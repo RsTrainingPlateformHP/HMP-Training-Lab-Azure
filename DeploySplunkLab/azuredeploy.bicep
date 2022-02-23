@@ -5,15 +5,15 @@ param virtualMachineName string = 'VM-Splunk'
 var nsgId = resourceId(resourceGroup().name, 'Microsoft.Network/networkSecurityGroups', networkSecurityGroupName)
 var vnetName = 'VNET-TP-Splunk'
 var subnetRef = '${vnetId}/subnets/${subnetName}'
-var imageID = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/from_snapshot_linux'
+var imageID = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/from_snapshot_linux/versions/1.0.0'
 var networkInterfaceName = '${virtualMachineName}-networkInterface'
 var networkSecurityGroupName = '${virtualMachineName}-NSG'
 var subnetName = 'Splunk_Default_Subnet'
 var virtualMachineSize = 'Standard_B4ms'
 
-param publicIpAddressName string = 'splunkVm-IP'
-param publicIpAddressType string = 'Dynamic'
-param publicIpAddressSku string = 'Standard'
+var publicIpAddressName = 'splunkVm-IP'
+var publicIpAddressType  = 'Dynamic'
+var publicIpAddressSku  = 'Standard'
 
 resource virtualNetwork_resource 'Microsoft.Network/virtualNetworks@2021-05-01' = {
   name: vnetName

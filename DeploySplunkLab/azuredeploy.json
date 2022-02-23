@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1272.37030",
-      "templateHash": "17947674720842478081"
+      "templateHash": "3939372905371218834"
     }
   },
   "parameters": {
@@ -22,7 +22,7 @@
     "nsgId": "[resourceId(resourceGroup().name, 'Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]",
     "vnetName": "VNET-TP-Splunk",
     "subnetRef": "[format('{0}/subnets/{1}', variables('vnetId'), variables('subnetName'))]",
-    "imageID": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/from_snapshot_linux",
+    "imageID": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/from_snapshot_linux/versions/1.0.0",
     "networkInterfaceName": "[format('{0}-networkInterface', parameters('virtualMachineName'))]",
     "networkSecurityGroupName": "[format('{0}-NSG', parameters('virtualMachineName'))]",
     "subnetName": "Splunk_Default_Subnet",
