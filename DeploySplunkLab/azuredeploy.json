@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1272.37030",
-      "templateHash": "255761131234614850"
+      "templateHash": "17947674720842478081"
     }
   },
   "parameters": {
@@ -13,22 +13,9 @@
       "type": "string",
       "defaultValue": "[resourceGroup().location]"
     },
-    "publicIpAddressName": {
-      "type": "string"
-    },
-    "publicIpAddressType": {
-      "type": "string"
-    },
-    "publicIpAddressSku": {
-      "type": "string"
-    },
     "virtualMachineName": {
       "type": "string",
       "defaultValue": "VM-Splunk"
-    },
-    "virtualMachineSize": {
-      "type": "string",
-      "defaultValue": "Standard_B4ms"
     }
   },
   "variables": {
@@ -39,6 +26,10 @@
     "networkInterfaceName": "[format('{0}-networkInterface', parameters('virtualMachineName'))]",
     "networkSecurityGroupName": "[format('{0}-NSG', parameters('virtualMachineName'))]",
     "subnetName": "Splunk_Default_Subnet",
+    "virtualMachineSize": "Standard_B4ms",
+    "publicIpAddressName": "splunkVm-IP",
+    "publicIpAddressType": "Dynamic",
+    "publicIpAddressSku": "Standard",
     "vnetId": "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
   },
   "resources": [
@@ -62,7 +53,7 @@
               },
               "privateIPAllocationMethod": "Dynamic",
               "publicIPAddress": {
-                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', parameters('publicIpAddressName'))]",
+                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', variables('publicIpAddressName'))]",
                 "properties": {
                   "deleteOption": "Delete"
                 }
@@ -76,7 +67,7 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]",
-        "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIpAddressName'))]",
+        "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIpAddressName'))]",
         "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
       ]
     },
@@ -89,13 +80,13 @@
     {
       "type": "Microsoft.Network/publicIPAddresses",
       "apiVersion": "2019-02-01",
-      "name": "[parameters('publicIpAddressName')]",
+      "name": "[variables('publicIpAddressName')]",
       "location": "[parameters('location')]",
       "properties": {
-        "publicIPAllocationMethod": "[parameters('publicIpAddressType')]"
+        "publicIPAllocationMethod": "[variables('publicIpAddressType')]"
       },
       "sku": {
-        "name": "[parameters('publicIpAddressSku')]"
+        "name": "[variables('publicIpAddressSku')]"
       }
     },
     {
@@ -105,7 +96,7 @@
       "location": "[parameters('location')]",
       "properties": {
         "hardwareProfile": {
-          "vmSize": "[parameters('virtualMachineSize')]"
+          "vmSize": "[variables('virtualMachineSize')]"
         },
         "storageProfile": {
           "osDisk": {
