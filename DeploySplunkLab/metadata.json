@@ -1,0 +1,6 @@
+{
+  "itemDisplayName": "SplunkVM",
+  "githubUsername": "JBFavrot",
+  "description": "Deployment of a splunk VM",
+  "summary": "The template deploys a single Splunk VM on B4ms VM"
+}
