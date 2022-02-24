@@ -8,15 +8,33 @@ var subnetRef = '${vnetId}/subnets/${subnetName}'
 var imageID = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/from_snapshot_linux/versions/1.0.0'
 var networkInterfaceName = '${virtualMachineName}-networkInterface'
 var networkSecurityGroupName = '${virtualMachineName}-NSG'
-var subnetName = 'Splunk_Default_Subnet'
+var subnetName = 'default'
 var virtualMachineSize = 'Standard_B4ms'
 
 var publicIpAddressName = 'splunkVm-IP'
-var publicIpAddressType  = 'Dynamic'
+var publicIpAddressType  = 'Static'
 var publicIpAddressSku  = 'Standard'
+
+
 
 resource virtualNetwork_resource 'Microsoft.Network/virtualNetworks@2021-05-01' = {
   name: vnetName
+  location: location
+  properties: {
+    addressSpace: {
+      addressPrefixes: [
+        '10.0.0.0/16'
+      ]
+    }
+    subnets: [
+      {
+        name: 'default'
+        properties: {
+          addressPrefix: '10.0.0.0/24'
+        }
+      }
+    ]
+  }
   }
 
 var vnetId = virtualNetwork_resource.id
@@ -84,7 +102,7 @@ resource virtualMachineName_resource 'Microsoft.Compute/virtualMachines@2021-07-
         deleteOption: 'Delete'
       }
       imageReference: {
-        sharedGalleryImageId: imageID
+        id: imageID
       }
     }
     networkProfile: {
@@ -112,7 +130,7 @@ resource shutdown_computevm_virtualMachineName 'Microsoft.DevTestLab/schedules@2
     status: 'Enabled'
     taskType: 'ComputeVmShutdownTask'
     dailyRecurrence: {
-      time: '19:00:00'
+      time: '19:00'
     }
     timeZoneId: 'Romance Standard Time'
     targetResourceId: virtualMachineName_resource.id

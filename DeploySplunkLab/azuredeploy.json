@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1272.37030",
-      "templateHash": "3939372905371218834"
+      "templateHash": "1871496129366316765"
     }
   },
   "parameters": {
@@ -25,10 +25,10 @@
     "imageID": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/from_snapshot_linux/versions/1.0.0",
     "networkInterfaceName": "[format('{0}-networkInterface', parameters('virtualMachineName'))]",
     "networkSecurityGroupName": "[format('{0}-NSG', parameters('virtualMachineName'))]",
-    "subnetName": "Splunk_Default_Subnet",
+    "subnetName": "default",
     "virtualMachineSize": "Standard_B4ms",
     "publicIpAddressName": "splunkVm-IP",
-    "publicIpAddressType": "Dynamic",
+    "publicIpAddressType": "Static",
     "publicIpAddressSku": "Standard",
     "vnetId": "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
   },
@@ -36,7 +36,23 @@
     {
       "type": "Microsoft.Network/virtualNetworks",
       "apiVersion": "2021-05-01",
-      "name": "[variables('vnetName')]"
+      "name": "[variables('vnetName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.0.0.0/16"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "default",
+            "properties": {
+              "addressPrefix": "10.0.0.0/24"
+            }
+          }
+        ]
+      }
     },
     {
       "type": "Microsoft.Network/networkInterfaces",
@@ -107,7 +123,7 @@
             "deleteOption": "Delete"
           },
           "imageReference": {
-            "sharedGalleryImageId": "[variables('imageID')]"
+            "id": "[variables('imageID')]"
           }
         },
         "networkProfile": {
@@ -139,7 +155,7 @@
         "status": "Enabled",
         "taskType": "ComputeVmShutdownTask",
         "dailyRecurrence": {
-          "time": "19:00:00"
+          "time": "19:00"
         },
         "timeZoneId": "Romance Standard Time",
         "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachineName'))]",
