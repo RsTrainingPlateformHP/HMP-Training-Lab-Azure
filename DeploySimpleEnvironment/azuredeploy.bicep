@@ -257,3 +257,4 @@ resource networkInterface_VM_Windows_Name_resource 'Microsoft.Network/networkInt
   }
 }
 
+
