@@ -1,6 +1,0 @@
-{
-    "itemDisplayName": "CSX_Lab",
-"githubUsername": "JBFavrot",
-"description": "Deployment of a CSX Lab Environment",
-"summary": "Deployment of 3 VMs with a configured VNET/NSG"
-}
