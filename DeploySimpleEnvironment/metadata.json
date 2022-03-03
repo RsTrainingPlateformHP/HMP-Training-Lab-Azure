@@ -4,4 +4,3 @@
     "description": "Deployment of a VM",
     "summary": "The template deploys a single VM with its nework and NSG and returns the public IP"
 }
-  
