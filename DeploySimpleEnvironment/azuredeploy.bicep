@@ -3,11 +3,12 @@ param networkInterface_VM_Windows_Name string = 'networkInterface-vm-windows001'
 param publicIP_VM_Windows_Name string = 'publicIP-VM-WINDOWS'
 param NSG_Name string = 'nsg-SimpleEnvironment'
 param schedules_shutdown_computevm_vm_windows_name string = 'shutdown-computevm-vm-windows'
-param VNET_ string = 'RG_ADMIN_TestDeployements-vnet'
+param VNET_simpleDeploy string = 'RG_ADMIN_TestDeployements-vnet'
 param location string = 'francecentral'
 param adminUserName string = 'azureuser'
 @secure()
 param adminPassword string
+
 
 resource NSG_SimpleEnvironment 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
   name: NSG_Name
@@ -16,6 +17,9 @@ resource NSG_SimpleEnvironment 'Microsoft.Network/networkSecurityGroups@2020-11-
     owner: 'Jean-Baptiste FAVROT'
     approver: 'Platform'
     endDate: '31/12/2022'
+  }
+  properties: {
+      
   }
 }
 
@@ -40,7 +44,7 @@ resource publicIP_VM_Windows 'Microsoft.Network/publicIPAddresses@2020-11-01' = 
 }
 
 resource VNET_SimpleDeployement 'Microsoft.Network/virtualNetworks@2020-11-01' = {
-  name: VNET_
+  name: VNET_simpleDeploy
   location: location
   tags: {
     owner: 'Jean-Baptiste FAVROT'
