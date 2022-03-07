@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1272.37030",
-      "templateHash": "15749254660306223571"
+      "templateHash": "13875954857613081758"
     }
   },
   "parameters": {
@@ -25,10 +25,6 @@
       "type": "string",
       "defaultValue": "nsg-SimpleEnvironment"
     },
-    "schedules_shutdown_computevm_vm_windows_name": {
-      "type": "string",
-      "defaultValue": "shutdown-computevm-vm-windows"
-    },
     "VNET_simpleDeploy": {
       "type": "string",
       "defaultValue": "RG_ADMIN_TestDeployements-vnet"
@@ -43,6 +39,15 @@
     },
     "adminPassword": {
       "type": "secureString"
+    },
+    "owner": {
+      "type": "string"
+    },
+    "approver": {
+      "type": "string"
+    },
+    "endDate": {
+      "type": "string"
     }
   },
   "resources": [
@@ -52,9 +57,9 @@
       "name": "[parameters('NSG_Name')]",
       "location": "[parameters('location')]",
       "tags": {
-        "owner": "Jean-Baptiste FAVROT",
-        "approver": "Platform",
-        "endDate": "31/12/2022"
+        "owner": "[parameters('owner')]",
+        "approver": "[parameters('approver')]",
+        "endDate": "[parameters('endDate')]"
       },
       "properties": {}
     },
@@ -64,9 +69,9 @@
       "name": "[parameters('publicIP_VM_Windows_Name')]",
       "location": "[parameters('location')]",
       "tags": {
-        "owner": "Jean-Baptiste FAVROT",
-        "approver": "Platform",
-        "endDate": "31/12/2022"
+        "owner": "[parameters('owner')]",
+        "approver": "[parameters('approver')]",
+        "endDate": "[parameters('endDate')]"
       },
       "sku": {
         "name": "Basic",
@@ -84,9 +89,9 @@
       "name": "[parameters('VNET_simpleDeploy')]",
       "location": "[parameters('location')]",
       "tags": {
-        "owner": "Jean-Baptiste FAVROT",
-        "approver": "Platform",
-        "endDate": "31/12/2022"
+        "owner": "[parameters('owner')]",
+        "approver": "[parameters('approver')]",
+        "endDate": "[parameters('endDate')]"
       },
       "properties": {
         "addressSpace": {
@@ -115,9 +120,9 @@
       "name": "[parameters('virtualMachines_VM_WINDOWS_name')]",
       "location": "[parameters('location')]",
       "tags": {
-        "owner": "Jean-Baptiste FAVROT",
-        "approver": "Platform",
-        "endDate": "31/12/2022"
+        "owner": "[parameters('owner')]",
+        "approver": "[parameters('approver')]",
+        "endDate": "[parameters('endDate')]"
       },
       "properties": {
         "hardwareProfile": {
@@ -177,35 +182,6 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterface_VM_Windows_Name'))]"
-      ]
-    },
-    {
-      "type": "Microsoft.DevTestLab/schedules",
-      "apiVersion": "2018-09-15",
-      "name": "[parameters('schedules_shutdown_computevm_vm_windows_name')]",
-      "location": "[parameters('location')]",
-      "tags": {
-        "owner": "Jean-Baptiste FAVROT",
-        "approver": "Platform",
-        "endDate": "31/12/2022"
-      },
-      "properties": {
-        "status": "Enabled",
-        "taskType": "ComputeVmShutdownTask",
-        "dailyRecurrence": {
-          "time": "1900"
-        },
-        "timeZoneId": "UTC",
-        "notificationSettings": {
-          "status": "Enabled",
-          "timeInMinutes": 30,
-          "emailRecipient": "jfavrot@beijaflorecyberrsoutlook.onmicrosoft.com",
-          "notificationLocale": "en"
-        },
-        "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_VM_WINDOWS_name'))]"
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_VM_WINDOWS_name'))]"
       ]
     },
     {
@@ -285,9 +261,9 @@
       "name": "[parameters('networkInterface_VM_Windows_Name')]",
       "location": "[parameters('location')]",
       "tags": {
-        "owner": "Jean-Baptiste FAVROT",
-        "approver": "Platform",
-        "endDate": "31/12/2022"
+        "owner": "[parameters('owner')]",
+        "approver": "[parameters('approver')]",
+        "endDate": "[parameters('endDate')]"
       },
       "properties": {
         "ipConfigurations": [

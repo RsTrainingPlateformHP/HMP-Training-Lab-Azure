@@ -2,21 +2,23 @@ param virtualMachines_VM_WINDOWS_name string = 'VM-WINDOWS'
 param networkInterface_VM_Windows_Name string = 'networkInterface-vm-windows001'
 param publicIP_VM_Windows_Name string = 'publicIP-VM-WINDOWS'
 param NSG_Name string = 'nsg-SimpleEnvironment'
-param schedules_shutdown_computevm_vm_windows_name string = 'shutdown-computevm-vm-windows'
 param VNET_simpleDeploy string = 'RG_ADMIN_TestDeployements-vnet'
 param location string = 'francecentral'
 param adminUserName string = 'azureuser'
 @secure()
 param adminPassword string
+param owner string
+param approver string
+param endDate string
 
 
 resource NSG_SimpleEnvironment 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
   name: NSG_Name
   location: location
   tags: {
-    owner: 'Jean-Baptiste FAVROT'
-    approver: 'Platform'
-    endDate: '31/12/2022'
+    owner: owner
+    approver: approver
+    endDate: endDate
   }
   properties: {
       
@@ -28,9 +30,9 @@ resource publicIP_VM_Windows 'Microsoft.Network/publicIPAddresses@2020-11-01' = 
   name: publicIP_VM_Windows_Name
   location: location
   tags: {
-    owner: 'Jean-Baptiste FAVROT'
-    approver: 'Platform'
-    endDate: '31/12/2022'
+    owner: owner
+    approver: approver
+    endDate: endDate
   }
   sku: {
     name: 'Basic'
@@ -47,9 +49,9 @@ resource VNET_SimpleDeployement 'Microsoft.Network/virtualNetworks@2020-11-01' =
   name: VNET_simpleDeploy
   location: location
   tags: {
-    owner: 'Jean-Baptiste FAVROT'
-    approver: 'Platform'
-    endDate: '31/12/2022'
+    owner: owner
+    approver: approver
+    endDate: endDate
   }
   properties: {
     addressSpace: {
@@ -77,9 +79,9 @@ resource VM_Windows 'Microsoft.Compute/virtualMachines@2021-11-01' = {
   name: virtualMachines_VM_WINDOWS_name
   location: location
   tags: {
-    owner: 'Jean-Baptiste FAVROT'
-    approver: 'Platform'
-    endDate: '31/12/2022'
+    owner: owner
+    approver: approver
+    endDate: endDate
   }
   properties: {
     hardwareProfile: {
@@ -139,30 +141,6 @@ resource VM_Windows 'Microsoft.Compute/virtualMachines@2021-11-01' = {
   }
 }
 
-resource schedules_shutdown_computevm_vm_windows_name_resource 'microsoft.devtestlab/schedules@2018-09-15' = {
-  name: schedules_shutdown_computevm_vm_windows_name
-  location: location
-  tags: {
-    owner: 'Jean-Baptiste FAVROT'
-    approver: 'Platform'
-    endDate: '31/12/2022'
-  }
-  properties: {
-    status: 'Enabled'
-    taskType: 'ComputeVmShutdownTask'
-    dailyRecurrence: {
-      time: '1900'
-    }
-    timeZoneId: 'UTC'
-    notificationSettings: {
-      status: 'Enabled'
-      timeInMinutes: 30
-      emailRecipient: 'jfavrot@beijaflorecyberrsoutlook.onmicrosoft.com'
-      notificationLocale: 'en'
-    }
-    targetResourceId: VM_Windows.id
-  }
-}
 
 resource Application_Security_Group_FE 'Microsoft.Network/applicationSecurityGroups@2021-05-01' = {
   name: 'FrontEndServer'
@@ -225,9 +203,9 @@ resource networkInterface_VM_Windows_Name_resource 'Microsoft.Network/networkInt
   name: networkInterface_VM_Windows_Name
   location: location
   tags: {
-    owner: 'Jean-Baptiste FAVROT'
-    approver: 'Platform'
-    endDate: '31/12/2022'
+    owner: owner
+    approver: approver
+    endDate: endDate
   }
   properties: {
     ipConfigurations: [
