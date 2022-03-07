@@ -212,7 +212,6 @@ resource networkInterface_VM_Windows_Name_resource 'Microsoft.Network/networkInt
       {
         name: 'ipconfig1'
         properties: {
-          privateIPAddress: '10.3.0.4'
           privateIPAllocationMethod: 'Dynamic'
           publicIPAddress: {
             id: publicIP_VM_Windows.id
