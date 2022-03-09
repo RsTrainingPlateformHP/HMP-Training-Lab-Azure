@@ -219,7 +219,7 @@ resource networkInterface_VM_FE_Windows 'Microsoft.Network/networkInterfaces@202
             id: publicIP_VM_FE_Windows.id
           }
           subnet: {
-            id: VNET_TP_CSX.id
+            id: VNET_TP_CSX.properties.subnets[0].id
           }
           primary: true
           privateIPAddressVersion: 'IPv4'
@@ -257,7 +257,7 @@ resource networkInterface_VM_FE_LINUX 'Microsoft.Network/networkInterfaces@2020-
         properties: {
           privateIPAllocationMethod: 'Dynamic'
           publicIPAddress: {
-            id: publicIP_VM_FE_LINUX.id
+            id: publicIP_VM_FE_LINUX.properties.subnets[0].id
           }
           subnet: {
             id: VNET_TP_CSX.id
@@ -298,7 +298,7 @@ resource networkInterface_VM_BE_SERVER 'Microsoft.Network/networkInterfaces@2020
         properties: {
           privateIPAllocationMethod: 'Dynamic'
           subnet: {
-            id: VNET_TP_CSX.id
+            id: VNET_TP_CSX.properties.subnets[0].id
           }
           primary: true
           privateIPAddressVersion: 'IPv4'

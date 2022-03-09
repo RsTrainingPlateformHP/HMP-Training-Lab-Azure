@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1272.37030",
-      "templateHash": "14329088642992974079"
+      "templateHash": "4960476173781574632"
     }
   },
   "parameters": {
@@ -251,7 +251,7 @@
                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', variables('VM_FE_WINDOWS_name')))]"
               },
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('VNET_name'))]"
+                "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', variables('VNET_name'))).subnets[0].id]"
               },
               "primary": true,
               "privateIPAddressVersion": "IPv4",
@@ -296,7 +296,7 @@
             "properties": {
               "privateIPAllocationMethod": "Dynamic",
               "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', variables('VM_FE_LINUX_name')))]"
+                "id": "[reference(resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', variables('VM_FE_LINUX_name')))).subnets[0].id]"
               },
               "subnet": {
                 "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('VNET_name'))]"
@@ -344,7 +344,7 @@
             "properties": {
               "privateIPAllocationMethod": "Dynamic",
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('VNET_name'))]"
+                "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', variables('VNET_name'))).subnets[0].id]"
               },
               "primary": true,
               "privateIPAddressVersion": "IPv4",
