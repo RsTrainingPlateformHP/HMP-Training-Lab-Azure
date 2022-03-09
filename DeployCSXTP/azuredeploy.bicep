@@ -336,10 +336,14 @@ resource VM_FE_WINDOWS 'Microsoft.Compute/virtualMachines@2021-11-01' = {
     storageProfile: {
       imageReference: {
         id: ImageID_VM_FE_WINDOWS
+        sku: 'Standard_LRS'
       }
       osDisk: {
         name: '${VM_FE_WINDOWS_name}_OSdisk'
         createOption: 'FromImage'
+        diskSizeGB: 64
+        deleteOption: 'Delete'
+        
       }
       dataDisks: []
     }
@@ -376,6 +380,7 @@ resource VM_FE_LINUX 'Microsoft.Compute/virtualMachines@2021-11-01' = {
     storageProfile: {
       imageReference: {
         id: ImageID_VM_FE_LINUX
+        sku: 'Standard_LRS'
       }
       osDisk: {
         name: '${VM_FE_LINUX_name}_OSdisk'
@@ -416,6 +421,7 @@ resource VM_BE_SERVER 'Microsoft.Compute/virtualMachines@2021-11-01' = {
     storageProfile: {
       imageReference: {
         id: ImageID_VM_BE_SERVER
+        sku: 'Standard_LRS'
       }
       osDisk: {
         name: '${VM_BE_SERVER_name}_OSdisk'

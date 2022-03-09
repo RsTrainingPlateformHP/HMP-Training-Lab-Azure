@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1272.37030",
-      "templateHash": "4960476173781574632"
+      "templateHash": "2715123478868677091"
     }
   },
   "parameters": {
@@ -387,11 +387,14 @@
         },
         "storageProfile": {
           "imageReference": {
-            "id": "[variables('ImageID_VM_FE_WINDOWS')]"
+            "id": "[variables('ImageID_VM_FE_WINDOWS')]",
+            "sku": "Standard_LRS"
           },
           "osDisk": {
             "name": "[format('{0}_OSdisk', variables('VM_FE_WINDOWS_name'))]",
-            "createOption": "FromImage"
+            "createOption": "FromImage",
+            "diskSizeGB": 64,
+            "deleteOption": "Delete"
           },
           "dataDisks": []
         },
@@ -431,7 +434,8 @@
         },
         "storageProfile": {
           "imageReference": {
-            "id": "[variables('ImageID_VM_FE_LINUX')]"
+            "id": "[variables('ImageID_VM_FE_LINUX')]",
+            "sku": "Standard_LRS"
           },
           "osDisk": {
             "name": "[format('{0}_OSdisk', variables('VM_FE_LINUX_name'))]",
@@ -475,7 +479,8 @@
         },
         "storageProfile": {
           "imageReference": {
-            "id": "[variables('ImageID_VM_BE_SERVER')]"
+            "id": "[variables('ImageID_VM_BE_SERVER')]",
+            "sku": "Standard_LRS"
           },
           "osDisk": {
             "name": "[format('{0}_OSdisk', variables('VM_BE_SERVER_name'))]",
