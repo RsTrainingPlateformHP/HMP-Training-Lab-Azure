@@ -160,7 +160,6 @@ resource VM_Windows 'Microsoft.Compute/virtualMachines@2021-11-01' = {
       }
       secrets: []
       allowExtensionOperations: true
-      requireGuestProvisionSignal: true
     }
     networkProfile: {
       networkInterfaces: [
