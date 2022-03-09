@@ -222,6 +222,10 @@ resource networkInterface_VM_Windows_Name_resource 'Microsoft.Network/networkInt
           }
           primary: true
           privateIPAddressVersion: 'IPv4'
+          applicationSecurityGroups: [
+            Application_Security_Group_FE
+            Application_Security_Group_BE
+          ]
         }
       }
     ]
@@ -234,6 +238,10 @@ resource networkInterface_VM_Windows_Name_resource 'Microsoft.Network/networkInt
       id: NSG_SimpleEnvironment.id
     }
   }
+  dependsOn: [
+    NSRule_RDP
+    NSRule_SSH_BE
+  ]
 }
 
 
