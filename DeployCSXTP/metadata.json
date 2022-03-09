@@ -1,0 +1,6 @@
+{
+  "itemDisplayName": "Deploy CSX TP",
+  "githubUsername": "JBFavrot",
+  "description": "Deployment of a CSX TP environment",
+  "summary": "The template deploys two front end VMs and a Back End VMs on a subnet with nsg and security rules configured"
+}

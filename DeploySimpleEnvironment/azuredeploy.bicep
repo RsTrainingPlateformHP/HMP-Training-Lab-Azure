@@ -67,7 +67,6 @@ resource NSG_SimpleEnvironment 'Microsoft.Network/networkSecurityGroups@2020-11-
   }
 }
 
-
 resource publicIP_VM_Windows 'Microsoft.Network/publicIPAddresses@2020-11-01' = {
   name: publicIP_VM_Windows_Name
   location: location
@@ -179,7 +178,6 @@ resource VM_Windows 'Microsoft.Compute/virtualMachines@2021-11-01' = {
   }
 }
 
-
 resource Application_Security_Group_FE 'Microsoft.Network/applicationSecurityGroups@2021-05-01' = {
   name: 'FrontEndServer'
   location : location
@@ -246,5 +244,3 @@ resource networkInterface_VM_Windows_Name_resource 'Microsoft.Network/networkInt
     }
   }
 }
-
-

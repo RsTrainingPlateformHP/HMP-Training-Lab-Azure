@@ -1,0 +1,481 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.4.1272.37030",
+      "templateHash": "12062232094814633094"
+    }
+  },
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "francecentral"
+    },
+    "owner": {
+      "type": "string"
+    },
+    "approver": {
+      "type": "string"
+    },
+    "endDate": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "VM_FE_WINDOWS_name": "VM-CSX-TP-LINUX",
+    "VM_FE_LINUX_name": "VM-CSX-TP-WINDOWS",
+    "VM_BE_SERVER_name": "VM-CSX-TP-SERVER",
+    "VNET_name": "VNET-Lab-CSX",
+    "NSG_Name": "nsg-CSX-TP",
+    "ImageID_VM_FE_WINDOWS": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_CSX_WINDOWS_VM/versions/latest",
+    "ImageID_VM_FE_LINUX": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_CSX_LINUX_VM/versions/latest",
+    "ImageID_VM_BE_SERVER": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_CSX_SERVER_VM/versions/latest"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/applicationSecurityGroups",
+      "apiVersion": "2021-05-01",
+      "name": "FrontEndServer",
+      "location": "[parameters('location')]",
+      "tags": {
+        "owner": "[parameters('owner')]",
+        "approver": "[parameters('approver')]",
+        "endDate": "[parameters('endDate')]"
+      }
+    },
+    {
+      "type": "Microsoft.Network/applicationSecurityGroups",
+      "apiVersion": "2021-05-01",
+      "name": "BackEndServer",
+      "location": "[parameters('location')]",
+      "tags": {
+        "owner": "[parameters('owner')]",
+        "approver": "[parameters('approver')]",
+        "endDate": "[parameters('endDate')]"
+      }
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2020-11-01",
+      "name": "[format('{0}-public-IP', variables('VM_FE_WINDOWS_name'))]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "owner": "[parameters('owner')]",
+        "approver": "[parameters('approver')]",
+        "endDate": "[parameters('endDate')]"
+      },
+      "sku": {
+        "name": "Basic",
+        "tier": "Regional"
+      },
+      "properties": {
+        "publicIPAddressVersion": "IPv4",
+        "publicIPAllocationMethod": "Dynamic",
+        "idleTimeoutInMinutes": 4
+      }
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2020-11-01",
+      "name": "[format('{0}-public-IP', variables('VM_FE_LINUX_name'))]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "owner": "[parameters('owner')]",
+        "approver": "[parameters('approver')]",
+        "endDate": "[parameters('endDate')]"
+      },
+      "sku": {
+        "name": "Basic",
+        "tier": "Regional"
+      },
+      "properties": {
+        "publicIPAddressVersion": "IPv4",
+        "publicIPAllocationMethod": "Dynamic",
+        "idleTimeoutInMinutes": 4
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2020-11-01",
+      "name": "[variables('VNET_name')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "owner": "[parameters('owner')]",
+        "approver": "[parameters('approver')]",
+        "endDate": "[parameters('endDate')]"
+      },
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.3.0.0/16"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "default",
+            "properties": {
+              "addressPrefix": "10.3.0.0/24",
+              "delegations": [],
+              "privateEndpointNetworkPolicies": "Enabled",
+              "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+          }
+        ],
+        "virtualNetworkPeerings": [],
+        "enableDdosProtection": false
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "apiVersion": "2020-11-01",
+      "name": "[variables('NSG_Name')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "owner": "[parameters('owner')]",
+        "approver": "[parameters('approver')]",
+        "endDate": "[parameters('endDate')]"
+      },
+      "properties": {
+        "securityRules": [
+          {
+            "name": "SSH_FE_BE",
+            "properties": {
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "sourceApplicationSecurityGroups": [
+                {
+                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', 'FrontEndServer')]",
+                  "location": "[parameters('location')]"
+                }
+              ],
+              "destinationPortRange": "22",
+              "destinationApplicationSecurityGroups": [
+                {
+                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', 'BackEndServer')]",
+                  "location": "[parameters('location')]"
+                }
+              ],
+              "access": "Allow",
+              "priority": 310,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "RDP_Inbound",
+            "properties": {
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "3389",
+              "sourceAddressPrefix": "*",
+              "destinationApplicationSecurityGroups": [
+                {
+                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', 'FrontEndServer')]",
+                  "location": "[parameters('location')]"
+                }
+              ],
+              "access": "Allow",
+              "priority": 300,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "SSH_Inbound",
+            "properties": {
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "22",
+              "sourceAddressPrefix": "*",
+              "destinationApplicationSecurityGroups": [
+                {
+                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', 'FrontEndServer')]",
+                  "location": "[parameters('location')]"
+                }
+              ],
+              "access": "Allow",
+              "priority": 300,
+              "direction": "Inbound"
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/applicationSecurityGroups', 'BackEndServer')]",
+        "[resourceId('Microsoft.Network/applicationSecurityGroups', 'FrontEndServer')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2020-11-01",
+      "name": "[format('{0}-network-interface', variables('VM_FE_WINDOWS_name'))]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "owner": "[parameters('owner')]",
+        "approver": "[parameters('approver')]",
+        "endDate": "[parameters('endDate')]"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', variables('VM_FE_WINDOWS_name')))]"
+              },
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('VNET_name'))]"
+              },
+              "primary": true,
+              "privateIPAddressVersion": "IPv4",
+              "applicationSecurityGroups": [
+                {
+                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', 'FrontEndServer')]"
+                }
+              ]
+            }
+          }
+        ],
+        "dnsSettings": {
+          "dnsServers": []
+        },
+        "enableAcceleratedNetworking": false,
+        "enableIPForwarding": false,
+        "networkSecurityGroup": {
+          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('NSG_Name'))]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/applicationSecurityGroups', 'FrontEndServer')]",
+        "[resourceId('Microsoft.Network/networkSecurityGroups', variables('NSG_Name'))]",
+        "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', variables('VM_FE_WINDOWS_name')))]",
+        "[resourceId('Microsoft.Network/virtualNetworks', variables('VNET_name'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2020-11-01",
+      "name": "[format('{0}-network-interface', variables('VM_FE_LINUX_name'))]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "owner": "[parameters('owner')]",
+        "approver": "[parameters('approver')]",
+        "endDate": "[parameters('endDate')]"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', variables('VM_FE_LINUX_name')))]"
+              },
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('VNET_name'))]"
+              },
+              "primary": true,
+              "privateIPAddressVersion": "IPv4",
+              "applicationSecurityGroups": [
+                {
+                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', 'FrontEndServer')]"
+                }
+              ]
+            }
+          }
+        ],
+        "dnsSettings": {
+          "dnsServers": []
+        },
+        "enableAcceleratedNetworking": false,
+        "enableIPForwarding": false,
+        "networkSecurityGroup": {
+          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('NSG_Name'))]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/applicationSecurityGroups', 'FrontEndServer')]",
+        "[resourceId('Microsoft.Network/networkSecurityGroups', variables('NSG_Name'))]",
+        "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', variables('VM_FE_LINUX_name')))]",
+        "[resourceId('Microsoft.Network/virtualNetworks', variables('VNET_name'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2020-11-01",
+      "name": "[format('{0}-network-interface', variables('VM_BE_SERVER_name'))]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "owner": "[parameters('owner')]",
+        "approver": "[parameters('approver')]",
+        "endDate": "[parameters('endDate')]"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('VNET_name'))]"
+              },
+              "primary": true,
+              "privateIPAddressVersion": "IPv4",
+              "applicationSecurityGroups": [
+                {
+                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', 'BackEndServer')]"
+                }
+              ]
+            }
+          }
+        ],
+        "dnsSettings": {
+          "dnsServers": []
+        },
+        "enableAcceleratedNetworking": false,
+        "enableIPForwarding": false,
+        "networkSecurityGroup": {
+          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('NSG_Name'))]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/applicationSecurityGroups', 'BackEndServer')]",
+        "[resourceId('Microsoft.Network/networkSecurityGroups', variables('NSG_Name'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks', variables('VNET_name'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2021-11-01",
+      "name": "[variables('VM_FE_WINDOWS_name')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "owner": "[parameters('owner')]",
+        "approver": "[parameters('approver')]",
+        "endDate": "[parameters('endDate')]"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "Standard_B2s"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "id": "[variables('ImageID_VM_FE_WINDOWS')]"
+          },
+          "osDisk": {
+            "name": "[format('{0}_OSdisk', variables('VM_FE_WINDOWS_name'))]",
+            "createOption": "FromImage"
+          },
+          "dataDisks": []
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface', variables('VM_FE_WINDOWS_name')))]",
+              "properties": {
+                "deleteOption": "Delete"
+              }
+            }
+          ]
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": true
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface', variables('VM_FE_WINDOWS_name')))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2021-11-01",
+      "name": "[variables('VM_FE_LINUX_name')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "owner": "[parameters('owner')]",
+        "approver": "[parameters('approver')]",
+        "endDate": "[parameters('endDate')]"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "Standard_B2s"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "id": "[variables('ImageID_VM_FE_LINUX')]"
+          },
+          "osDisk": {
+            "name": "[format('{0}_OSdisk', variables('VM_FE_LINUX_name'))]",
+            "createOption": "FromImage"
+          },
+          "dataDisks": []
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface', variables('VM_FE_LINUX_name')))]",
+              "properties": {
+                "deleteOption": "Delete"
+              }
+            }
+          ]
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": true
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface', variables('VM_FE_LINUX_name')))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2021-11-01",
+      "name": "[variables('VM_BE_SERVER_name')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "owner": "[parameters('owner')]",
+        "approver": "[parameters('approver')]",
+        "endDate": "[parameters('endDate')]"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "Standard_B2s"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "id": "[variables('ImageID_VM_BE_SERVER')]"
+          },
+          "osDisk": {
+            "name": "[format('{0}_OSdisk', variables('VM_BE_SERVER_name'))]",
+            "createOption": "FromImage"
+          },
+          "dataDisks": []
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface', variables('VM_BE_SERVER_name')))]",
+              "properties": {
+                "deleteOption": "Delete"
+              }
+            }
+          ]
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": true
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface', variables('VM_BE_SERVER_name')))]"
+      ]
+    }
+  ]
+}
