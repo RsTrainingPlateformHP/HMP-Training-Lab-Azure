@@ -37,6 +37,7 @@ resource NSG_SimpleEnvironment 'Microsoft.Network/networkSecurityGroups@2020-11-
             destinationApplicationSecurityGroups: [
               {
                 id: Application_Security_Group_BE.id
+                location: location
               }
             ]
             access: 'Allow'
@@ -52,7 +53,10 @@ resource NSG_SimpleEnvironment 'Microsoft.Network/networkSecurityGroups@2020-11-
             destinationPortRange: '3389'
             sourceAddressPrefix: '*'
             destinationApplicationSecurityGroups: [
-              Application_Security_Group_FE
+              {
+                id: Application_Security_Group_FE.id
+                location: location
+              }
             ]
             access: 'Allow'
             priority: 300
@@ -225,8 +229,13 @@ resource networkInterface_VM_Windows_Name_resource 'Microsoft.Network/networkInt
           primary: true
           privateIPAddressVersion: 'IPv4'
           applicationSecurityGroups: [
-            Application_Security_Group_FE
-            Application_Security_Group_BE
+            {
+              id: Application_Security_Group_FE.id
+            }
+            {
+              id: Application_Security_Group_BE.id
+            }
+            
           ]
         }
       }
