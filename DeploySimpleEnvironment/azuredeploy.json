@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1272.37030",
-      "templateHash": "9994330431557866513"
+      "templateHash": "2391020017719034099"
     }
   },
   "parameters": {
@@ -278,12 +278,7 @@
                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('VNET_simpleDeploy'), 'default')]"
               },
               "primary": true,
-              "privateIPAddressVersion": "IPv4",
-              "applicationSecurityGroups": [
-                {
-                  "id": "resourceId('Microsoft.Network/applicationSecurityGroups', 'FrontEndServer'"
-                }
-              ]
+              "privateIPAddressVersion": "IPv4"
             }
           }
         ],
@@ -297,7 +292,6 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Network/applicationSecurityGroups', 'FrontEndServer')]",
         "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('NSG_Name'))]",
         "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIP_VM_Windows_Name'))]",
         "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('VNET_simpleDeploy'), 'default')]"

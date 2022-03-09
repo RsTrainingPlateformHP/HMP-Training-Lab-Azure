@@ -145,6 +145,7 @@ resource VM_Windows 'Microsoft.Compute/virtualMachines@2021-11-01' = {
 resource Application_Security_Group_FE 'Microsoft.Network/applicationSecurityGroups@2021-05-01' = {
   name: 'FrontEndServer'
   location : location
+  
 }
 
 resource Application_Security_Group_BE 'Microsoft.Network/applicationSecurityGroups@2021-05-01' = {
@@ -221,9 +222,6 @@ resource networkInterface_VM_Windows_Name_resource 'Microsoft.Network/networkInt
           }
           primary: true
           privateIPAddressVersion: 'IPv4'
-          applicationSecurityGroups: [
-            Application_Security_Group_FE
-          ]
         }
       }
     ]
