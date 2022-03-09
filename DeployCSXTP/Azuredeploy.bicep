@@ -131,7 +131,7 @@ resource NSG_TP_CSX 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
               }
             ]
             access: 'Allow'
-            priority: 310
+            priority: 100
             direction: 'Inbound'
           }
         }
@@ -149,7 +149,7 @@ resource NSG_TP_CSX 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
               }
             ]
             access: 'Allow'
-            priority: 300
+            priority: 110
             direction: 'Inbound'
           }
         }
@@ -167,8 +167,34 @@ resource NSG_TP_CSX 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
               }
             ]
             access: 'Allow'
+            priority: 120
+            direction: 'Inbound'
+          }
+        }
+        {
+          name: 'RestrictVNetFlowInbound'
+          properties: {
+            protocol: '*'
+            sourcePortRange: '*'
+            destinationPortRange: '*'
+            sourceAddressPrefix: 'VirtualNetwork'
+            destinationAddressPrefix: 'VirtualNetwork'
+            access: 'Deny'
             priority: 300
             direction: 'Inbound'
+          }
+        }
+        {
+          name: 'RestrictVNetFlowOutbould'
+          properties: {
+            protocol: '*'
+            sourcePortRange: '*'
+            destinationPortRange: '*'
+            sourceAddressPrefix: 'VirtualNetwork'
+            destinationAddressPrefix: 'VirtualNetwork'
+            access: 'Deny'
+            priority: 300
+            direction: 'Outbound'
           }
         }
       ]
@@ -414,3 +440,7 @@ resource VM_BE_SERVER 'Microsoft.Compute/virtualMachines@2021-11-01' = {
     }
   }
 }
+
+output Public_IP_VM_FE_Windows string = publicIP_VM_FE_Windows.properties.ipAddress
+output Public_IP_VM_FE_Linux string = publicIP_VM_FE_LINUX.properties.ipAddress
+output Private_IP_VM_BE_SERVER string = networkInterface_VM_BE_SERVER.properties.ipConfigurations[0].properties.privateIPAddress
