@@ -336,7 +336,6 @@ resource VM_FE_WINDOWS 'Microsoft.Compute/virtualMachines@2021-11-01' = {
     storageProfile: {
       imageReference: {
         id: ImageID_VM_FE_WINDOWS
-        sku: 'Standard_LRS'
       }
       osDisk: {
         name: '${VM_FE_WINDOWS_name}_OSdisk'

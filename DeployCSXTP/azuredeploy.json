@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1272.37030",
-      "templateHash": "11537433785195976820"
+      "templateHash": "18366844238063662959"
     }
   },
   "parameters": {
@@ -387,8 +387,7 @@
         },
         "storageProfile": {
           "imageReference": {
-            "id": "[variables('ImageID_VM_FE_WINDOWS')]",
-            "sku": "Standard_LRS"
+            "id": "[variables('ImageID_VM_FE_WINDOWS')]"
           },
           "osDisk": {
             "name": "[format('{0}_OSdisk', variables('VM_FE_WINDOWS_name'))]",
