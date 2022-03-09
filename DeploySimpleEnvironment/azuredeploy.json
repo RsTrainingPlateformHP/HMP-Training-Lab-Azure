@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1272.37030",
-      "templateHash": "4417729125235423860"
+      "templateHash": "3837145416319015456"
     }
   },
   "parameters": {
@@ -188,9 +188,6 @@
             "name": "[format('{0}_OSdisk', parameters('virtualMachines_VM_WINDOWS_name'))]",
             "createOption": "FromImage",
             "caching": "ReadWrite",
-            "managedDisk": {
-              "id": "[resourceId('Microsoft.Compute/disks', format('{0}_disk1_3a5192f7d0d44d94a2b0df55ac16ad75', parameters('virtualMachines_VM_WINDOWS_name')))]"
-            },
             "deleteOption": "Delete"
           },
           "dataDisks": []

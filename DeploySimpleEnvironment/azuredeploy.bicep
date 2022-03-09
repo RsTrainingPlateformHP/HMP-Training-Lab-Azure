@@ -141,9 +141,6 @@ resource VM_Windows 'Microsoft.Compute/virtualMachines@2021-11-01' = {
         name: '${virtualMachines_VM_WINDOWS_name}_OSdisk'
         createOption: 'FromImage'
         caching: 'ReadWrite'
-        managedDisk: {
-          id: resourceId('Microsoft.Compute/disks', '${virtualMachines_VM_WINDOWS_name}_disk1_3a5192f7d0d44d94a2b0df55ac16ad75')
-        }
         deleteOption: 'Delete'
       }
       dataDisks: []
