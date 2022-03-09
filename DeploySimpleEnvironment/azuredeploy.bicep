@@ -21,7 +21,40 @@ resource NSG_SimpleEnvironment 'Microsoft.Network/networkSecurityGroups@2020-11-
     endDate: endDate
   }
   properties: {
-      
+      securityRules: [
+        {
+          name: 'SSH_FE_BE'
+          properties: {
+            protocol: 'Tcp'
+            sourcePortRange: '*'
+            sourceApplicationSecurityGroups: [
+              Application_Security_Group_FE
+            ]
+            destinationPortRange: '22'
+            destinationApplicationSecurityGroups: [
+              Application_Security_Group_BE
+            ]
+            access: 'Allow'
+            priority: 310
+            direction: 'Inbound'
+          }
+        }
+        {
+          name: 'RDP_Inbound'
+          properties: {
+            protocol: 'Tcp'
+            sourcePortRange: '*'
+            destinationPortRange: '3389'
+            sourceAddressPrefix: '*'
+            destinationApplicationSecurityGroups: [
+              Application_Security_Group_FE
+            ]
+            access: 'Allow'
+            priority: 300
+            direction: 'Inbound'
+          }
+        }
+      ]
   }
 }
 
@@ -153,42 +186,6 @@ resource Application_Security_Group_BE 'Microsoft.Network/applicationSecurityGro
   location: location
 }
 
-resource NSRule_RDP 'Microsoft.Network/networkSecurityGroups/securityRules@2020-11-01' = {
-  parent: NSG_SimpleEnvironment
-  name: 'RDP_Inbound'
-  properties: {
-    protocol: 'Tcp'
-    sourcePortRange: '*'
-    destinationPortRange: '3389'
-    sourceAddressPrefix: '*'
-    destinationApplicationSecurityGroups: [
-      Application_Security_Group_FE
-    ]
-    access: 'Allow'
-    priority: 300
-    direction: 'Inbound'
-  }
-}
-
-resource NSRule_SSH_BE 'Microsoft.Network/networkSecurityGroups/securityRules@2021-05-01'= {
-  parent: NSG_SimpleEnvironment
-  name: 'SSH_FE_BE'
-  properties: {
-    protocol: 'Tcp'
-    sourcePortRange: '*'
-    sourceApplicationSecurityGroups: [
-      Application_Security_Group_FE
-    ]
-    destinationPortRange: '22'
-    destinationApplicationSecurityGroups: [
-      Application_Security_Group_BE
-    ]
-    access: 'Allow'
-    priority: 310
-    direction: 'Inbound'
-  }
-}
-
 resource VNET__default 'Microsoft.Network/virtualNetworks/subnets@2020-11-01' = {
   parent: VNET_SimpleDeployement
   name: 'default'
@@ -238,10 +235,6 @@ resource networkInterface_VM_Windows_Name_resource 'Microsoft.Network/networkInt
       id: NSG_SimpleEnvironment.id
     }
   }
-  dependsOn: [
-    NSRule_RDP
-    NSRule_SSH_BE
-  ]
 }
 
 
