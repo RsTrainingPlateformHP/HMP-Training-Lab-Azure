@@ -280,7 +280,9 @@
               "primary": true,
               "privateIPAddressVersion": "IPv4",
               "applicationSecurityGroups": [
-                "[reference(resourceId('Microsoft.Network/applicationSecurityGroups', 'FrontEndServer'), '2021-05-01', 'full')]"
+                {
+                  "id": "resourceId('Microsoft.Network/applicationSecurityGroups', 'FrontEndServer'"
+                }
               ]
             }
           }
