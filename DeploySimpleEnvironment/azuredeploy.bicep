@@ -28,11 +28,16 @@ resource NSG_SimpleEnvironment 'Microsoft.Network/networkSecurityGroups@2020-11-
             protocol: 'Tcp'
             sourcePortRange: '*'
             sourceApplicationSecurityGroups: [
-              Application_Security_Group_FE
+              {
+                id: Application_Security_Group_FE.id
+                location: location
+              }
             ]
             destinationPortRange: '22'
             destinationApplicationSecurityGroups: [
-              Application_Security_Group_BE
+              {
+                id: Application_Security_Group_BE.id
+              }
             ]
             access: 'Allow'
             priority: 310
