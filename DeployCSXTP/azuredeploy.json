@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1272.37030",
-      "templateHash": "18366844238063662959"
+      "templateHash": "5343358781593675732"
     }
   },
   "parameters": {
@@ -392,7 +392,9 @@
           "osDisk": {
             "name": "[format('{0}_OSdisk', variables('VM_FE_WINDOWS_name'))]",
             "createOption": "FromImage",
-            "diskSizeGB": 64,
+            "managedDisk": {
+              "storageAccountType": "Standard_LRS"
+            },
             "deleteOption": "Delete"
           },
           "dataDisks": []
@@ -437,7 +439,11 @@
           },
           "osDisk": {
             "name": "[format('{0}_OSdisk', variables('VM_FE_LINUX_name'))]",
-            "createOption": "FromImage"
+            "createOption": "FromImage",
+            "managedDisk": {
+              "storageAccountType": "Standard_LRS"
+            },
+            "deleteOption": "Delete"
           },
           "dataDisks": []
         },
@@ -481,7 +487,11 @@
           },
           "osDisk": {
             "name": "[format('{0}_OSdisk', variables('VM_BE_SERVER_name'))]",
-            "createOption": "FromImage"
+            "createOption": "FromImage",
+            "managedDisk": {
+              "storageAccountType": "Standard_LRS"
+            },
+            "deleteOption": "Delete"
           },
           "dataDisks": []
         },
