@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1272.37030",
-      "templateHash": "5343358781593675732"
+      "templateHash": "8855100786278268717"
     }
   },
   "parameters": {
@@ -24,8 +24,8 @@
     }
   },
   "variables": {
-    "VM_FE_WINDOWS_name": "VM-CSX-TP-LINUX",
-    "VM_FE_LINUX_name": "VM-CSX-TP-WINDOWS",
+    "VM_FE_WINDOWS_name": "VM-CSX-TP-WINDOWS",
+    "VM_FE_LINUX_name": "VM-CSX-TP-LINUX",
     "VM_BE_SERVER_name": "VM-CSX-TP-SERVER",
     "VNET_name": "VNET-Lab-CSX",
     "NSG_Name": "nsg-CSX-TP",

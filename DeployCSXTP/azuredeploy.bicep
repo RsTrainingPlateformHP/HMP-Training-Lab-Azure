@@ -3,8 +3,8 @@ param owner string
 param approver string
 param endDate string
 
-var VM_FE_WINDOWS_name = 'VM-CSX-TP-LINUX'
-var VM_FE_LINUX_name = 'VM-CSX-TP-WINDOWS'
+var VM_FE_WINDOWS_name = 'VM-CSX-TP-WINDOWS'
+var VM_FE_LINUX_name = 'VM-CSX-TP-LINUX'
 var VM_BE_SERVER_name = 'VM-CSX-TP-SERVER'
 
 var VNET_name = 'VNET-Lab-CSX'
