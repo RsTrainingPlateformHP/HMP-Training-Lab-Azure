@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1318.3566",
-      "templateHash": "5628411350054668120"
+      "templateHash": "18423129526303928690"
     }
   },
   "parameters": {
@@ -519,11 +519,11 @@
   "outputs": {
     "Public_IP_VM_FE_Windows": {
       "type": "string",
-      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', variables('VM_FE_WINDOWS_name')))).ipAddress]"
+      "value": "[reference(resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface', variables('VM_FE_WINDOWS_name')))).ipConfigurations[0].properties.publicIPAddress.properties.ipAddress]"
     },
     "Public_IP_VM_FE_Linux": {
       "type": "string",
-      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', variables('VM_FE_LINUX_name')))).ipAddress]"
+      "value": "[reference(resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface', variables('VM_FE_LINUX_name')))).ipConfigurations[0].properties.publicIPAddress.properties.ipAddress]"
     },
     "Private_IP_VM_BE_SERVER": {
       "type": "string",

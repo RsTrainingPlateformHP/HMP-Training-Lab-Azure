@@ -453,6 +453,6 @@ resource VM_BE_SERVER 'Microsoft.Compute/virtualMachines@2021-11-01' = {
   }
 }
 
-output Public_IP_VM_FE_Windows string = publicIP_VM_FE_Windows.properties.ipAddress
-output Public_IP_VM_FE_Linux string = publicIP_VM_FE_LINUX.properties.ipAddress
+output Public_IP_VM_FE_Windows string = networkInterface_VM_FE_Windows.properties.ipConfigurations[0].properties.publicIPAddress.properties.ipAddress
+output Public_IP_VM_FE_Linux string = networkInterface_VM_FE_LINUX.properties.ipConfigurations[0].properties.publicIPAddress.properties.ipAddress
 output Private_IP_VM_BE_SERVER string = networkInterface_VM_BE_SERVER.properties.ipConfigurations[0].properties.privateIPAddress
