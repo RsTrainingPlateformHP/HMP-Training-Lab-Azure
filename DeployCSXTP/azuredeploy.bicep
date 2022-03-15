@@ -368,11 +368,6 @@ resource VM_FE_WINDOWS 'Microsoft.Compute/virtualMachines@2021-11-01' = {
 resource VM_FE_LINUX 'Microsoft.Compute/virtualMachines@2021-11-01' = {
   name: VM_FE_LINUX_name
   location: location
-  plan: {
-    name: ''
-    product:''
-    publisher:''
-  }
   tags: {
     owner: owner
     approver: approver
