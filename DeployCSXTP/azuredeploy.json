@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.4.1272.37030",
-      "templateHash": "8855100786278268717"
+      "version": "0.4.1318.3566",
+      "templateHash": "4785608259185239741"
     }
   },
   "parameters": {
@@ -296,10 +296,10 @@
             "properties": {
               "privateIPAllocationMethod": "Dynamic",
               "publicIPAddress": {
-                "id": "[reference(resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', variables('VM_FE_LINUX_name')))).subnets[0].id]"
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', variables('VM_FE_LINUX_name')))]"
               },
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('VNET_name'))]"
+                "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', variables('VNET_name'))).subnets[0].id]"
               },
               "primary": true,
               "privateIPAddressVersion": "IPv4",
@@ -424,6 +424,11 @@
       "apiVersion": "2021-11-01",
       "name": "[variables('VM_FE_LINUX_name')]",
       "location": "[parameters('location')]",
+      "plan": {
+        "name": "",
+        "product": "",
+        "publisher": ""
+      },
       "tags": {
         "owner": "[parameters('owner')]",
         "approver": "[parameters('approver')]",

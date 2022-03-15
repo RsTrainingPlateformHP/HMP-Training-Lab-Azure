@@ -257,10 +257,10 @@ resource networkInterface_VM_FE_LINUX 'Microsoft.Network/networkInterfaces@2020-
         properties: {
           privateIPAllocationMethod: 'Dynamic'
           publicIPAddress: {
-            id: publicIP_VM_FE_LINUX.properties.subnets[0].id
+            id: publicIP_VM_FE_LINUX.id
           }
           subnet: {
-            id: VNET_TP_CSX.id
+            id: VNET_TP_CSX.properties.subnets[0].id
           }
           primary: true
           privateIPAddressVersion: 'IPv4'
@@ -368,6 +368,11 @@ resource VM_FE_WINDOWS 'Microsoft.Compute/virtualMachines@2021-11-01' = {
 resource VM_FE_LINUX 'Microsoft.Compute/virtualMachines@2021-11-01' = {
   name: VM_FE_LINUX_name
   location: location
+  plan: {
+    name: ''
+    product:''
+    publisher:''
+  }
   tags: {
     owner: owner
     approver: approver
