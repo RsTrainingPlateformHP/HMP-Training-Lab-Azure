@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1318.3566",
-      "templateHash": "18268823592436768784"
+      "templateHash": "1797134202599165813"
     }
   },
   "parameters": {
@@ -99,7 +99,7 @@
     {
       "type": "Microsoft.Network/virtualNetworks",
       "apiVersion": "2020-11-01",
-      "name": "[variables('VNET_name')]",
+      "name": "[format('{0}{1}', variables('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name))]",
       "location": "[parameters('location')]",
       "tags": {
         "owner": "[parameters('owner')]",
@@ -238,7 +238,7 @@
                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', variables('VM_FE_WINDOWS_name')))]"
               },
               "subnet": {
-                "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', variables('VNET_name'))).subnets[0].id]"
+                "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', variables('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name)))).subnets[0].id]"
               },
               "primary": true,
               "privateIPAddressVersion": "IPv4",
@@ -263,7 +263,7 @@
         "[resourceId('Microsoft.Network/applicationSecurityGroups', 'FrontEndServer')]",
         "[resourceId('Microsoft.Network/networkSecurityGroups', variables('NSG_Name'))]",
         "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', variables('VM_FE_WINDOWS_name')))]",
-        "[resourceId('Microsoft.Network/virtualNetworks', variables('VNET_name'))]"
+        "[resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', variables('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name)))]"
       ]
     },
     {
@@ -286,7 +286,7 @@
                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', variables('VM_FE_LINUX_name')))]"
               },
               "subnet": {
-                "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', variables('VNET_name'))).subnets[0].id]"
+                "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', variables('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name)))).subnets[0].id]"
               },
               "primary": true,
               "privateIPAddressVersion": "IPv4",
@@ -311,7 +311,7 @@
         "[resourceId('Microsoft.Network/applicationSecurityGroups', 'FrontEndServer')]",
         "[resourceId('Microsoft.Network/networkSecurityGroups', variables('NSG_Name'))]",
         "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', variables('VM_FE_LINUX_name')))]",
-        "[resourceId('Microsoft.Network/virtualNetworks', variables('VNET_name'))]"
+        "[resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', variables('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name)))]"
       ]
     },
     {
@@ -331,7 +331,7 @@
             "properties": {
               "privateIPAllocationMethod": "Dynamic",
               "subnet": {
-                "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', variables('VNET_name'))).subnets[0].id]"
+                "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', variables('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name)))).subnets[0].id]"
               },
               "primary": true,
               "privateIPAddressVersion": "IPv4",
@@ -355,7 +355,7 @@
       "dependsOn": [
         "[resourceId('Microsoft.Network/applicationSecurityGroups', 'BackEndServer')]",
         "[resourceId('Microsoft.Network/networkSecurityGroups', variables('NSG_Name'))]",
-        "[resourceId('Microsoft.Network/virtualNetworks', variables('VNET_name'))]"
+        "[resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', variables('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name)))]"
       ]
     },
     {

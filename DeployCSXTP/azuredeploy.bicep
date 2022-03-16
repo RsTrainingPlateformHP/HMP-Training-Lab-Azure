@@ -73,7 +73,7 @@ resource publicIP_VM_FE_LINUX 'Microsoft.Network/publicIPAddresses@2020-11-01' =
 }
 
 resource VNET_TP_CSX 'Microsoft.Network/virtualNetworks@2020-11-01' = {
-  name: VNET_name
+  name: '${VNET_name}${uniqueString(subscription().subscriptionId, deployment().name)}'
   location: location
   tags: {
     owner: owner
