@@ -172,19 +172,6 @@ resource NSG_TP_CSX 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
           }
         }
         {
-          name: 'RestrictVNetFlowInbound'
-          properties: {
-            protocol: '*'
-            sourcePortRange: '*'
-            destinationPortRange: '*'
-            sourceAddressPrefix: 'VirtualNetwork'
-            destinationAddressPrefix: 'VirtualNetwork'
-            access: 'Deny'
-            priority: 300
-            direction: 'Inbound'
-          }
-        }
-        {
           name: 'RestrictVNetFlowOutbould'
           properties: {
             protocol: '*'
@@ -452,6 +439,27 @@ resource VM_BE_SERVER 'Microsoft.Compute/virtualMachines@2021-11-01' = {
     }
   }
 }
+
+resource SecurityRuleRestrictVNetFLow 'Microsoft.Network/networkSecurityGroups/securityRules@2021-05-01' = {
+  parent: NSG_TP_CSX
+  name: 'RestrictVNetFlowInbound'
+  properties: { 
+    protocol: '*'
+    sourcePortRange: '*'
+    destinationPortRange: '*'
+    sourceAddressPrefix: 'VirtualNetwork'
+    destinationAddressPrefix: 'VirtualNetwork'
+    access: 'Deny'
+    priority: 300
+    direction: 'Inbound'
+  }
+  dependsOn: [
+    VM_BE_SERVER
+    VM_FE_LINUX
+    VM_FE_WINDOWS
+  ]
+}
+
 
 output Public_IP_VM_FE_Windows string = publicIP_VM_FE_Windows.properties.ipAddress
 output Public_IP_VM_FE_Linux string = publicIP_VM_FE_LINUX.properties.ipAddress

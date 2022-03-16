@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1318.3566",
-      "templateHash": "5628411350054668120"
+      "templateHash": "11002935437249397652"
     }
   },
   "parameters": {
@@ -195,19 +195,6 @@
               ],
               "access": "Allow",
               "priority": 120,
-              "direction": "Inbound"
-            }
-          },
-          {
-            "name": "RestrictVNetFlowInbound",
-            "properties": {
-              "protocol": "*",
-              "sourcePortRange": "*",
-              "destinationPortRange": "*",
-              "sourceAddressPrefix": "VirtualNetwork",
-              "destinationAddressPrefix": "VirtualNetwork",
-              "access": "Deny",
-              "priority": 300,
               "direction": "Inbound"
             }
           },
@@ -513,6 +500,27 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface', variables('VM_BE_SERVER_name')))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+      "apiVersion": "2021-05-01",
+      "name": "[format('{0}/{1}', variables('NSG_Name'), 'RestrictVNetFlowInbound')]",
+      "properties": {
+        "protocol": "*",
+        "sourcePortRange": "*",
+        "destinationPortRange": "*",
+        "sourceAddressPrefix": "VirtualNetwork",
+        "destinationAddressPrefix": "VirtualNetwork",
+        "access": "Deny",
+        "priority": 300,
+        "direction": "Inbound"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkSecurityGroups', variables('NSG_Name'))]",
+        "[resourceId('Microsoft.Compute/virtualMachines', variables('VM_BE_SERVER_name'))]",
+        "[resourceId('Microsoft.Compute/virtualMachines', variables('VM_FE_LINUX_name'))]",
+        "[resourceId('Microsoft.Compute/virtualMachines', variables('VM_FE_WINDOWS_name'))]"
       ]
     }
   ],
