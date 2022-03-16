@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1318.3566",
-      "templateHash": "1797134202599165813"
+      "templateHash": "4329873795834321287"
     }
   },
   "parameters": {
@@ -29,9 +29,9 @@
     "VM_BE_SERVER_name": "VM-CSX-TP-SERVER",
     "VNET_name": "VNET-Lab-CSX",
     "NSG_Name": "nsg-CSX-TP",
-    "ImageID_VM_FE_WINDOWS": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_CSX_WINDOWS_VM/versions/latest",
-    "ImageID_VM_FE_LINUX": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_CSX_LINUX_VM/versions/latest",
-    "ImageID_VM_BE_SERVER": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_CSX_SERVER_VM/versions/latest"
+    "ImageID_VM_FE_WINDOWS": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_CSX_WINDOWS_VM/versions/1.0.0",
+    "ImageID_VM_FE_LINUX": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_CSX_LINUX_VM/versions/1.0.0",
+    "ImageID_VM_BE_SERVER": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_CSX_SERVER_VM/versions/1.0.0"
   },
   "resources": [
     {

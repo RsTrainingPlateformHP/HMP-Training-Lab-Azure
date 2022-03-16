@@ -10,9 +10,9 @@ var VM_BE_SERVER_name = 'VM-CSX-TP-SERVER'
 var VNET_name = 'VNET-Lab-CSX'
 var NSG_Name = 'nsg-CSX-TP'
 
-var ImageID_VM_FE_WINDOWS = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_CSX_WINDOWS_VM/versions/latest'
-var ImageID_VM_FE_LINUX = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_CSX_LINUX_VM/versions/latest'
-var ImageID_VM_BE_SERVER = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_CSX_SERVER_VM/versions/latest'
+var ImageID_VM_FE_WINDOWS = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_CSX_WINDOWS_VM/versions/1.0.0'
+var ImageID_VM_FE_LINUX = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_CSX_LINUX_VM/versions/1.0.0'
+var ImageID_VM_BE_SERVER = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_CSX_SERVER_VM/versions/1.0.0'
 
 resource Application_Security_Group_FE 'Microsoft.Network/applicationSecurityGroups@2021-05-01' = {
   name: 'FrontEndServer'
