@@ -459,8 +459,3 @@ resource SecurityRuleRestrictVNetFLow 'Microsoft.Network/networkSecurityGroups/s
     VM_FE_WINDOWS
   ]
 }
-
-
-output Public_IP_VM_FE_Windows string = publicIP_VM_FE_Windows.properties.ipAddress
-output Public_IP_VM_FE_Linux string = publicIP_VM_FE_LINUX.properties.ipAddress
-output Private_IP_VM_BE_SERVER string = networkInterface_VM_BE_SERVER.properties.ipConfigurations[0].properties.privateIPAddress
