@@ -201,7 +201,8 @@ resource networkInterface_VM_FE_Windows 'Microsoft.Network/networkInterfaces@202
       {
         name: 'ipconfig1'
         properties: {
-          privateIPAllocationMethod: 'Dynamic'
+          privateIPAllocationMethod: 'Static'
+          privateIPAddress: '10.3.0.5'
           publicIPAddress: {
             id: publicIP_VM_FE_Windows.id
           }
@@ -284,7 +285,8 @@ resource networkInterface_VM_BE_SERVER 'Microsoft.Network/networkInterfaces@2020
       {
         name: 'ipconfig1'
         properties: {
-          privateIPAllocationMethod: 'Dynamic'
+          privateIPAllocationMethod: 'Static'
+          privateIPAddress: '10.3.0.6'
           subnet: {
             id: VNET_TP_CSX.properties.subnets[0].id
           }
