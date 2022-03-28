@@ -243,7 +243,7 @@ resource networkInterface_VM_FE_LINUX 'Microsoft.Network/networkInterfaces@2020-
         name: 'ipconfig1'
         properties: {
           privateIPAllocationMethod: 'Static'
-          privateIPAddress: '10.0.0.4'
+          privateIPAddress: '10.3.0.4'
           publicIPAddress: {
             id: publicIP_VM_FE_LINUX.id
           }
