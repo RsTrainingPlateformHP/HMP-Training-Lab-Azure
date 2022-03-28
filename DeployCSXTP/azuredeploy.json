@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1318.3566",
-      "templateHash": "1797134202599165813"
+      "templateHash": "11831107280314897505"
     }
   },
   "parameters": {
@@ -281,7 +281,8 @@
           {
             "name": "ipconfig1",
             "properties": {
-              "privateIPAllocationMethod": "Dynamic",
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "10.0.0.4",
               "publicIPAddress": {
                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', variables('VM_FE_LINUX_name')))]"
               },
