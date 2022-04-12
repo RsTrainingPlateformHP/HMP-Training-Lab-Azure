@@ -113,7 +113,7 @@ resource NSG_TP_CSX 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
   properties: {
       securityRules: [
         {
-          name: 'SSH_FE_BE'
+          name: 'SSH_FE_to_BE_Inbound'
           properties: {
             protocol: 'Tcp'
             sourcePortRange: '*'
@@ -136,6 +136,29 @@ resource NSG_TP_CSX 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
           }
         }
         {
+          name: 'SSH_BE_to_FE_Inbound'
+          properties: {
+            protocol: 'Tcp'
+            sourcePortRange: '*'
+            sourceApplicationSecurityGroups: [
+              {
+                id: Application_Security_Group_BE.id
+                location: location
+              }
+            ]
+            destinationPortRange: '22'
+            destinationApplicationSecurityGroups: [
+              {
+                id: Application_Security_Group_FE.id
+                location: location
+              }
+            ]
+            access: 'Allow'
+            priority: 110
+            direction: 'Inbound'
+          }
+        }
+        {
           name: 'RDP_Inbound'
           properties: {
             protocol: 'Tcp'
@@ -149,7 +172,7 @@ resource NSG_TP_CSX 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
               }
             ]
             access: 'Allow'
-            priority: 110
+            priority: 120
             direction: 'Inbound'
           }
         }
@@ -167,12 +190,58 @@ resource NSG_TP_CSX 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
               }
             ]
             access: 'Allow'
-            priority: 120
+            priority: 130
             direction: 'Inbound'
           }
         }
         {
-          name: 'RestrictVNetFlowOutbould'
+          name: 'SSH_FE_to_BE_Outbound'
+          properties: {
+            protocol: 'Tcp'
+            sourcePortRange: '*'
+            sourceApplicationSecurityGroups: [
+              {
+                id: Application_Security_Group_FE.id
+                location: location
+              }
+            ]
+            destinationPortRange: '22'
+            destinationApplicationSecurityGroups: [
+              {
+                id: Application_Security_Group_BE.id
+                location: location
+              }
+            ]
+            access: 'Allow'
+            priority: 100
+            direction: 'Outbound'
+          }
+        }
+                {
+          name: 'SSH_BE_to_FE_Outbound'
+          properties: {
+            protocol: 'Tcp'
+            sourcePortRange: '*'
+            sourceApplicationSecurityGroups: [
+              {
+                id: Application_Security_Group_BE.id
+                location: location
+              }
+            ]
+            destinationPortRange: '22'
+            destinationApplicationSecurityGroups: [
+              {
+                id: Application_Security_Group_FE.id
+                location: location
+              }
+            ]
+            access: 'Allow'
+            priority: 110
+            direction: 'Outbound'
+          }
+        }
+        {
+          name: 'RestrictVNetFlowOutbound'
           properties: {
             protocol: '*'
             sourcePortRange: '*'
@@ -184,6 +253,7 @@ resource NSG_TP_CSX 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
             direction: 'Outbound'
           }
         }
+        
       ]
   }
 }

@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.4.1318.3566",
-      "templateHash": "1596097543097781995"
+      "version": "0.5.6.12127",
+      "templateHash": "12712650166148506796"
     }
   },
   "parameters": {
@@ -140,7 +140,7 @@
       "properties": {
         "securityRules": [
           {
-            "name": "SSH_FE_BE",
+            "name": "SSH_FE_to_BE_Inbound",
             "properties": {
               "protocol": "Tcp",
               "sourcePortRange": "*",
@@ -163,6 +163,29 @@
             }
           },
           {
+            "name": "SSH_BE_to_FE_Inbound",
+            "properties": {
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "sourceApplicationSecurityGroups": [
+                {
+                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', 'BackEndServer')]",
+                  "location": "[parameters('location')]"
+                }
+              ],
+              "destinationPortRange": "22",
+              "destinationApplicationSecurityGroups": [
+                {
+                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', 'FrontEndServer')]",
+                  "location": "[parameters('location')]"
+                }
+              ],
+              "access": "Allow",
+              "priority": 110,
+              "direction": "Inbound"
+            }
+          },
+          {
             "name": "RDP_Inbound",
             "properties": {
               "protocol": "Tcp",
@@ -176,7 +199,7 @@
                 }
               ],
               "access": "Allow",
-              "priority": 110,
+              "priority": 120,
               "direction": "Inbound"
             }
           },
@@ -194,12 +217,58 @@
                 }
               ],
               "access": "Allow",
-              "priority": 120,
+              "priority": 130,
               "direction": "Inbound"
             }
           },
           {
-            "name": "RestrictVNetFlowOutbould",
+            "name": "SSH_FE_to_BE_Outbound",
+            "properties": {
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "sourceApplicationSecurityGroups": [
+                {
+                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', 'FrontEndServer')]",
+                  "location": "[parameters('location')]"
+                }
+              ],
+              "destinationPortRange": "22",
+              "destinationApplicationSecurityGroups": [
+                {
+                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', 'BackEndServer')]",
+                  "location": "[parameters('location')]"
+                }
+              ],
+              "access": "Allow",
+              "priority": 100,
+              "direction": "Outbound"
+            }
+          },
+          {
+            "name": "SSH_BE_to_FE_Outbound",
+            "properties": {
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "sourceApplicationSecurityGroups": [
+                {
+                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', 'BackEndServer')]",
+                  "location": "[parameters('location')]"
+                }
+              ],
+              "destinationPortRange": "22",
+              "destinationApplicationSecurityGroups": [
+                {
+                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', 'FrontEndServer')]",
+                  "location": "[parameters('location')]"
+                }
+              ],
+              "access": "Allow",
+              "priority": 110,
+              "direction": "Outbound"
+            }
+          },
+          {
+            "name": "RestrictVNetFlowOutbound",
             "properties": {
               "protocol": "*",
               "sourcePortRange": "*",
