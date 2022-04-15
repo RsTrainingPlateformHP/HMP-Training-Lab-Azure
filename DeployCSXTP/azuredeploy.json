@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.5.6.12127",
-      "templateHash": "13975282887137983852"
+      "templateHash": "12712650166148506796"
     }
   },
   "parameters": {
@@ -225,14 +225,14 @@
             "name": "SSH_FE_to_BE_Outbound",
             "properties": {
               "protocol": "Tcp",
-              "sourcePortRange": "22",
+              "sourcePortRange": "*",
               "sourceApplicationSecurityGroups": [
                 {
                   "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', 'FrontEndServer')]",
                   "location": "[parameters('location')]"
                 }
               ],
-              "destinationPortRange": "*",
+              "destinationPortRange": "22",
               "destinationApplicationSecurityGroups": [
                 {
                   "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', 'BackEndServer')]",
@@ -248,14 +248,14 @@
             "name": "SSH_BE_to_FE_Outbound",
             "properties": {
               "protocol": "Tcp",
-              "sourcePortRange": "22",
+              "sourcePortRange": "*",
               "sourceApplicationSecurityGroups": [
                 {
                   "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', 'BackEndServer')]",
                   "location": "[parameters('location')]"
                 }
               ],
-              "destinationPortRange": "*",
+              "destinationPortRange": "22",
               "destinationApplicationSecurityGroups": [
                 {
                   "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', 'FrontEndServer')]",

@@ -198,14 +198,14 @@ resource NSG_TP_CSX 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
           name: 'SSH_FE_to_BE_Outbound'
           properties: {
             protocol: 'Tcp'
-            sourcePortRange: '22'
+            sourcePortRange: '*'
             sourceApplicationSecurityGroups: [
               {
                 id: Application_Security_Group_FE.id
                 location: location
               }
             ]
-            destinationPortRange: '*'
+            destinationPortRange: '22'
             destinationApplicationSecurityGroups: [
               {
                 id: Application_Security_Group_BE.id
@@ -221,14 +221,14 @@ resource NSG_TP_CSX 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
           name: 'SSH_BE_to_FE_Outbound'
           properties: {
             protocol: 'Tcp'
-            sourcePortRange: '22'
+            sourcePortRange: '*'
             sourceApplicationSecurityGroups: [
               {
                 id: Application_Security_Group_BE.id
                 location: location
               }
             ]
-            destinationPortRange: '*'
+            destinationPortRange: '22'
             destinationApplicationSecurityGroups: [
               {
                 id: Application_Security_Group_FE.id
