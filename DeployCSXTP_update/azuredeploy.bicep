@@ -1,4 +1,11 @@
 
+param location string = 'francecentral'
+
+
+param owner string
+param approver string
+param endDate string
+
 var accountNames  = [
   'user1'
   'user2'
@@ -11,6 +18,11 @@ module stgModule './singleunit.bicep' = [for name in accountNames: {
   params: {
     accountName : name
     accountIndex: indexOf(accountNames, name )
+    location : location
+    owner : owner
+    approver:approver
+    endDate: endDate
+
   }
 }]
 
