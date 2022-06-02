@@ -29,7 +29,7 @@ module stgModule './singleunit.bicep' = [for name in accountNames: {
   }
 }]
 
-output namesArray array = accountNamesJson
+output namesArray string = first(accountNamesJson)
 
 /* resource createStorages 'Microsoft.Storage/storageAccounts@2021-06-01' = [for i in range(0, storageCount): {
   name: '${i}storage${uniqueString(resourceGroup().id)}'
