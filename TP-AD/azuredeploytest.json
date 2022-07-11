@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.8.9.13224",
-      "templateHash": "15285687312522171782"
+      "templateHash": "8082703599961608239"
     }
   },
   "parameters": {
@@ -24,6 +24,36 @@
     }
   },
   "resources": [
+    {
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "apiVersion": "2021-08-01",
+      "name": "beijaWIN01",
+      "location": "[parameters('location')]",
+      "tags": {
+        "owner": "[parameters('owner')]",
+        "approver": "[parameters('approver')]",
+        "endDate": "[parameters('endDate')]"
+      },
+      "properties": {
+        "securityRules": [
+          {
+            "name": "default-allow-rdp",
+            "properties": {
+              "priority": 1000,
+              "protocol": "TCP",
+              "access": "Allow",
+              "direction": "Inbound",
+              "sourceApplicationSecurityGroups": [],
+              "destinationApplicationSecurityGroups": [],
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "3389"
+            }
+          }
+        ]
+      }
+    },
     {
       "type": "Microsoft.Network/networkInterfaces",
       "apiVersion": "2021-08-01",
@@ -53,10 +83,11 @@
           }
         ],
         "networkSecurityGroup": {
-          "id": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_TP_AD/providers/Microsoft.Network/networkSecurityGroups/BeijaWIN01-nsg"
+          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'beijaWIN01')]"
         }
       },
       "dependsOn": [
+        "[resourceId('Microsoft.Network/networkSecurityGroups', 'beijaWIN01')]",
         "[resourceId('Microsoft.Network/publicIPAddresses', 'BeijaWIN01-ip')]"
       ]
     },

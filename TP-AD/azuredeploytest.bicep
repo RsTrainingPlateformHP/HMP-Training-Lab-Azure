@@ -4,7 +4,36 @@ param owner string
 param approver string
 param endDate string
 
+resource nsg_win01 'Microsoft.Network/networkSecurityGroups@2021-08-01' = {
+  name: 'beijaWIN01'
+  location: location
+  tags:{
+    owner: owner
+    approver: approver
+    endDate: endDate
+  }
+  properties: {
+    securityRules: [ {
+      name: 'default-allow-rdp'
+      properties: {
+          priority: 1000
+          protocol: 'TCP'
+          access: 'Allow'
+          direction: 'Inbound'
+          sourceApplicationSecurityGroups: []
+          destinationApplicationSecurityGroups: []
+          sourceAddressPrefix: '*'
+          sourcePortRange: '*'
+          destinationAddressPrefix: '*'
+          destinationPortRange: '3389'
+      } 
+    }
+  ]
+  }
+  
 
+
+}
 
 resource networkInterfaceName_resource 'Microsoft.Network/networkInterfaces@2021-08-01' = {
   name: 'beijawin01895'
@@ -33,7 +62,7 @@ resource networkInterfaceName_resource 'Microsoft.Network/networkInterfaces@2021
       }
     ]
     networkSecurityGroup: {
-      id: '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_TP_AD/providers/Microsoft.Network/networkSecurityGroups/BeijaWIN01-nsg'
+      id: nsg_win01.id
     }
   }
   dependsOn: [
