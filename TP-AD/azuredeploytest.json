@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.8.9.13224",
-      "templateHash": "8609404609990630692"
+      "templateHash": "15285687312522171782"
     }
   },
   "parameters": {
@@ -53,7 +53,7 @@
           }
         ],
         "networkSecurityGroup": {
-          "id": "BeijaWIN01-nsg"
+          "id": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_TP_AD/providers/Microsoft.Network/networkSecurityGroups/BeijaWIN01-nsg"
         }
       },
       "dependsOn": [

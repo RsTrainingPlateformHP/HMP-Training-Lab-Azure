@@ -33,7 +33,7 @@ resource networkInterfaceName_resource 'Microsoft.Network/networkInterfaces@2021
       }
     ]
     networkSecurityGroup: {
-      id: 'BeijaWIN01-nsg'
+      id: '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_TP_AD/providers/Microsoft.Network/networkSecurityGroups/BeijaWIN01-nsg'
     }
   }
   dependsOn: [
