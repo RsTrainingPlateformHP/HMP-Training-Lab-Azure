@@ -117,7 +117,7 @@ resource virtualMachineName_resource 'Microsoft.Compute/virtualMachines@2021-07-
     osProfile: {
       computerName: 'BeijaWIN01'
       adminUsername: 'AdminAdminAdmin'
-      adminPassword: 'AdminAdminAdmin'
+      adminPassword: 'AdminAdminAdmin@01'
       windowsConfiguration: {
         enableAutomaticUpdates: false
         provisionVMAgent: true

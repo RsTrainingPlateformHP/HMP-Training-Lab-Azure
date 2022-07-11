@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.8.9.13224",
-      "templateHash": "9962521431509019594"
+      "templateHash": "15880736009499203678"
     }
   },
   "parameters": {
@@ -141,7 +141,7 @@
         "osProfile": {
           "computerName": "BeijaWIN01",
           "adminUsername": "AdminAdminAdmin",
-          "adminPassword": "AdminAdminAdmin",
+          "adminPassword": "AdminAdminAdmin@01",
           "windowsConfiguration": {
             "enableAutomaticUpdates": false,
             "provisionVMAgent": true,
