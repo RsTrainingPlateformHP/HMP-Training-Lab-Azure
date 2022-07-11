@@ -49,7 +49,7 @@ resource networkInterfaceName_resource 'Microsoft.Network/networkInterfaces@2021
         name: 'ipconfig1'
         properties: {
           subnet: {
-            id: '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_TP_AD/providers/Microsoft.Network/virtualNetworks/RG_TP_AD-vnet01/RG_TP_AD-vnet01_windows'
+            id: '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_TP_AD/providers/Microsoft.Network/virtualNetworks/subnets/RG_TP_AD-vnet01/RG_TP_AD-vnet01_windows'
           }
           privateIPAllocationMethod: 'Dynamic'
           publicIPAddress: {
