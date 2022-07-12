@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.8.9.13224",
-      "templateHash": "15880736009499203678"
+      "templateHash": "1612649905388787666"
     }
   },
   "parameters": {
@@ -21,7 +21,27 @@
     },
     "endDate": {
       "type": "string"
+    },
+    "vm_username": {
+      "type": "string",
+      "metadata": {
+        "description": "Choisir nom du compte admin et son password"
+      }
+    },
+    "vm_password": {
+      "type": "secureString"
     }
+  },
+  "variables": {
+    "vnet_tp_name": "vnet_tp_ad",
+    "subnet_win": "sub_vnet_win",
+    "subnet_dc": "sub_vnet_dc",
+    "win01_ip": "beijaWIN01-ip",
+    "win01": "beijaWIN01",
+    "dc01": "beijaDC01",
+    "domain": "beijflore.racine",
+    "dcInterface": "beijaDCinterface",
+    "dcPublicIP": "beijaDC01-ip"
   },
   "resources": [
     {
@@ -45,13 +65,53 @@
               "direction": "Inbound",
               "sourceApplicationSecurityGroups": [],
               "destinationApplicationSecurityGroups": [],
-              "sourceAddressPrefix": "*",
+              "sourceAddressPrefix": "10.5.0.0/16",
               "sourcePortRange": "*",
               "destinationAddressPrefix": "*",
               "destinationPortRange": "3389"
             }
           }
         ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2021-08-01",
+      "name": "[variables('vnet_tp_name')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "owner": "[parameters('owner')]",
+        "approver": "[parameters('approver')]",
+        "endDate": "[parameters('endDate')]"
+      },
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.5.0.0/16"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[variables('subnet_win')]",
+            "properties": {
+              "addressPrefix": "10.5.0.0/24",
+              "delegations": [],
+              "privateEndpointNetworkPolicies": "Enabled",
+              "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+          },
+          {
+            "name": "[variables('subnet_dc')]",
+            "properties": {
+              "addressPrefix": "10.5.1.0/24",
+              "delegations": [],
+              "privateEndpointNetworkPolicies": "Enabled",
+              "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+          }
+        ],
+        "virtualNetworkPeerings": [],
+        "enableDdosProtection": false
       }
     },
     {
@@ -70,13 +130,13 @@
             "name": "ipconfig1",
             "properties": {
               "subnet": {
-                "id": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_TP_AD/providers/Microsoft.Network/virtualNetworks/RG_TP_AD-vnet01/subnets/RG_TP_AD-vnet01_windows"
+                "id": "[resourceId('Microsoft.Network/VirtualNetworks/subnets', variables('vnet_tp_name'), variables('subnet_win'))]"
               },
               "privateIPAllocationMethod": "Dynamic",
               "publicIPAddress": {
-                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', 'BeijaWIN01-ip')]",
+                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', variables('win01_ip'))]",
                 "properties": {
-                  "deleteOption": "Detach"
+                  "deleteOption": "Delete"
                 }
               }
             }
@@ -88,13 +148,13 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkSecurityGroups', 'beijaWIN01')]",
-        "[resourceId('Microsoft.Network/publicIPAddresses', 'BeijaWIN01-ip')]"
+        "[resourceId('Microsoft.Network/publicIPAddresses', variables('win01_ip'))]"
       ]
     },
     {
       "type": "Microsoft.Network/publicIPAddresses",
       "apiVersion": "2021-08-01",
-      "name": "BeijaWIN01-ip",
+      "name": "[variables('win01_ip')]",
       "location": "[parameters('location')]",
       "properties": {
         "publicIPAllocationMethod": "Dynamic"
@@ -107,11 +167,11 @@
     {
       "type": "Microsoft.Compute/virtualMachines",
       "apiVersion": "2021-07-01",
-      "name": "BeijaWIN01",
+      "name": "[variables('win01')]",
       "location": "[parameters('location')]",
       "properties": {
         "hardwareProfile": {
-          "vmSize": "Standard_A4_v2"
+          "vmSize": "Standard_B2s"
         },
         "storageProfile": {
           "osDisk": {
@@ -133,15 +193,15 @@
             {
               "id": "[resourceId('Microsoft.Network/networkInterfaces', 'beijawin01895')]",
               "properties": {
-                "deleteOption": "Detach"
+                "deleteOption": "Delete"
               }
             }
           ]
         },
         "osProfile": {
-          "computerName": "BeijaWIN01",
-          "adminUsername": "AdminAdminAdmin",
-          "adminPassword": "AdminAdminAdmin@01",
+          "computerName": "[variables('win01')]",
+          "adminUsername": "[parameters('vm_username')]",
+          "adminPassword": "[parameters('vm_password')]",
           "windowsConfiguration": {
             "enableAutomaticUpdates": false,
             "provisionVMAgent": true,
@@ -155,6 +215,109 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkInterfaces', 'beijawin01895')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2021-08-01",
+      "name": "[variables('dcInterface')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "owner": "[parameters('owner')]",
+        "approver": "[parameters('approver')]",
+        "endDate": "[parameters('endDate')]"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/VirtualNetworks/subnets', variables('vnet_tp_name'), variables('subnet_dc'))]"
+              },
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', variables('dcPublicIP'))]",
+                "properties": {
+                  "deleteOption": "Delete"
+                }
+              }
+            }
+          }
+        ],
+        "networkSecurityGroup": {
+          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'beijaWIN01')]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', variables('dcPublicIP'))]",
+        "[resourceId('Microsoft.Network/networkSecurityGroups', 'beijaWIN01')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2021-08-01",
+      "name": "[variables('dcPublicIP')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic"
+      },
+      "sku": {
+        "name": "Basic",
+        "tier": "Regional"
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2021-07-01",
+      "name": "[variables('dc01')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "Standard_B2s"
+        },
+        "storageProfile": {
+          "osDisk": {
+            "createOption": "FromImage",
+            "managedDisk": {
+              "storageAccountType": "Standard_LRS"
+            },
+            "deleteOption": "Delete"
+          },
+          "imageReference": {
+            "publisher": "MicrosoftWindowsServer",
+            "offer": "WindowsServer",
+            "sku": "2019-Datacenter",
+            "version": "latest"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('dcInterface'))]",
+              "properties": {
+                "deleteOption": "Delete"
+              }
+            }
+          ]
+        },
+        "osProfile": {
+          "computerName": "[variables('win01')]",
+          "adminUsername": "[parameters('vm_username')]",
+          "adminPassword": "[parameters('vm_password')]",
+          "windowsConfiguration": {
+            "enableAutomaticUpdates": false,
+            "provisionVMAgent": true,
+            "patchSettings": {
+              "enableHotpatching": false,
+              "patchMode": "Manual"
+            }
+          }
+        },
+        "licenseType": "Windows_Client"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('dcInterface'))]"
       ]
     }
   ]

@@ -3,6 +3,21 @@ param location string = 'francecentral'
 param owner string
 param approver string
 param endDate string
+@description('Choisir nom du compte admin et son password')
+param vm_username string
+@secure()
+param vm_password string
+
+var vnet_tp_name = 'vnet_tp_ad'
+var subnet_win = 'sub_vnet_win'
+var subnet_dc = 'sub_vnet_dc'
+var win01_ip = 'beijaWIN01-ip'
+var win01 = 'beijaWIN01'
+
+var dc01 = 'beijaDC01'
+var domain = 'beijflore.racine'
+var dcInterface = 'beijaDCinterface'
+var dcPublicIP = 'beijaDC01-ip'
 
 resource nsg_win01 'Microsoft.Network/networkSecurityGroups@2021-08-01' = {
   name: 'beijaWIN01'
@@ -22,7 +37,7 @@ resource nsg_win01 'Microsoft.Network/networkSecurityGroups@2021-08-01' = {
           direction: 'Inbound'
           sourceApplicationSecurityGroups: []
           destinationApplicationSecurityGroups: []
-          sourceAddressPrefix: '*'
+          sourceAddressPrefix: '10.5.0.0/16'
           sourcePortRange: '*'
           destinationAddressPrefix: '*'
           destinationPortRange: '3389'
@@ -35,7 +50,46 @@ resource nsg_win01 'Microsoft.Network/networkSecurityGroups@2021-08-01' = {
 
 }
 
-resource networkInterfaceName_resource 'Microsoft.Network/networkInterfaces@2021-08-01' = {
+resource vnet_tp_ad 'Microsoft.Network/virtualNetworks@2021-08-01' = {
+  name: vnet_tp_name
+  location: location
+  tags:{
+    owner: owner
+    approver: approver
+    endDate: endDate
+  }
+  properties:{
+    addressSpace: {
+      addressPrefixes: [
+        '10.5.0.0/16'
+      ]
+    }
+    subnets: [
+      {
+        name: subnet_win
+        properties: {
+          addressPrefix: '10.5.0.0/24'
+          delegations: []
+          privateEndpointNetworkPolicies: 'Enabled'
+          privateLinkServiceNetworkPolicies: 'Enabled'
+        }
+      }
+      {
+        name: subnet_dc
+        properties: {
+          addressPrefix: '10.5.1.0/24'
+          delegations: []
+          privateEndpointNetworkPolicies: 'Enabled'
+          privateLinkServiceNetworkPolicies: 'Enabled'
+        }
+      }
+    ]
+    virtualNetworkPeerings: []
+    enableDdosProtection: false
+  }
+}
+
+resource networkInterface_resource 'Microsoft.Network/networkInterfaces@2021-08-01' = {
   name: 'beijawin01895'
   location: location
   tags: {
@@ -49,13 +103,13 @@ resource networkInterfaceName_resource 'Microsoft.Network/networkInterfaces@2021
         name: 'ipconfig1'
         properties: {
           subnet: {
-            id: '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_TP_AD/providers/Microsoft.Network/virtualNetworks/RG_TP_AD-vnet01/subnets/RG_TP_AD-vnet01_windows'
+            id: resourceId('Microsoft.Network/VirtualNetworks/subnets', vnet_tp_name, subnet_win)
           }
           privateIPAllocationMethod: 'Dynamic'
           publicIPAddress: {
-            id: resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', 'BeijaWIN01-ip')
+            id: resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', win01_ip)
             properties: {
-              deleteOption: 'Detach'
+              deleteOption: 'Delete'
             }
           }
         }
@@ -66,12 +120,12 @@ resource networkInterfaceName_resource 'Microsoft.Network/networkInterfaces@2021
     }
   }
   dependsOn: [
-    publicIpAddressName_resource
+    publicIpAddress_resource
   ]
 }
 
-resource publicIpAddressName_resource 'Microsoft.Network/publicIpAddresses@2021-08-01' = {
-  name: 'BeijaWIN01-ip'
+resource publicIpAddress_resource 'Microsoft.Network/publicIpAddresses@2021-08-01' = {
+  name: win01_ip
   location: location
   properties: {
     publicIPAllocationMethod: 'Dynamic'
@@ -82,12 +136,12 @@ resource publicIpAddressName_resource 'Microsoft.Network/publicIpAddresses@2021-
   }
 }
 
-resource virtualMachineName_resource 'Microsoft.Compute/virtualMachines@2021-07-01' = {
-  name: 'BeijaWIN01'
+resource virtualMachineWIN_resource 'Microsoft.Compute/virtualMachines@2021-07-01' = {
+  name: win01
   location: location
   properties: {
     hardwareProfile: {
-      vmSize: 'Standard_A4_v2'
+      vmSize: 'Standard_B2s'
     }
     storageProfile: {
       osDisk: {
@@ -107,17 +161,119 @@ resource virtualMachineName_resource 'Microsoft.Compute/virtualMachines@2021-07-
     networkProfile: {
       networkInterfaces: [
         {
-          id: networkInterfaceName_resource.id
+          id: networkInterface_resource.id
           properties: {
-            deleteOption: 'Detach'
+            deleteOption: 'Delete'
           }
         }
       ]
     }
     osProfile: {
-      computerName: 'BeijaWIN01'
-      adminUsername: 'AdminAdminAdmin'
-      adminPassword: 'AdminAdminAdmin@01'
+      computerName: win01
+      adminUsername: vm_username
+      adminPassword: vm_password
+      windowsConfiguration: {
+        enableAutomaticUpdates: false
+        provisionVMAgent: true
+        patchSettings: {
+          enableHotpatching: false
+          patchMode: 'Manual'
+        }
+      }
+    }
+    licenseType: 'Windows_Client'
+  }
+}
+
+
+
+
+
+
+resource DCnetworkInterface_resource 'Microsoft.Network/networkInterfaces@2021-08-01' = {
+  name: dcInterface
+  location: location
+  tags: {
+    owner: owner
+    approver: approver
+    endDate: endDate
+  }
+  properties: {
+    ipConfigurations: [
+      {
+        name: 'ipconfig1'
+        properties: {
+          subnet: {
+            id: resourceId('Microsoft.Network/VirtualNetworks/subnets', vnet_tp_name, subnet_dc)
+          }
+          privateIPAllocationMethod: 'Dynamic'
+          publicIPAddress: {
+            id: resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', dcPublicIP)
+            properties: {
+              deleteOption: 'Delete'
+            }
+          }
+        }
+      }
+    ]
+    networkSecurityGroup: {
+      id: nsg_win01.id
+    }
+  }
+  dependsOn: [
+    DCpublicIpAddress_resource
+  ]
+}
+
+resource DCpublicIpAddress_resource 'Microsoft.Network/publicIpAddresses@2021-08-01' = {
+  name: dcPublicIP
+  location: location
+  properties: {
+    publicIPAllocationMethod: 'Dynamic'
+  }
+  sku: {
+    name: 'Basic'
+    tier: 'Regional'
+  }
+}
+
+
+resource virtualMachineDC 'Microsoft.Compute/virtualMachines@2021-07-01' ={
+  name: dc01
+  location: location
+  properties: {
+    hardwareProfile: {
+    vmSize: 'Standard_B2s'
+    }
+    storageProfile: {
+      osDisk: {
+        createOption: 'FromImage'
+        managedDisk: {
+          storageAccountType: 'Standard_LRS'
+        }
+        deleteOption: 'Delete'
+      }
+      imageReference: {
+        publisher: 'MicrosoftWindowsServer'
+        offer: 'WindowsServer'
+        sku: '2019-Datacenter'
+        version: 'latest'
+      }
+    }
+    networkProfile: {
+      networkInterfaces: [
+        {
+          id: DCnetworkInterface_resource.id
+          properties: {
+            deleteOption: 'Delete'
+          }
+        }
+      ]
+    }
+    osProfile: {
+      computerName: win01
+      adminUsername: vm_username
+      adminPassword: vm_password
       windowsConfiguration: {
         enableAutomaticUpdates: false
         provisionVMAgent: true
