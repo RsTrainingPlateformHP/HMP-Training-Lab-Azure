@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.8.9.13224",
-      "templateHash": "8267958225355428958"
+      "templateHash": "6106166444888672419"
     }
   },
   "parameters": {
@@ -112,7 +112,12 @@
           }
         ],
         "virtualNetworkPeerings": [],
-        "enableDdosProtection": false
+        "enableDdosProtection": false,
+        "dhcpOptions": {
+          "dnsServers": [
+            "10.5.1.4"
+          ]
+        }
       }
     },
     {

@@ -87,6 +87,11 @@ resource vnet_tp_ad 'Microsoft.Network/virtualNetworks@2021-08-01' = {
     ]
     virtualNetworkPeerings: []
     enableDdosProtection: false
+    dhcpOptions: {
+      dnsServers: [
+        '10.5.1.4'
+      ]
+    }
   }
 }
 
@@ -106,6 +111,7 @@ resource networkInterface_resource 'Microsoft.Network/networkInterfaces@2021-08-
           subnet: {
             id: resourceId('Microsoft.Network/VirtualNetworks/subnets', vnet_tp_name, subnet_win)
           }
+          
           privateIPAddress: '10.5.0.4'
           publicIPAddress: {
             id: resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', win01_ip)
@@ -165,6 +171,7 @@ resource virtualMachineWIN_resource 'Microsoft.Compute/virtualMachines@2021-07-0
           id: networkInterface_resource.id
           properties: {
             deleteOption: 'Delete'
+            
           }
         }
       ]
