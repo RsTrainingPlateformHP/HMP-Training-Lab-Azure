@@ -38,11 +38,23 @@ resource nsg_win01 'Microsoft.Network/networkSecurityGroups@2021-08-01' = {
           direction: 'Inbound'
           sourceApplicationSecurityGroups: []
           destinationApplicationSecurityGroups: []
-          sourceAddressPrefix: '10.5.0.0/16'
+          sourceAddressPrefix: '*'
           sourcePortRange: '*'
           destinationAddressPrefix: '*'
           destinationPortRange: '3389'
       } 
+    }
+    {
+      name:'interntrafic'
+      properties:{
+        priority:300
+        protocol:'*'
+        sourcePortRange:'*'
+        destinationPortRange:'*'
+        sourceAddressPrefix: 'VirtualNetwork'
+        destinationAddressPrefix: 'VirtualNetwork'
+        access:'Allow'
+      }
     }
   ]
   }

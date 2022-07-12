@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.8.9.13224",
-      "templateHash": "17349553018568682531"
+      "templateHash": "8189623691190519615"
     }
   },
   "parameters": {
@@ -66,10 +66,22 @@
               "direction": "Inbound",
               "sourceApplicationSecurityGroups": [],
               "destinationApplicationSecurityGroups": [],
-              "sourceAddressPrefix": "10.5.0.0/16",
+              "sourceAddressPrefix": "*",
               "sourcePortRange": "*",
               "destinationAddressPrefix": "*",
               "destinationPortRange": "3389"
+            }
+          },
+          {
+            "name": "interntrafic",
+            "properties": {
+              "priority": 300,
+              "protocol": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "*",
+              "sourceAddressPrefix": "VirtualNetwork",
+              "destinationAddressPrefix": "VirtualNetwork",
+              "access": "Allow"
             }
           }
         ]
