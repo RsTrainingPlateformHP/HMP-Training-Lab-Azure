@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.8.9.13224",
-      "templateHash": "1612649905388787666"
+      "templateHash": "17349553018568682531"
     }
   },
   "parameters": {
@@ -37,6 +37,7 @@
     "subnet_win": "sub_vnet_win",
     "subnet_dc": "sub_vnet_dc",
     "win01_ip": "beijaWIN01-ip",
+    "winInterface": "beijaWIN01895",
     "win01": "beijaWIN01",
     "dc01": "beijaDC01",
     "domain": "beijflore.racine",
@@ -117,7 +118,7 @@
     {
       "type": "Microsoft.Network/networkInterfaces",
       "apiVersion": "2021-08-01",
-      "name": "beijawin01895",
+      "name": "[variables('winInterface')]",
       "location": "[parameters('location')]",
       "tags": {
         "owner": "[parameters('owner')]",
@@ -132,7 +133,7 @@
               "subnet": {
                 "id": "[resourceId('Microsoft.Network/VirtualNetworks/subnets', variables('vnet_tp_name'), variables('subnet_win'))]"
               },
-              "privateIPAllocationMethod": "Dynamic",
+              "privateIPAddress": "10.5.0.4",
               "publicIPAddress": {
                 "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', variables('win01_ip'))]",
                 "properties": {
@@ -191,7 +192,7 @@
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces', 'beijawin01895')]",
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('winInterface'))]",
               "properties": {
                 "deleteOption": "Delete"
               }
@@ -214,7 +215,7 @@
         "licenseType": "Windows_Client"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Network/networkInterfaces', 'beijawin01895')]"
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('winInterface'))]"
       ]
     },
     {
@@ -235,7 +236,7 @@
               "subnet": {
                 "id": "[resourceId('Microsoft.Network/VirtualNetworks/subnets', variables('vnet_tp_name'), variables('subnet_dc'))]"
               },
-              "privateIPAllocationMethod": "Dynamic",
+              "privateIPAddress": "10.5.1.4",
               "publicIPAddress": {
                 "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', variables('dcPublicIP'))]",
                 "properties": {
@@ -314,7 +315,7 @@
             }
           }
         },
-        "licenseType": "Windows_Client"
+        "licenseType": "Windows_Server"
       },
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkInterfaces', variables('dcInterface'))]"

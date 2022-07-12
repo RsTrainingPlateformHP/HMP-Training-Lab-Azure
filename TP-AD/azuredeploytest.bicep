@@ -12,6 +12,7 @@ var vnet_tp_name = 'vnet_tp_ad'
 var subnet_win = 'sub_vnet_win'
 var subnet_dc = 'sub_vnet_dc'
 var win01_ip = 'beijaWIN01-ip'
+var winInterface = 'beijaWIN01895'
 var win01 = 'beijaWIN01'
 
 var dc01 = 'beijaDC01'
@@ -90,7 +91,7 @@ resource vnet_tp_ad 'Microsoft.Network/virtualNetworks@2021-08-01' = {
 }
 
 resource networkInterface_resource 'Microsoft.Network/networkInterfaces@2021-08-01' = {
-  name: 'beijawin01895'
+  name: winInterface
   location: location
   tags: {
     owner: owner
@@ -105,7 +106,7 @@ resource networkInterface_resource 'Microsoft.Network/networkInterfaces@2021-08-
           subnet: {
             id: resourceId('Microsoft.Network/VirtualNetworks/subnets', vnet_tp_name, subnet_win)
           }
-          privateIPAllocationMethod: 'Dynamic'
+          privateIPAddress: '10.5.0.4'
           publicIPAddress: {
             id: resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', win01_ip)
             properties: {
@@ -206,7 +207,7 @@ resource DCnetworkInterface_resource 'Microsoft.Network/networkInterfaces@2021-0
           subnet: {
             id: resourceId('Microsoft.Network/VirtualNetworks/subnets', vnet_tp_name, subnet_dc)
           }
-          privateIPAllocationMethod: 'Dynamic'
+          privateIPAddress: '10.5.1.4'
           publicIPAddress: {
             id: resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', dcPublicIP)
             properties: {
@@ -283,6 +284,6 @@ resource virtualMachineDC 'Microsoft.Compute/virtualMachines@2021-07-01' ={
         }
       }
     }
-    licenseType: 'Windows_Client'
+    licenseType: 'Windows_Server'
   }
 }
