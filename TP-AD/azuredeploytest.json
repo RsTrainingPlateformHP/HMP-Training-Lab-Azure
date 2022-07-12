@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.8.9.13224",
-      "templateHash": "8189623691190519615"
+      "templateHash": "8267958225355428958"
     }
   },
   "parameters": {
@@ -70,18 +70,6 @@
               "sourcePortRange": "*",
               "destinationAddressPrefix": "*",
               "destinationPortRange": "3389"
-            }
-          },
-          {
-            "name": "interntrafic",
-            "properties": {
-              "priority": 300,
-              "protocol": "*",
-              "sourcePortRange": "*",
-              "destinationPortRange": "*",
-              "sourceAddressPrefix": "VirtualNetwork",
-              "destinationAddressPrefix": "VirtualNetwork",
-              "access": "Allow"
             }
           }
         ]

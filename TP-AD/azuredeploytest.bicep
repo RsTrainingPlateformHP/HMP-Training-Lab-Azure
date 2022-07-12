@@ -44,18 +44,6 @@ resource nsg_win01 'Microsoft.Network/networkSecurityGroups@2021-08-01' = {
           destinationPortRange: '3389'
       } 
     }
-    {
-      name:'interntrafic'
-      properties:{
-        priority:300
-        protocol:'*'
-        sourcePortRange:'*'
-        destinationPortRange:'*'
-        sourceAddressPrefix: 'VirtualNetwork'
-        destinationAddressPrefix: 'VirtualNetwork'
-        access:'Allow'
-      }
-    }
   ]
   }
   
