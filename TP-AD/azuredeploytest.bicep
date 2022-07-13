@@ -8,20 +8,22 @@ param vm_username string
 @secure()
 param vm_password string
 
-var vnet_tp_name = 'vnet_tp_ad'
-var subnet_win = 'sub_vnet_win'
-var subnet_dc = 'sub_vnet_dc'
-var win01_ip = 'beijaWIN01-ip'
-var winInterface = 'beijaWIN01895'
-var win01 = 'beijaWIN01'
+param vnet_tp_name string //= 'vnet_tp_ad'
+param subnet_win string //= 'sub_vnet_win'
+param subnet_dc string//= 'sub_vnet_dc'
+param win01_ip string//= 'beijaWIN01-ip'
+param winInterface string//= 'beijaWIN01895'
+param win01 string//= 'beijaWIN01'
+param nsg_Win01 string//= 'nsg_beijaWIN01'
 
-var dc01 = 'beijaDC01'
-var domain = 'beijflore.racine'
-var dcInterface = 'beijaDCinterface'
-var dcPublicIP = 'beijaDC01-ip'
+param dc01 string//= 'beijaDC01'
+param dcInterface string//= 'beijaDCinterface'
+param dcPublicIP string//= 'beijaDC01-ip'
+
+
 
 resource nsg_win01 'Microsoft.Network/networkSecurityGroups@2021-08-01' = {
-  name: 'beijaWIN01'
+  name: nsg_Win01
   location: location
   tags:{
     owner: owner
@@ -46,9 +48,6 @@ resource nsg_win01 'Microsoft.Network/networkSecurityGroups@2021-08-01' = {
     }
   ]
   }
-  
-
-
 }
 
 resource vnet_tp_ad 'Microsoft.Network/virtualNetworks@2021-08-01' = {
