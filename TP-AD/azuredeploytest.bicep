@@ -1,4 +1,4 @@
-
+//on définit les paramètres azures
 param location string = 'francecentral'
 param owner string
 param approver string
@@ -8,19 +8,20 @@ param vm_username string
 @secure()
 param vm_password string
 
-param vnet_tp_name string //= 'vnet_tp_ad'
-param subnet_win string //= 'sub_vnet_win'
-param subnet_dc string//= 'sub_vnet_dc'
-param win01_ip string//= 'beijaWIN01-ip'
-param winInterface string//= 'beijaWIN01895'
-param win01 string//= 'beijaWIN01'
-param nsg_Win01 string//= 'nsg_beijaWIN01'
+//les noms des ressources pour le tp sont mis en place dans le deploymodule
+param vnet_tp_name string
+param subnet_win string 
+param subnet_dc string
+param win01_ip string
+param winInterface string
+param win01 string
+param nsg_Win01 string
 
-param dc01 string//= 'beijaDC01'
-param dcInterface string//= 'beijaDCinterface'
-param dcPublicIP string//= 'beijaDC01-ip'
+param dc01 string
+param dcInterface string
+param dcPublicIP string
 
-
+//On définit les network security group pour avoir accès au RDP
 
 resource nsg_win01 'Microsoft.Network/networkSecurityGroups@2021-08-01' = {
   name: nsg_Win01
@@ -50,6 +51,8 @@ resource nsg_win01 'Microsoft.Network/networkSecurityGroups@2021-08-01' = {
   }
 }
 
+//Pour ce TP, il nous faut un réseau virtuel avec deux sous réseau (un pour chaque machine)
+
 resource vnet_tp_ad 'Microsoft.Network/virtualNetworks@2021-08-01' = {
   name: vnet_tp_name
   location: location
@@ -61,12 +64,12 @@ resource vnet_tp_ad 'Microsoft.Network/virtualNetworks@2021-08-01' = {
   properties:{
     addressSpace: {
       addressPrefixes: [
-        '10.5.0.0/16'
+        '10.5.0.0/16' //plage d'adresse du réseau virtuel
       ]
     }
     subnets: [
       {
-        name: subnet_win
+        name: subnet_win //sous réseau pour le client
         properties: {
           addressPrefix: '10.5.0.0/24'
           delegations: []
@@ -75,7 +78,7 @@ resource vnet_tp_ad 'Microsoft.Network/virtualNetworks@2021-08-01' = {
         }
       }
       {
-        name: subnet_dc
+        name: subnet_dc //sous réseau pour le serveur
         properties: {
           addressPrefix: '10.5.1.0/24'
           delegations: []
@@ -88,12 +91,13 @@ resource vnet_tp_ad 'Microsoft.Network/virtualNetworks@2021-08-01' = {
     enableDdosProtection: false
     dhcpOptions: {
       dnsServers: [
-        '10.5.1.4'
+        '10.5.1.4' //adresse IP du DC comme DNS (pour le TP)
       ]
     }
   }
 }
 
+//interface du client pour se connecter à son sous réseau
 resource networkInterface_resource 'Microsoft.Network/networkInterfaces@2021-08-01' = {
   name: winInterface
   location: location
@@ -129,7 +133,7 @@ resource networkInterface_resource 'Microsoft.Network/networkInterfaces@2021-08-
     publicIpAddress_resource
   ]
 }
-
+//définition d'une adresse IP publique pour accès en RDP
 resource publicIpAddress_resource 'Microsoft.Network/publicIpAddresses@2021-08-01' = {
   name: win01_ip
   location: location
@@ -141,7 +145,7 @@ resource publicIpAddress_resource 'Microsoft.Network/publicIpAddresses@2021-08-0
     tier: 'Regional'
   }
 }
-
+//mise en place du client
 resource virtualMachineWIN_resource 'Microsoft.Compute/virtualMachines@2021-07-01' = {
   name: win01
   location: location
@@ -195,7 +199,7 @@ resource virtualMachineWIN_resource 'Microsoft.Compute/virtualMachines@2021-07-0
 
 
 
-
+//définition de l'interface réseau du DC
 
 resource DCnetworkInterface_resource 'Microsoft.Network/networkInterfaces@2021-08-01' = {
   name: dcInterface
@@ -232,6 +236,7 @@ resource DCnetworkInterface_resource 'Microsoft.Network/networkInterfaces@2021-0
   ]
 }
 
+//IP publique pour RDP
 resource DCpublicIpAddress_resource 'Microsoft.Network/publicIpAddresses@2021-08-01' = {
   name: dcPublicIP
   location: location
@@ -244,7 +249,7 @@ resource DCpublicIpAddress_resource 'Microsoft.Network/publicIpAddresses@2021-08
   }
 }
 
-
+//mise en place de la vm du DC
 resource virtualMachineDC 'Microsoft.Compute/virtualMachines@2021-07-01' ={
   name: dc01
   location: location

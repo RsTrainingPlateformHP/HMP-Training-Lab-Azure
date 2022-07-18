@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.8.9.13224",
-      "templateHash": "6915508473306199535"
+      "templateHash": "778252330464446572"
     }
   },
   "parameters": {
@@ -24,7 +24,6 @@
     },
     "count": {
       "type": "int",
-      "defaultValue": 2,
       "metadata": {
         "description": "Nombre d'instances à déployer"
       }
@@ -73,7 +72,7 @@
             "value": "[parameters('vm_password')]"
           },
           "subnet_win": {
-            "value": "[format('sub_vnet_win_{0}', range(0, parameters('count'))[copyIndex()])]"
+            "value": "[format('sub_vnet_winClient_{0}', range(0, parameters('count'))[copyIndex()])]"
           },
           "vnet_tp_name": {
             "value": "[format('vnet_tp_ad_{0}', range(0, parameters('count'))[copyIndex()])]"
@@ -82,7 +81,7 @@
             "value": "[format('sub_vnet_dc_{0}', range(0, parameters('count'))[copyIndex()])]"
           },
           "win01_ip": {
-            "value": "[format('IP_WIN_{0}', range(0, parameters('count'))[copyIndex()])]"
+            "value": "[format('IP_Public_WINClient_{0}', range(0, parameters('count'))[copyIndex()])]"
           },
           "winInterface": {
             "value": "[format('WIN_interface_{0}', range(0, parameters('count'))[copyIndex()])]"
@@ -97,7 +96,7 @@
             "value": "[format('beijaDC{0}', range(0, parameters('count'))[copyIndex()])]"
           },
           "dcInterface": {
-            "value": "[format('beijaDCinterface{0}', range(0, parameters('count'))[copyIndex()])]"
+            "value": "[format('DC_interface{0}', range(0, parameters('count'))[copyIndex()])]"
           },
           "dcPublicIP": {
             "value": "[format('IP_Public_DC_{0}', range(0, parameters('count'))[copyIndex()])]"
