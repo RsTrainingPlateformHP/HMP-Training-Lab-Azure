@@ -1,4 +1,5 @@
-param location string = 'francecentral'
+param location string 
+
 param owner string
 param approver string
 param endDate string
@@ -14,8 +15,13 @@ var ImageID_VM_FE_WINDOWS = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe
 var ImageID_VM_FE_LINUX = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_CSX_LINUX_VM/versions/latest'
 var ImageID_VM_BE_SERVER = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_CSX_SERVER_VM/versions/latest'
 
+param accountName string
+param accountIndex int
+
+
+
 resource Application_Security_Group_FE 'Microsoft.Network/applicationSecurityGroups@2021-05-01' = {
-  name: 'FrontEndServer'
+  name: 'FrontEndServer_${accountName}'
   location : location
   tags: {
     owner: owner
@@ -25,7 +31,7 @@ resource Application_Security_Group_FE 'Microsoft.Network/applicationSecurityGro
 }
 
 resource Application_Security_Group_BE 'Microsoft.Network/applicationSecurityGroups@2021-05-01' = {
-  name: 'BackEndServer'
+  name: 'BackEndServer_${accountName}'
   location: location
   tags: {
     owner: owner
@@ -35,7 +41,7 @@ resource Application_Security_Group_BE 'Microsoft.Network/applicationSecurityGro
 }
 
 resource publicIP_VM_FE_Windows 'Microsoft.Network/publicIPAddresses@2020-11-01' = {
-  name: '${VM_FE_WINDOWS_name}-public-IP'
+  name: '${VM_FE_WINDOWS_name}-public-IP_${accountName}'
   location: location
   tags: {
     owner: owner
@@ -54,7 +60,7 @@ resource publicIP_VM_FE_Windows 'Microsoft.Network/publicIPAddresses@2020-11-01'
 }
 
 resource publicIP_VM_FE_LINUX 'Microsoft.Network/publicIPAddresses@2020-11-01' = {
-  name: '${VM_FE_LINUX_name}-public-IP'
+  name: '${VM_FE_LINUX_name}-public-IP_${accountName}'
   location: location
   tags: {
     owner: owner
@@ -73,7 +79,7 @@ resource publicIP_VM_FE_LINUX 'Microsoft.Network/publicIPAddresses@2020-11-01' =
 }
 
 resource VNET_TP_CSX 'Microsoft.Network/virtualNetworks@2020-11-01' = {
-  name: '${VNET_name}${uniqueString(subscription().subscriptionId, deployment().name)}'
+  name: '${VNET_name}${uniqueString(subscription().subscriptionId, deployment().name)}_${accountName}'
   location: location
   tags: {
     owner: owner
@@ -103,7 +109,7 @@ resource VNET_TP_CSX 'Microsoft.Network/virtualNetworks@2020-11-01' = {
 }
 
 resource NSG_TP_CSX 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
-  name: NSG_Name
+  name: '${NSG_Name}_${accountName}'
   location: location
   tags: {
     owner: owner
@@ -259,7 +265,7 @@ resource NSG_TP_CSX 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
 }
 
 resource networkInterface_VM_FE_Windows 'Microsoft.Network/networkInterfaces@2020-11-01' = {
-  name: '${VM_FE_WINDOWS_name}-network-interface'
+  name: '${VM_FE_WINDOWS_name}-network-interface_${accountName}'
   location: location
   tags: {
     owner: owner
@@ -301,7 +307,7 @@ resource networkInterface_VM_FE_Windows 'Microsoft.Network/networkInterfaces@202
 }
 
 resource networkInterface_VM_FE_LINUX 'Microsoft.Network/networkInterfaces@2020-11-01' = {
-  name: '${VM_FE_LINUX_name}-network-interface'
+  name: '${VM_FE_LINUX_name}-network-interface_${accountName}'
   location: location
   tags: {
     owner: owner
@@ -343,7 +349,7 @@ resource networkInterface_VM_FE_LINUX 'Microsoft.Network/networkInterfaces@2020-
 }
 
 resource networkInterface_VM_BE_SERVER 'Microsoft.Network/networkInterfaces@2020-11-01' = {
-  name: '${VM_BE_SERVER_name}-network-interface'
+  name: '${VM_BE_SERVER_name}-network-interface_${accountName}'
   location: location
   tags: {
     owner: owner
@@ -382,7 +388,7 @@ resource networkInterface_VM_BE_SERVER 'Microsoft.Network/networkInterfaces@2020
 }
 
 resource VM_FE_WINDOWS 'Microsoft.Compute/virtualMachines@2021-11-01' = {
-  name: VM_FE_WINDOWS_name
+  name: '${VM_FE_WINDOWS_name}_${accountName}'
   location: location
   tags: {
     owner: owner
@@ -426,7 +432,7 @@ resource VM_FE_WINDOWS 'Microsoft.Compute/virtualMachines@2021-11-01' = {
 }
 
 resource VM_FE_LINUX 'Microsoft.Compute/virtualMachines@2021-11-01' = {
-  name: VM_FE_LINUX_name
+  name: '${VM_FE_LINUX_name}_${accountName}'
   location: location
   tags: {
     owner: owner
@@ -470,7 +476,7 @@ resource VM_FE_LINUX 'Microsoft.Compute/virtualMachines@2021-11-01' = {
 }
 
 resource VM_BE_SERVER 'Microsoft.Compute/virtualMachines@2021-11-01' = {
-  name: VM_BE_SERVER_name
+  name: '${VM_BE_SERVER_name}_${accountName}'
   location: location
   tags: {
     owner: owner
@@ -515,7 +521,7 @@ resource VM_BE_SERVER 'Microsoft.Compute/virtualMachines@2021-11-01' = {
 
 resource SecurityRuleRestrictVNetFLow 'Microsoft.Network/networkSecurityGroups/securityRules@2021-05-01' = {
   parent: NSG_TP_CSX
-  name: 'RestrictVNetFlowInbound'
+  name: 'RestrictVNetFlowInbound_${accountName}'
   properties: { 
     protocol: '*'
     sourcePortRange: '*'

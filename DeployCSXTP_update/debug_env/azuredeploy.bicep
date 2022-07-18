@@ -6,7 +6,7 @@ param owner string
 param approver string
 param endDate string
 
-var accountNamesJson = array(json(loadTextContent('arrayContent.json')))
+//var accountNamesJson = array(json(loadTextContent('arrayContent.json')))
 
 
 var accountNames  = [
@@ -14,13 +14,19 @@ var accountNames  = [
   'user2'
 ]
 
+var IpFlexConfig = [  
+  100
+  100
+  100
+]
 
 
-module stgModule './singleunit.bicep' = [for name in accountNamesJson: {
+
+module stgModule './singleunit_dbg.bicep' = [for name in accountNames: {
   name: '${name}deploy'
   params: {
     accountName : name
-    accountIndex: indexOf(accountNamesJson, name )
+    accountIndex: indexOf(accountNames, name )
     location : location
     owner : owner
     approver:approver
@@ -29,7 +35,7 @@ module stgModule './singleunit.bicep' = [for name in accountNamesJson: {
   }
 }]
 
-output namesArray string = first(accountNamesJson)
+  output namesArray string = first(accountNames)
 
 /* resource createStorages 'Microsoft.Storage/storageAccounts@2021-06-01' = [for i in range(0, storageCount): {
   name: '${i}storage${uniqueString(resourceGroup().id)}'
