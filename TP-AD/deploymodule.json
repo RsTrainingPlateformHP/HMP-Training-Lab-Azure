@@ -1,0 +1,456 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.8.9.13224",
+      "templateHash": "778252330464446572"
+    }
+  },
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "francecentral"
+    },
+    "owner": {
+      "type": "string"
+    },
+    "approver": {
+      "type": "string"
+    },
+    "endDate": {
+      "type": "string"
+    },
+    "count": {
+      "type": "int",
+      "metadata": {
+        "description": "Nombre d'instances à déployer"
+      }
+    },
+    "vm_username": {
+      "type": "string",
+      "metadata": {
+        "description": "Choisir nom du compte admin et son password"
+      }
+    },
+    "vm_password": {
+      "type": "secureString"
+    }
+  },
+  "resources": [
+    {
+      "copy": {
+        "name": "deploy_tp_ad",
+        "count": "[length(range(0, parameters('count')))]"
+      },
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-10-01",
+      "name": "[format('{0}tpAD', range(0, parameters('count'))[copyIndex()])]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "owner": {
+            "value": "[parameters('owner')]"
+          },
+          "approver": {
+            "value": "[parameters('approver')]"
+          },
+          "endDate": {
+            "value": "[parameters('endDate')]"
+          },
+          "vm_username": {
+            "value": "[parameters('vm_username')]"
+          },
+          "vm_password": {
+            "value": "[parameters('vm_password')]"
+          },
+          "subnet_win": {
+            "value": "[format('sub_vnet_winClient_{0}', range(0, parameters('count'))[copyIndex()])]"
+          },
+          "vnet_tp_name": {
+            "value": "[format('vnet_tp_ad_{0}', range(0, parameters('count'))[copyIndex()])]"
+          },
+          "subnet_dc": {
+            "value": "[format('sub_vnet_dc_{0}', range(0, parameters('count'))[copyIndex()])]"
+          },
+          "win01_ip": {
+            "value": "[format('IP_Public_WINClient_{0}', range(0, parameters('count'))[copyIndex()])]"
+          },
+          "winInterface": {
+            "value": "[format('WIN_interface_{0}', range(0, parameters('count'))[copyIndex()])]"
+          },
+          "win01": {
+            "value": "[format('beijaWIN{0}', range(0, parameters('count'))[copyIndex()])]"
+          },
+          "nsg_Win01": {
+            "value": "[format('nsg_beijaWIN{0}', range(0, parameters('count'))[copyIndex()])]"
+          },
+          "dc01": {
+            "value": "[format('beijaDC{0}', range(0, parameters('count'))[copyIndex()])]"
+          },
+          "dcInterface": {
+            "value": "[format('DC_interface{0}', range(0, parameters('count'))[copyIndex()])]"
+          },
+          "dcPublicIP": {
+            "value": "[format('IP_Public_DC_{0}', range(0, parameters('count'))[copyIndex()])]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.8.9.13224",
+              "templateHash": "13498058647160980168"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "defaultValue": "francecentral"
+            },
+            "owner": {
+              "type": "string"
+            },
+            "approver": {
+              "type": "string"
+            },
+            "endDate": {
+              "type": "string"
+            },
+            "vm_username": {
+              "type": "string",
+              "metadata": {
+                "description": "Choisir nom du compte admin et son password"
+              }
+            },
+            "vm_password": {
+              "type": "secureString"
+            },
+            "vnet_tp_name": {
+              "type": "string"
+            },
+            "subnet_win": {
+              "type": "string"
+            },
+            "subnet_dc": {
+              "type": "string"
+            },
+            "win01_ip": {
+              "type": "string"
+            },
+            "winInterface": {
+              "type": "string"
+            },
+            "win01": {
+              "type": "string"
+            },
+            "nsg_Win01": {
+              "type": "string"
+            },
+            "dc01": {
+              "type": "string"
+            },
+            "dcInterface": {
+              "type": "string"
+            },
+            "dcPublicIP": {
+              "type": "string"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Network/networkSecurityGroups",
+              "apiVersion": "2021-08-01",
+              "name": "[parameters('nsg_Win01')]",
+              "location": "[parameters('location')]",
+              "tags": {
+                "owner": "[parameters('owner')]",
+                "approver": "[parameters('approver')]",
+                "endDate": "[parameters('endDate')]"
+              },
+              "properties": {
+                "securityRules": [
+                  {
+                    "name": "default-allow-rdp",
+                    "properties": {
+                      "priority": 1000,
+                      "protocol": "TCP",
+                      "access": "Allow",
+                      "direction": "Inbound",
+                      "sourceApplicationSecurityGroups": [],
+                      "destinationApplicationSecurityGroups": [],
+                      "sourceAddressPrefix": "*",
+                      "sourcePortRange": "*",
+                      "destinationAddressPrefix": "*",
+                      "destinationPortRange": "3389"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Microsoft.Network/virtualNetworks",
+              "apiVersion": "2021-08-01",
+              "name": "[parameters('vnet_tp_name')]",
+              "location": "[parameters('location')]",
+              "tags": {
+                "owner": "[parameters('owner')]",
+                "approver": "[parameters('approver')]",
+                "endDate": "[parameters('endDate')]"
+              },
+              "properties": {
+                "addressSpace": {
+                  "addressPrefixes": [
+                    "10.5.0.0/16"
+                  ]
+                },
+                "subnets": [
+                  {
+                    "name": "[parameters('subnet_win')]",
+                    "properties": {
+                      "addressPrefix": "10.5.0.0/24",
+                      "delegations": [],
+                      "privateEndpointNetworkPolicies": "Enabled",
+                      "privateLinkServiceNetworkPolicies": "Enabled"
+                    }
+                  },
+                  {
+                    "name": "[parameters('subnet_dc')]",
+                    "properties": {
+                      "addressPrefix": "10.5.1.0/24",
+                      "delegations": [],
+                      "privateEndpointNetworkPolicies": "Enabled",
+                      "privateLinkServiceNetworkPolicies": "Enabled"
+                    }
+                  }
+                ],
+                "virtualNetworkPeerings": [],
+                "enableDdosProtection": false,
+                "dhcpOptions": {
+                  "dnsServers": [
+                    "10.5.1.4"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "Microsoft.Network/networkInterfaces",
+              "apiVersion": "2021-08-01",
+              "name": "[parameters('winInterface')]",
+              "location": "[parameters('location')]",
+              "tags": {
+                "owner": "[parameters('owner')]",
+                "approver": "[parameters('approver')]",
+                "endDate": "[parameters('endDate')]"
+              },
+              "properties": {
+                "ipConfigurations": [
+                  {
+                    "name": "ipconfig1",
+                    "properties": {
+                      "subnet": {
+                        "id": "[resourceId('Microsoft.Network/VirtualNetworks/subnets', parameters('vnet_tp_name'), parameters('subnet_win'))]"
+                      },
+                      "privateIPAddress": "10.5.0.4",
+                      "publicIPAddress": {
+                        "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', parameters('win01_ip'))]",
+                        "properties": {
+                          "deleteOption": "Delete"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "networkSecurityGroup": {
+                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsg_Win01'))]"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsg_Win01'))]",
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('win01_ip'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Network/publicIPAddresses",
+              "apiVersion": "2021-08-01",
+              "name": "[parameters('win01_ip')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "publicIPAllocationMethod": "Dynamic"
+              },
+              "sku": {
+                "name": "Basic",
+                "tier": "Regional"
+              }
+            },
+            {
+              "type": "Microsoft.Compute/virtualMachines",
+              "apiVersion": "2021-07-01",
+              "name": "[parameters('win01')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "hardwareProfile": {
+                  "vmSize": "Standard_B2s"
+                },
+                "storageProfile": {
+                  "osDisk": {
+                    "createOption": "FromImage",
+                    "managedDisk": {
+                      "storageAccountType": "Standard_LRS"
+                    },
+                    "deleteOption": "Delete"
+                  },
+                  "imageReference": {
+                    "publisher": "MicrosoftWindowsDesktop",
+                    "offer": "Windows-10",
+                    "sku": "21h1-ent",
+                    "version": "latest"
+                  }
+                },
+                "networkProfile": {
+                  "networkInterfaces": [
+                    {
+                      "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('winInterface'))]",
+                      "properties": {
+                        "deleteOption": "Delete"
+                      }
+                    }
+                  ]
+                },
+                "osProfile": {
+                  "computerName": "[parameters('win01')]",
+                  "adminUsername": "[parameters('vm_username')]",
+                  "adminPassword": "[parameters('vm_password')]",
+                  "windowsConfiguration": {
+                    "enableAutomaticUpdates": false,
+                    "provisionVMAgent": true,
+                    "patchSettings": {
+                      "enableHotpatching": false,
+                      "patchMode": "Manual"
+                    }
+                  }
+                },
+                "licenseType": "Windows_Client"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('winInterface'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Network/networkInterfaces",
+              "apiVersion": "2021-08-01",
+              "name": "[parameters('dcInterface')]",
+              "location": "[parameters('location')]",
+              "tags": {
+                "owner": "[parameters('owner')]",
+                "approver": "[parameters('approver')]",
+                "endDate": "[parameters('endDate')]"
+              },
+              "properties": {
+                "ipConfigurations": [
+                  {
+                    "name": "ipconfig1",
+                    "properties": {
+                      "subnet": {
+                        "id": "[resourceId('Microsoft.Network/VirtualNetworks/subnets', parameters('vnet_tp_name'), parameters('subnet_dc'))]"
+                      },
+                      "privateIPAddress": "10.5.1.4",
+                      "publicIPAddress": {
+                        "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', parameters('dcPublicIP'))]",
+                        "properties": {
+                          "deleteOption": "Delete"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "networkSecurityGroup": {
+                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsg_Win01'))]"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('dcPublicIP'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsg_Win01'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Network/publicIPAddresses",
+              "apiVersion": "2021-08-01",
+              "name": "[parameters('dcPublicIP')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "publicIPAllocationMethod": "Dynamic"
+              },
+              "sku": {
+                "name": "Basic",
+                "tier": "Regional"
+              }
+            },
+            {
+              "type": "Microsoft.Compute/virtualMachines",
+              "apiVersion": "2021-07-01",
+              "name": "[parameters('dc01')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "hardwareProfile": {
+                  "vmSize": "Standard_B2s"
+                },
+                "storageProfile": {
+                  "osDisk": {
+                    "createOption": "FromImage",
+                    "managedDisk": {
+                      "storageAccountType": "Standard_LRS"
+                    },
+                    "deleteOption": "Delete"
+                  },
+                  "imageReference": {
+                    "publisher": "MicrosoftWindowsServer",
+                    "offer": "WindowsServer",
+                    "sku": "2019-Datacenter",
+                    "version": "latest"
+                  }
+                },
+                "networkProfile": {
+                  "networkInterfaces": [
+                    {
+                      "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('dcInterface'))]",
+                      "properties": {
+                        "deleteOption": "Delete"
+                      }
+                    }
+                  ]
+                },
+                "osProfile": {
+                  "computerName": "[parameters('win01')]",
+                  "adminUsername": "[parameters('vm_username')]",
+                  "adminPassword": "[parameters('vm_password')]",
+                  "windowsConfiguration": {
+                    "enableAutomaticUpdates": false,
+                    "provisionVMAgent": true,
+                    "patchSettings": {
+                      "enableHotpatching": false,
+                      "patchMode": "Manual"
+                    }
+                  }
+                },
+                "licenseType": "Windows_Server"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('dcInterface'))]"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
