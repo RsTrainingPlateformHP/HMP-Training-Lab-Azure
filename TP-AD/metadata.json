@@ -1,0 +1,6 @@
+{
+  "itemDisplayName": "Deploy TP AD",
+  "githubUsername": "LeoPichon",
+  "description": "Deployment of a TP AD environment",
+  "summary": "The template deploys two VMs, a windows client and a windowns Domain Controller, each one is connected on a different subnet with the same nsg"
+}
