@@ -283,7 +283,7 @@ resource virtualMachineDC 'Microsoft.Compute/virtualMachines@2021-07-01' ={
       ]
     }
     osProfile: {
-      computerName: win01
+      computerName: dc01
       adminUsername: vm_username
       adminPassword: vm_password
       windowsConfiguration: {
