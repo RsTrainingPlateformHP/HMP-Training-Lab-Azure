@@ -10,8 +10,8 @@ param endDate string
 
 
 var accountNames  = [
-  'user1'
-  'user2'
+  'userA'
+  'userB'
 ]
 
 var IpFlexConfig = [  
@@ -39,16 +39,4 @@ module stgModule './singleunit_dbg.bicep' = [for name in accountNames: {
   output testOutput int = 10
   output testOutput_2 string = 'this is a sample string'
 
-/* resource createStorages 'Microsoft.Storage/storageAccounts@2021-06-01' = [for i in range(0, storageCount): {
-  name: '${i}storage${uniqueString(resourceGroup().id)}'
-  location: rgLocation
-  sku: {
-    name: 'UserID1'
-  }
-  kind: 'StorageV2'
-}]
 
-output names array = [for i in range(0, storageCount): {
-  name: createStorages[i].name
-}]
- */
