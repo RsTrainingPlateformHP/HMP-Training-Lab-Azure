@@ -404,7 +404,7 @@ resource VM_FE_WINDOWS 'Microsoft.Compute/virtualMachines@2021-11-01' = {
         id: ImageID_VM_FE_WINDOWS
       }
       osDisk: {
-        name: '${VM_FE_WINDOWS_name}_OSdisk'
+        //name: '${VM_FE_WINDOWS_name}_OSdisk_${accountName}_id-${accountIndex}'
         createOption: 'FromImage'
         managedDisk: {
           storageAccountType: 'Standard_LRS'
@@ -448,7 +448,7 @@ resource VM_FE_LINUX 'Microsoft.Compute/virtualMachines@2021-11-01' = {
         id: ImageID_VM_FE_LINUX
       }
       osDisk: {
-        name: '${VM_FE_LINUX_name}_OSdisk'
+        //name: '${VM_FE_LINUX_name}_OSdisk_${accountName}_id-${accountIndex}'
         createOption: 'FromImage'
         managedDisk: {
           storageAccountType: 'Standard_LRS'
@@ -492,7 +492,7 @@ resource VM_BE_SERVER 'Microsoft.Compute/virtualMachines@2021-11-01' = {
         id: ImageID_VM_BE_SERVER
       }
       osDisk: {
-        name: '${VM_BE_SERVER_name}_OSdisk'
+        //name: '${VM_BE_SERVER_name}_OSdisk_${accountName}_id-${accountIndex}'
         createOption: 'FromImage'
         managedDisk: {
           storageAccountType: 'Standard_LRS'
