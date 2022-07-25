@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.8.9.13224",
-      "templateHash": "12767307249292828310"
+      "templateHash": "13266670888051797213"
     }
   },
   "parameters": {
@@ -25,8 +25,8 @@
   },
   "variables": {
     "accountNames": [
-      "user1",
-      "user2"
+      "userA",
+      "userB"
     ],
     "IpFlexConfig": [
       100,
@@ -75,7 +75,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.8.9.13224",
-              "templateHash": "17779998554978934979"
+              "templateHash": "239840054718246807"
             }
           },
           "parameters": {
@@ -112,7 +112,7 @@
             {
               "type": "Microsoft.Network/applicationSecurityGroups",
               "apiVersion": "2021-05-01",
-              "name": "[format('FrontEndServer_{0}', parameters('accountName'))]",
+              "name": "[format('FrontEndServer_{0}_id-{1}', parameters('accountName'), parameters('accountIndex'))]",
               "location": "[parameters('location')]",
               "tags": {
                 "owner": "[parameters('owner')]",
@@ -123,7 +123,7 @@
             {
               "type": "Microsoft.Network/applicationSecurityGroups",
               "apiVersion": "2021-05-01",
-              "name": "[format('BackEndServer_{0}', parameters('accountName'))]",
+              "name": "[format('BackEndServer_{0}_id-{1}', parameters('accountName'), parameters('accountIndex'))]",
               "location": "[parameters('location')]",
               "tags": {
                 "owner": "[parameters('owner')]",
@@ -134,7 +134,7 @@
             {
               "type": "Microsoft.Network/publicIPAddresses",
               "apiVersion": "2020-11-01",
-              "name": "[format('{0}-public-IP_{1}', variables('VM_FE_WINDOWS_name'), parameters('accountName'))]",
+              "name": "[format('{0}-public-IP_{1}_id-{2}', variables('VM_FE_WINDOWS_name'), parameters('accountName'), parameters('accountIndex'))]",
               "location": "[parameters('location')]",
               "tags": {
                 "owner": "[parameters('owner')]",
@@ -154,7 +154,7 @@
             {
               "type": "Microsoft.Network/publicIPAddresses",
               "apiVersion": "2020-11-01",
-              "name": "[format('{0}-public-IP_{1}', variables('VM_FE_LINUX_name'), parameters('accountName'))]",
+              "name": "[format('{0}-public-IP_{1}_id-{2}', variables('VM_FE_LINUX_name'), parameters('accountName'), parameters('accountIndex'))]",
               "location": "[parameters('location')]",
               "tags": {
                 "owner": "[parameters('owner')]",
@@ -174,7 +174,7 @@
             {
               "type": "Microsoft.Network/virtualNetworks",
               "apiVersion": "2020-11-01",
-              "name": "[format('{0}{1}_{2}', variables('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name), parameters('accountName'))]",
+              "name": "[format('{0}{1}_{2}_id-{3}', variables('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name), parameters('accountName'), parameters('accountIndex'))]",
               "location": "[parameters('location')]",
               "tags": {
                 "owner": "[parameters('owner')]",
@@ -205,7 +205,7 @@
             {
               "type": "Microsoft.Network/networkSecurityGroups",
               "apiVersion": "2020-11-01",
-              "name": "[format('{0}_{1}', variables('NSG_Name'), parameters('accountName'))]",
+              "name": "[format('{0}_{1}_id-{2}', variables('NSG_Name'), parameters('accountName'), parameters('accountIndex'))]",
               "location": "[parameters('location')]",
               "tags": {
                 "owner": "[parameters('owner')]",
@@ -221,14 +221,14 @@
                       "sourcePortRange": "*",
                       "sourceApplicationSecurityGroups": [
                         {
-                          "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', format('FrontEndServer_{0}', parameters('accountName')))]",
+                          "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', format('FrontEndServer_{0}_id-{1}', parameters('accountName'), parameters('accountIndex')))]",
                           "location": "[parameters('location')]"
                         }
                       ],
                       "destinationPortRange": "22",
                       "destinationApplicationSecurityGroups": [
                         {
-                          "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', format('BackEndServer_{0}', parameters('accountName')))]",
+                          "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', format('BackEndServer_{0}_id-{1}', parameters('accountName'), parameters('accountIndex')))]",
                           "location": "[parameters('location')]"
                         }
                       ],
@@ -244,14 +244,14 @@
                       "sourcePortRange": "*",
                       "sourceApplicationSecurityGroups": [
                         {
-                          "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', format('BackEndServer_{0}', parameters('accountName')))]",
+                          "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', format('BackEndServer_{0}_id-{1}', parameters('accountName'), parameters('accountIndex')))]",
                           "location": "[parameters('location')]"
                         }
                       ],
                       "destinationPortRange": "22",
                       "destinationApplicationSecurityGroups": [
                         {
-                          "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', format('FrontEndServer_{0}', parameters('accountName')))]",
+                          "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', format('FrontEndServer_{0}_id-{1}', parameters('accountName'), parameters('accountIndex')))]",
                           "location": "[parameters('location')]"
                         }
                       ],
@@ -269,7 +269,7 @@
                       "sourceAddressPrefix": "*",
                       "destinationApplicationSecurityGroups": [
                         {
-                          "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', format('FrontEndServer_{0}', parameters('accountName')))]",
+                          "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', format('FrontEndServer_{0}_id-{1}', parameters('accountName'), parameters('accountIndex')))]",
                           "location": "[parameters('location')]"
                         }
                       ],
@@ -287,7 +287,7 @@
                       "sourceAddressPrefix": "*",
                       "destinationApplicationSecurityGroups": [
                         {
-                          "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', format('FrontEndServer_{0}', parameters('accountName')))]",
+                          "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', format('FrontEndServer_{0}_id-{1}', parameters('accountName'), parameters('accountIndex')))]",
                           "location": "[parameters('location')]"
                         }
                       ],
@@ -303,14 +303,14 @@
                       "sourcePortRange": "*",
                       "sourceApplicationSecurityGroups": [
                         {
-                          "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', format('FrontEndServer_{0}', parameters('accountName')))]",
+                          "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', format('FrontEndServer_{0}_id-{1}', parameters('accountName'), parameters('accountIndex')))]",
                           "location": "[parameters('location')]"
                         }
                       ],
                       "destinationPortRange": "22",
                       "destinationApplicationSecurityGroups": [
                         {
-                          "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', format('BackEndServer_{0}', parameters('accountName')))]",
+                          "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', format('BackEndServer_{0}_id-{1}', parameters('accountName'), parameters('accountIndex')))]",
                           "location": "[parameters('location')]"
                         }
                       ],
@@ -326,14 +326,14 @@
                       "sourcePortRange": "*",
                       "sourceApplicationSecurityGroups": [
                         {
-                          "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', format('BackEndServer_{0}', parameters('accountName')))]",
+                          "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', format('BackEndServer_{0}_id-{1}', parameters('accountName'), parameters('accountIndex')))]",
                           "location": "[parameters('location')]"
                         }
                       ],
                       "destinationPortRange": "22",
                       "destinationApplicationSecurityGroups": [
                         {
-                          "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', format('FrontEndServer_{0}', parameters('accountName')))]",
+                          "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', format('FrontEndServer_{0}_id-{1}', parameters('accountName'), parameters('accountIndex')))]",
                           "location": "[parameters('location')]"
                         }
                       ],
@@ -358,14 +358,14 @@
                 ]
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Network/applicationSecurityGroups', format('BackEndServer_{0}', parameters('accountName')))]",
-                "[resourceId('Microsoft.Network/applicationSecurityGroups', format('FrontEndServer_{0}', parameters('accountName')))]"
+                "[resourceId('Microsoft.Network/applicationSecurityGroups', format('BackEndServer_{0}_id-{1}', parameters('accountName'), parameters('accountIndex')))]",
+                "[resourceId('Microsoft.Network/applicationSecurityGroups', format('FrontEndServer_{0}_id-{1}', parameters('accountName'), parameters('accountIndex')))]"
               ]
             },
             {
               "type": "Microsoft.Network/networkInterfaces",
               "apiVersion": "2020-11-01",
-              "name": "[format('{0}-network-interface_{1}', variables('VM_FE_WINDOWS_name'), parameters('accountName'))]",
+              "name": "[format('{0}-network-interface_{1}_id-{2}', variables('VM_FE_WINDOWS_name'), parameters('accountName'), parameters('accountIndex'))]",
               "location": "[parameters('location')]",
               "tags": {
                 "owner": "[parameters('owner')]",
@@ -380,16 +380,16 @@
                       "privateIPAllocationMethod": "Static",
                       "privateIPAddress": "10.3.0.5",
                       "publicIPAddress": {
-                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP_{1}', variables('VM_FE_WINDOWS_name'), parameters('accountName')))]"
+                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP_{1}_id-{2}', variables('VM_FE_WINDOWS_name'), parameters('accountName'), parameters('accountIndex')))]"
                       },
                       "subnet": {
-                        "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}_{2}', variables('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name), parameters('accountName')))).subnets[0].id]"
+                        "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}_{2}_id-{3}', variables('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name), parameters('accountName'), parameters('accountIndex')))).subnets[0].id]"
                       },
                       "primary": true,
                       "privateIPAddressVersion": "IPv4",
                       "applicationSecurityGroups": [
                         {
-                          "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', format('FrontEndServer_{0}', parameters('accountName')))]"
+                          "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', format('FrontEndServer_{0}_id-{1}', parameters('accountName'), parameters('accountIndex')))]"
                         }
                       ]
                     }
@@ -401,20 +401,20 @@
                 "enableAcceleratedNetworking": false,
                 "enableIPForwarding": false,
                 "networkSecurityGroup": {
-                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}_{1}', variables('NSG_Name'), parameters('accountName')))]"
+                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}_{1}_id-{2}', variables('NSG_Name'), parameters('accountName'), parameters('accountIndex')))]"
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Network/applicationSecurityGroups', format('FrontEndServer_{0}', parameters('accountName')))]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}_{1}', variables('NSG_Name'), parameters('accountName')))]",
-                "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP_{1}', variables('VM_FE_WINDOWS_name'), parameters('accountName')))]",
-                "[resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}_{2}', variables('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name), parameters('accountName')))]"
+                "[resourceId('Microsoft.Network/applicationSecurityGroups', format('FrontEndServer_{0}_id-{1}', parameters('accountName'), parameters('accountIndex')))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}_{1}_id-{2}', variables('NSG_Name'), parameters('accountName'), parameters('accountIndex')))]",
+                "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP_{1}_id-{2}', variables('VM_FE_WINDOWS_name'), parameters('accountName'), parameters('accountIndex')))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}_{2}_id-{3}', variables('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name), parameters('accountName'), parameters('accountIndex')))]"
               ]
             },
             {
               "type": "Microsoft.Network/networkInterfaces",
               "apiVersion": "2020-11-01",
-              "name": "[format('{0}-network-interface_{1}', variables('VM_FE_LINUX_name'), parameters('accountName'))]",
+              "name": "[format('{0}-network-interface_{1}_id-{2}', variables('VM_FE_LINUX_name'), parameters('accountName'), parameters('accountIndex'))]",
               "location": "[parameters('location')]",
               "tags": {
                 "owner": "[parameters('owner')]",
@@ -429,16 +429,16 @@
                       "privateIPAllocationMethod": "Static",
                       "privateIPAddress": "10.3.0.4",
                       "publicIPAddress": {
-                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP_{1}', variables('VM_FE_LINUX_name'), parameters('accountName')))]"
+                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP_{1}_id-{2}', variables('VM_FE_LINUX_name'), parameters('accountName'), parameters('accountIndex')))]"
                       },
                       "subnet": {
-                        "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}_{2}', variables('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name), parameters('accountName')))).subnets[0].id]"
+                        "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}_{2}_id-{3}', variables('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name), parameters('accountName'), parameters('accountIndex')))).subnets[0].id]"
                       },
                       "primary": true,
                       "privateIPAddressVersion": "IPv4",
                       "applicationSecurityGroups": [
                         {
-                          "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', format('FrontEndServer_{0}', parameters('accountName')))]"
+                          "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', format('FrontEndServer_{0}_id-{1}', parameters('accountName'), parameters('accountIndex')))]"
                         }
                       ]
                     }
@@ -450,20 +450,20 @@
                 "enableAcceleratedNetworking": false,
                 "enableIPForwarding": false,
                 "networkSecurityGroup": {
-                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}_{1}', variables('NSG_Name'), parameters('accountName')))]"
+                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}_{1}_id-{2}', variables('NSG_Name'), parameters('accountName'), parameters('accountIndex')))]"
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Network/applicationSecurityGroups', format('FrontEndServer_{0}', parameters('accountName')))]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}_{1}', variables('NSG_Name'), parameters('accountName')))]",
-                "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP_{1}', variables('VM_FE_LINUX_name'), parameters('accountName')))]",
-                "[resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}_{2}', variables('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name), parameters('accountName')))]"
+                "[resourceId('Microsoft.Network/applicationSecurityGroups', format('FrontEndServer_{0}_id-{1}', parameters('accountName'), parameters('accountIndex')))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}_{1}_id-{2}', variables('NSG_Name'), parameters('accountName'), parameters('accountIndex')))]",
+                "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP_{1}_id-{2}', variables('VM_FE_LINUX_name'), parameters('accountName'), parameters('accountIndex')))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}_{2}_id-{3}', variables('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name), parameters('accountName'), parameters('accountIndex')))]"
               ]
             },
             {
               "type": "Microsoft.Network/networkInterfaces",
               "apiVersion": "2020-11-01",
-              "name": "[format('{0}-network-interface_{1}', variables('VM_BE_SERVER_name'), parameters('accountName'))]",
+              "name": "[format('{0}-network-interface_{1}_id-{2}', variables('VM_BE_SERVER_name'), parameters('accountName'), parameters('accountIndex'))]",
               "location": "[parameters('location')]",
               "tags": {
                 "owner": "[parameters('owner')]",
@@ -478,13 +478,13 @@
                       "privateIPAllocationMethod": "Static",
                       "privateIPAddress": "10.3.0.6",
                       "subnet": {
-                        "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}_{2}', variables('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name), parameters('accountName')))).subnets[0].id]"
+                        "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}_{2}_id-{3}', variables('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name), parameters('accountName'), parameters('accountIndex')))).subnets[0].id]"
                       },
                       "primary": true,
                       "privateIPAddressVersion": "IPv4",
                       "applicationSecurityGroups": [
                         {
-                          "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', format('BackEndServer_{0}', parameters('accountName')))]"
+                          "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', format('BackEndServer_{0}_id-{1}', parameters('accountName'), parameters('accountIndex')))]"
                         }
                       ]
                     }
@@ -496,19 +496,19 @@
                 "enableAcceleratedNetworking": false,
                 "enableIPForwarding": false,
                 "networkSecurityGroup": {
-                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}_{1}', variables('NSG_Name'), parameters('accountName')))]"
+                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}_{1}_id-{2}', variables('NSG_Name'), parameters('accountName'), parameters('accountIndex')))]"
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Network/applicationSecurityGroups', format('BackEndServer_{0}', parameters('accountName')))]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}_{1}', variables('NSG_Name'), parameters('accountName')))]",
-                "[resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}_{2}', variables('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name), parameters('accountName')))]"
+                "[resourceId('Microsoft.Network/applicationSecurityGroups', format('BackEndServer_{0}_id-{1}', parameters('accountName'), parameters('accountIndex')))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}_{1}_id-{2}', variables('NSG_Name'), parameters('accountName'), parameters('accountIndex')))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}_{2}_id-{3}', variables('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name), parameters('accountName'), parameters('accountIndex')))]"
               ]
             },
             {
               "type": "Microsoft.Compute/virtualMachines",
               "apiVersion": "2021-11-01",
-              "name": "[format('{0}_{1}', variables('VM_FE_WINDOWS_name'), parameters('accountName'))]",
+              "name": "[format('{0}_{1}_id-{2}', variables('VM_FE_WINDOWS_name'), parameters('accountName'), parameters('accountIndex'))]",
               "location": "[parameters('location')]",
               "tags": {
                 "owner": "[parameters('owner')]",
@@ -524,7 +524,6 @@
                     "id": "[variables('ImageID_VM_FE_WINDOWS')]"
                   },
                   "osDisk": {
-                    "name": "[format('{0}_OSdisk', variables('VM_FE_WINDOWS_name'))]",
                     "createOption": "FromImage",
                     "managedDisk": {
                       "storageAccountType": "Standard_LRS"
@@ -536,7 +535,7 @@
                 "networkProfile": {
                   "networkInterfaces": [
                     {
-                      "id": "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface_{1}', variables('VM_FE_WINDOWS_name'), parameters('accountName')))]",
+                      "id": "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface_{1}_id-{2}', variables('VM_FE_WINDOWS_name'), parameters('accountName'), parameters('accountIndex')))]",
                       "properties": {
                         "deleteOption": "Delete"
                       }
@@ -550,13 +549,13 @@
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface_{1}', variables('VM_FE_WINDOWS_name'), parameters('accountName')))]"
+                "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface_{1}_id-{2}', variables('VM_FE_WINDOWS_name'), parameters('accountName'), parameters('accountIndex')))]"
               ]
             },
             {
               "type": "Microsoft.Compute/virtualMachines",
               "apiVersion": "2021-11-01",
-              "name": "[format('{0}_{1}', variables('VM_FE_LINUX_name'), parameters('accountName'))]",
+              "name": "[format('{0}_{1}_id-{2}', variables('VM_FE_LINUX_name'), parameters('accountName'), parameters('accountIndex'))]",
               "location": "[parameters('location')]",
               "tags": {
                 "owner": "[parameters('owner')]",
@@ -572,7 +571,6 @@
                     "id": "[variables('ImageID_VM_FE_LINUX')]"
                   },
                   "osDisk": {
-                    "name": "[format('{0}_OSdisk', variables('VM_FE_LINUX_name'))]",
                     "createOption": "FromImage",
                     "managedDisk": {
                       "storageAccountType": "Standard_LRS"
@@ -584,7 +582,7 @@
                 "networkProfile": {
                   "networkInterfaces": [
                     {
-                      "id": "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface_{1}', variables('VM_FE_LINUX_name'), parameters('accountName')))]",
+                      "id": "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface_{1}_id-{2}', variables('VM_FE_LINUX_name'), parameters('accountName'), parameters('accountIndex')))]",
                       "properties": {
                         "deleteOption": "Delete"
                       }
@@ -598,13 +596,13 @@
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface_{1}', variables('VM_FE_LINUX_name'), parameters('accountName')))]"
+                "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface_{1}_id-{2}', variables('VM_FE_LINUX_name'), parameters('accountName'), parameters('accountIndex')))]"
               ]
             },
             {
               "type": "Microsoft.Compute/virtualMachines",
               "apiVersion": "2021-11-01",
-              "name": "[format('{0}_{1}', variables('VM_BE_SERVER_name'), parameters('accountName'))]",
+              "name": "[format('{0}_{1}_id-{2}', variables('VM_BE_SERVER_name'), parameters('accountName'), parameters('accountIndex'))]",
               "location": "[parameters('location')]",
               "tags": {
                 "owner": "[parameters('owner')]",
@@ -620,7 +618,6 @@
                     "id": "[variables('ImageID_VM_BE_SERVER')]"
                   },
                   "osDisk": {
-                    "name": "[format('{0}_OSdisk', variables('VM_BE_SERVER_name'))]",
                     "createOption": "FromImage",
                     "managedDisk": {
                       "storageAccountType": "Standard_LRS"
@@ -632,7 +629,7 @@
                 "networkProfile": {
                   "networkInterfaces": [
                     {
-                      "id": "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface_{1}', variables('VM_BE_SERVER_name'), parameters('accountName')))]",
+                      "id": "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface_{1}_id-{2}', variables('VM_BE_SERVER_name'), parameters('accountName'), parameters('accountIndex')))]",
                       "properties": {
                         "deleteOption": "Delete"
                       }
@@ -646,13 +643,13 @@
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface_{1}', variables('VM_BE_SERVER_name'), parameters('accountName')))]"
+                "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface_{1}_id-{2}', variables('VM_BE_SERVER_name'), parameters('accountName'), parameters('accountIndex')))]"
               ]
             },
             {
               "type": "Microsoft.Network/networkSecurityGroups/securityRules",
               "apiVersion": "2021-05-01",
-              "name": "[format('{0}/{1}', format('{0}_{1}', variables('NSG_Name'), parameters('accountName')), format('RestrictVNetFlowInbound_{0}', parameters('accountName')))]",
+              "name": "[format('{0}/{1}', format('{0}_{1}_id-{2}', variables('NSG_Name'), parameters('accountName'), parameters('accountIndex')), format('RestrictVNetFlowInbound_{0}_id-{1}', parameters('accountName'), parameters('accountIndex')))]",
               "properties": {
                 "protocol": "*",
                 "sourcePortRange": "*",
@@ -664,10 +661,10 @@
                 "direction": "Inbound"
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}_{1}', variables('NSG_Name'), parameters('accountName')))]",
-                "[resourceId('Microsoft.Compute/virtualMachines', format('{0}_{1}', variables('VM_BE_SERVER_name'), parameters('accountName')))]",
-                "[resourceId('Microsoft.Compute/virtualMachines', format('{0}_{1}', variables('VM_FE_LINUX_name'), parameters('accountName')))]",
-                "[resourceId('Microsoft.Compute/virtualMachines', format('{0}_{1}', variables('VM_FE_WINDOWS_name'), parameters('accountName')))]"
+                "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}_{1}_id-{2}', variables('NSG_Name'), parameters('accountName'), parameters('accountIndex')))]",
+                "[resourceId('Microsoft.Compute/virtualMachines', format('{0}_{1}_id-{2}', variables('VM_BE_SERVER_name'), parameters('accountName'), parameters('accountIndex')))]",
+                "[resourceId('Microsoft.Compute/virtualMachines', format('{0}_{1}_id-{2}', variables('VM_FE_LINUX_name'), parameters('accountName'), parameters('accountIndex')))]",
+                "[resourceId('Microsoft.Compute/virtualMachines', format('{0}_{1}_id-{2}', variables('VM_FE_WINDOWS_name'), parameters('accountName'), parameters('accountIndex')))]"
               ]
             }
           ]
@@ -679,6 +676,14 @@
     "namesArray": {
       "type": "string",
       "value": "[first(variables('accountNames'))]"
+    },
+    "testOutput": {
+      "type": "int",
+      "value": 10
+    },
+    "testOutput_2": {
+      "type": "string",
+      "value": "this is a sample string"
     }
   }
 }
