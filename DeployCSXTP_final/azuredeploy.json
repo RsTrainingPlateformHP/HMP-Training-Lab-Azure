@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.12.40.16777",
-      "templateHash": "6574740441473099478"
+      "templateHash": "14943654295118782583"
     }
   },
   "parameters": {
@@ -60,10 +60,10 @@
             "value": "[format('{0}_VM-CSX-TP-WINDOWS', range(0, parameters('count'))[copyIndex()])]"
           },
           "VM_BE_SERVER_name": {
-            "value": "[format('{0}_VM-CSX-TP-LINUX', range(0, parameters('count'))[copyIndex()])]"
+            "value": "[format('{0}_VM-CSX-TP-SERVER', range(0, parameters('count'))[copyIndex()])]"
           },
           "VM_FE_LINUX_name": {
-            "value": "[format('{0}_VM-CSX-TP-SERVER', range(0, parameters('count'))[copyIndex()])]"
+            "value": "[format('{0}_VM-CSX-TP-LINUX', range(0, parameters('count'))[copyIndex()])]"
           },
           "NSG_Name": {
             "value": "[format('{0}_nsg-CSX-TP', range(0, parameters('count'))[copyIndex()])]"
