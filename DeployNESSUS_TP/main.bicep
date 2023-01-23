@@ -204,7 +204,7 @@ resource NSG_TP_NESSUS_LINUX 'Microsoft.Network/networkSecurityGroups@2022-07-01
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
           destinationAddressPrefix: '*'         
-          destinationPortRange: '22' //port de destination autorisé (ssh)
+          destinationPortRange: '22' 
         }
       }
       {
@@ -218,7 +218,7 @@ resource NSG_TP_NESSUS_LINUX 'Microsoft.Network/networkSecurityGroups@2022-07-01
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
           destinationAddressPrefix: '*'         
-          destinationPortRange: '4000' //port de destination autorisé (ssh)
+          destinationPortRange: '4000' 
         }
       }
       {
@@ -232,11 +232,11 @@ resource NSG_TP_NESSUS_LINUX 'Microsoft.Network/networkSecurityGroups@2022-07-01
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
           destinationAddressPrefix: '*'         
-          destinationPortRange: '8080' //port de destination autorisé (ssh)
+          destinationPortRange: '8080' 
         }
       }
       {
-        name: 'Allow 8080' //nom de la règle
+        name: 'Allow 9991' //nom de la règle
         properties: {
           priority: 330
           protocol: '*'
@@ -246,7 +246,7 @@ resource NSG_TP_NESSUS_LINUX 'Microsoft.Network/networkSecurityGroups@2022-07-01
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
           destinationAddressPrefix: '*'         
-          destinationPortRange: '9991' //port de destination autorisé (ssh)
+          destinationPortRange: '9991'
         }
       }
     ]
