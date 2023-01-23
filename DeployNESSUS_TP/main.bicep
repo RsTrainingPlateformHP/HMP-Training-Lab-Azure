@@ -8,7 +8,7 @@ param VM_LINUX_name string
 param VM_SERVER_name string
 
 param VNET_name string
-param NSG_Name string
+param NSG_Name_SERVER string
 param NSG_Name_LINUX string
 param NSG_Name_WINDOWS string
 
@@ -16,6 +16,7 @@ var ImageID_VM_WINDOWS = ''
 var ImageID_VM_LINUX = ''
 var ImageID_VM_SERVER = ''
 
+//////////////////////////////////////////////////////////////////////////////////SERVER PUBLIC IP/////////////////////////////////////////////////////////////////////////////////////
 
 resource publicIP_VM_SERVER 'Microsoft.Network/publicIPAddresses@2022-07-01' = {
   name: '${VM_SERVER_name}-public-IP'
@@ -36,6 +37,7 @@ resource publicIP_VM_SERVER 'Microsoft.Network/publicIPAddresses@2022-07-01' = {
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////VNET/////////////////////////////////////////////////////////////////////////////////////////////////
 
 resource VNET_TP_NESSUS 'Microsoft.Network/virtualNetworks@2022-07-01' = {
   name: '${VNET_name}${uniqueString(subscription().subscriptionId, deployment().name)}'
@@ -67,8 +69,10 @@ resource VNET_TP_NESSUS 'Microsoft.Network/virtualNetworks@2022-07-01' = {
   }
 }
 
-resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
-  name: NSG_Name
+//////////////////////////////////////////////////////////////////////////////////Network Security Groups//////////////////////////////////////////////////////////////////////////////
+
+resource NSG_TP_NESSUS_SERVER 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
+  name: NSG_Name_SERVER
   location: location
   tags:{
     owner: owner
@@ -249,6 +253,45 @@ resource NSG_TP_NESSUS_LINUX 'Microsoft.Network/networkSecurityGroups@2022-07-01
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////Network Interface////////////////////////////////////////////////////////////////////////////////////
+
+resource networkInterface_VM_SERVER 'Microsoft.Network/networkInterfaces@2020-11-01' = {
+  name: '${VM_SERVER_name}-network-interface'
+  location: location
+  tags: {
+    owner: owner
+    approver: approver
+    endDate: endDate
+  }
+  properties: {
+    ipConfigurations: [
+      {
+        name: 'ipconfig1'
+        properties: {
+          privateIPAllocationMethod: 'Static'
+          privateIPAddress: '10.4.0.3'
+          publicIPAddress: {
+            id: publicIP_VM_SERVER.id
+          }
+          subnet: {
+            id: VNET_TP_NESSUS.properties.subnets[0].id
+          }
+          primary: true
+          privateIPAddressVersion: 'IPv4'
+        }
+      }
+    ]
+    dnsSettings: {
+      dnsServers: []
+    }
+    enableAcceleratedNetworking: false
+    enableIPForwarding: false
+    networkSecurityGroup: {
+      id: NSG_TP_NESSUS_SERVER.id
+    }
+  }
+}
+
 resource networkInterface_VM_WINDOWS 'Microsoft.Network/networkInterfaces@2022-07-01' = {
   name: '${VM_WINDOWS_name}-network-interface'
   location: location
@@ -317,42 +360,7 @@ resource networkInterface_VM_LINUX 'Microsoft.Network/networkInterfaces@2022-07-
   }
 }
 
-resource networkInterface_VM_SERVER 'Microsoft.Network/networkInterfaces@2020-11-01' = {
-  name: '${VM_SERVER_name}-network-interface'
-  location: location
-  tags: {
-    owner: owner
-    approver: approver
-    endDate: endDate
-  }
-  properties: {
-    ipConfigurations: [
-      {
-        name: 'ipconfig1'
-        properties: {
-          privateIPAllocationMethod: 'Static'
-          privateIPAddress: '10.4.0.3'
-          publicIPAddress: {
-            id: publicIP_VM_SERVER.id
-          }
-          subnet: {
-            id: VNET_TP_NESSUS.properties.subnets[0].id
-          }
-          primary: true
-          privateIPAddressVersion: 'IPv4'
-        }
-      }
-    ]
-    dnsSettings: {
-      dnsServers: []
-    }
-    enableAcceleratedNetworking: false
-    enableIPForwarding: false
-    networkSecurityGroup: {
-      id: NSG_TP_NESSUS.id
-    }
-  }
-}
+//////////////////////////////////////////////////////////////////////////////////Virtual Machines/////////////////////////////////////////////////////////////////////////////////////
 
 resource VM_WINDOWS 'Microsoft.Compute/virtualMachines@2022-08-01' = {
   name: VM_WINDOWS_name
