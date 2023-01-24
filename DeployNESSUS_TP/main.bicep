@@ -8,9 +8,7 @@ param VM_LINUX_name string
 param VM_SERVER_name string
 
 param VNET_name string
-param NSG_Name_SERVER string
-param NSG_Name_LINUX string
-param NSG_Name_WINDOWS string
+param NSG_Name string
 
 var ImageID_VM_WINDOWS = ''
 var ImageID_VM_LINUX = ''
@@ -69,10 +67,11 @@ resource VNET_TP_NESSUS 'Microsoft.Network/virtualNetworks@2022-07-01' = {
   }
 }
 
+
 //////////////////////////////////////////////////////////////////////////////////Network Security Groups//////////////////////////////////////////////////////////////////////////////
 
-resource NSG_TP_NESSUS_SERVER 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
-  name: NSG_Name_SERVER
+resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
+  name: NSG_Name
   location: location
   tags:{
     owner: owner
@@ -98,7 +97,7 @@ resource NSG_TP_NESSUS_SERVER 'Microsoft.Network/networkSecurityGroups@2022-07-0
       {
         name: 'Allow Nessus Web' //nom de la règle
         properties: {
-          priority: 330
+          priority: 310
           protocol: '*'
           access: 'Allow'
           direction: 'Inbound'
@@ -109,32 +108,46 @@ resource NSG_TP_NESSUS_SERVER 'Microsoft.Network/networkSecurityGroups@2022-07-0
           destinationPortRange: '8834' //port de destination autorisé (nessus)
         }
       }
-    ]
-  }
-}
-
-resource NSG_TP_NESSUS_WINDOWS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
-  name: NSG_Name_WINDOWS
-  location: location
-  tags:{
-    owner: owner
-    approver: approver
-    endDate: endDate
-  }
-  properties: {
-    securityRules: [
       {
-        name: 'Allow SSH' //nom de la règle
+        name: 'Allow 4000' //nom de la règle
         properties: {
-          priority: 340
-          protocol: 'TCP'
+          priority: 320
+          protocol: '*'
           access: 'Allow'
           direction: 'Inbound'
           sourceApplicationSecurityGroups: []
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
           destinationAddressPrefix: '*'         
-          destinationPortRange: '22' //port de destination autorisé (ssh)
+          destinationPortRange: '4000' 
+        }
+      }
+      {
+        name: 'Allow 8080' //nom de la règle
+        properties: {
+          priority: 330
+          protocol: '*'
+          access: 'Allow'
+          direction: 'Inbound'
+          sourceApplicationSecurityGroups: []
+          destinationApplicationSecurityGroups: []
+          sourcePortRange: '*'
+          destinationAddressPrefix: '*'         
+          destinationPortRange: '8080' 
+        }
+      }
+      {
+        name: 'Allow 9991' //nom de la règle
+        properties: {
+          priority: 340
+          protocol: '*'
+          access: 'Allow'
+          direction: 'Inbound'
+          sourceApplicationSecurityGroups: []
+          destinationApplicationSecurityGroups: []
+          sourcePortRange: '*'
+          destinationAddressPrefix: '*'         
+          destinationPortRange: '9991'
         }
       }
       {
@@ -154,7 +167,7 @@ resource NSG_TP_NESSUS_WINDOWS 'Microsoft.Network/networkSecurityGroups@2022-07-
       {
         name: 'Allow http' //nom de la règle
         properties: {
-          priority: 300
+          priority: 350
           protocol: '*'
           access: 'Allow'
           direction: 'Inbound'
@@ -168,7 +181,7 @@ resource NSG_TP_NESSUS_WINDOWS 'Microsoft.Network/networkSecurityGroups@2022-07-
       {
         name: 'Allow https' //nom de la règle
         properties: {
-          priority: 300
+          priority: 370
           protocol: '*'
           access: 'Allow'
           direction: 'Inbound'
@@ -183,75 +196,6 @@ resource NSG_TP_NESSUS_WINDOWS 'Microsoft.Network/networkSecurityGroups@2022-07-
   }
 }
 
-resource NSG_TP_NESSUS_LINUX 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
-  name: NSG_Name_LINUX
-  location: location
-  tags:{
-    owner: owner
-    approver: approver
-    endDate: endDate
-  }
-  properties: {
-    securityRules: [
-      {
-        name: 'Allow SSH' //nom de la règle
-        properties: {
-          priority: 300
-          protocol: 'TCP'
-          access: 'Allow'
-          direction: 'Inbound'
-          sourceApplicationSecurityGroups: []
-          destinationApplicationSecurityGroups: []
-          sourcePortRange: '*'
-          destinationAddressPrefix: '*'         
-          destinationPortRange: '22' 
-        }
-      }
-      {
-        name: 'Allow 4000' //nom de la règle
-        properties: {
-          priority: 310
-          protocol: '*'
-          access: 'Allow'
-          direction: 'Inbound'
-          sourceApplicationSecurityGroups: []
-          destinationApplicationSecurityGroups: []
-          sourcePortRange: '*'
-          destinationAddressPrefix: '*'         
-          destinationPortRange: '4000' 
-        }
-      }
-      {
-        name: 'Allow 8080' //nom de la règle
-        properties: {
-          priority: 320
-          protocol: '*'
-          access: 'Allow'
-          direction: 'Inbound'
-          sourceApplicationSecurityGroups: []
-          destinationApplicationSecurityGroups: []
-          sourcePortRange: '*'
-          destinationAddressPrefix: '*'         
-          destinationPortRange: '8080' 
-        }
-      }
-      {
-        name: 'Allow 9991' //nom de la règle
-        properties: {
-          priority: 330
-          protocol: '*'
-          access: 'Allow'
-          direction: 'Inbound'
-          sourceApplicationSecurityGroups: []
-          destinationApplicationSecurityGroups: []
-          sourcePortRange: '*'
-          destinationAddressPrefix: '*'         
-          destinationPortRange: '9991'
-        }
-      }
-    ]
-  }
-}
 
 //////////////////////////////////////////////////////////////////////////////////Network Interface////////////////////////////////////////////////////////////////////////////////////
 
@@ -287,7 +231,7 @@ resource networkInterface_VM_SERVER 'Microsoft.Network/networkInterfaces@2020-11
     enableAcceleratedNetworking: false
     enableIPForwarding: false
     networkSecurityGroup: {
-      id: NSG_TP_NESSUS_SERVER.id
+      id: NSG_TP_NESSUS.id
     }
   }
 }
@@ -321,7 +265,7 @@ resource networkInterface_VM_WINDOWS 'Microsoft.Network/networkInterfaces@2022-0
     enableAcceleratedNetworking: false
     enableIPForwarding: false
     networkSecurityGroup: {
-      id: NSG_TP_NESSUS_WINDOWS.id
+      id: NSG_TP_NESSUS.id
     }
   }
 }
@@ -355,7 +299,7 @@ resource networkInterface_VM_LINUX 'Microsoft.Network/networkInterfaces@2022-07-
     enableAcceleratedNetworking: false
     enableIPForwarding: false
     networkSecurityGroup: {
-      id: NSG_TP_NESSUS_LINUX.id
+      id: NSG_TP_NESSUS.id
     }
   }
 }
