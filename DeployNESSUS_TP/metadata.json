@@ -1,0 +1,6 @@
+{
+    "itemDisplayName": "Deploy TP NESSUS",
+    "githubUsername": "Htamarin",
+    "description": "Deployment of a TP NESSUS environment",
+    "summary": "The template deploys three vm on a subnet with nsg and security rules configured"
+}
