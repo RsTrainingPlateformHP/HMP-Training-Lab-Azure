@@ -2,7 +2,7 @@ param location string = 'francecentral'
 param owner string
 param approver string
 param endDate string
-@description('Choisir nom du cmpte admin et son password')
+@description('Choisir nom du compte admin et son password')
 param VM_WINDOWS_name string
 param VM_LINUX_name string
 param VM_SERVER_name string
@@ -12,9 +12,9 @@ param NSG_Name_SERVER string
 param NSG_Name_LINUX string
 param NSG_Name_WINDOWS string
 
-var ImageID_VM_WINDOWS = ''
-var ImageID_VM_LINUX = ''
-var ImageID_VM_SERVER = ''
+var ImageID_VM_SERVER = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_SERVER_VM/versions/1.0.0'
+var ImageID_VM_WINDOWS = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_WINDOWS_VM/versions/1.0.0'
+var ImageID_VM_LINUX = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_LINUX_VM/versions/1.0.0'
 
 //////////////////////////////////////////////////////////////////////////////////SERVER PUBLIC IP/////////////////////////////////////////////////////////////////////////////////////
 
@@ -42,7 +42,7 @@ resource publicIP_VM_SERVER 'Microsoft.Network/publicIPAddresses@2022-07-01' = {
 resource VNET_TP_NESSUS 'Microsoft.Network/virtualNetworks@2022-07-01' = {
   name: '${VNET_name}${uniqueString(subscription().subscriptionId, deployment().name)}'
   location: location
-  tags:{
+  tags: {
     owner: owner
     approver: approver
     endDate: endDate
@@ -54,14 +54,14 @@ resource VNET_TP_NESSUS 'Microsoft.Network/virtualNetworks@2022-07-01' = {
       ]
     }
     subnets: [
-      { 
+      {
         name: 'default' //specs obligatoires
         properties: {
           addressPrefix: '10.4.0.0/24'
           delegations: []
           privateEndpointNetworkPolicies: 'Enabled'
           privateLinkServiceNetworkPolicies: 'Enabled'
-        }   
+        }
       }
     ]
     virtualNetworkPeerings: []
@@ -74,7 +74,7 @@ resource VNET_TP_NESSUS 'Microsoft.Network/virtualNetworks@2022-07-01' = {
 resource NSG_TP_NESSUS_SERVER 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
   name: NSG_Name_SERVER
   location: location
-  tags:{
+  tags: {
     owner: owner
     approver: approver
     endDate: endDate
@@ -91,7 +91,7 @@ resource NSG_TP_NESSUS_SERVER 'Microsoft.Network/networkSecurityGroups@2022-07-0
           sourceApplicationSecurityGroups: []
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
-          destinationAddressPrefix: '*'         
+          destinationAddressPrefix: '*'
           destinationPortRange: '22' //port de destination autorisé (ssh)
         }
       }
@@ -105,7 +105,7 @@ resource NSG_TP_NESSUS_SERVER 'Microsoft.Network/networkSecurityGroups@2022-07-0
           sourceApplicationSecurityGroups: []
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
-          destinationAddressPrefix: '*'         
+          destinationAddressPrefix: '*'
           destinationPortRange: '8834' //port de destination autorisé (nessus)
         }
       }
@@ -116,7 +116,7 @@ resource NSG_TP_NESSUS_SERVER 'Microsoft.Network/networkSecurityGroups@2022-07-0
 resource NSG_TP_NESSUS_WINDOWS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
   name: NSG_Name_WINDOWS
   location: location
-  tags:{
+  tags: {
     owner: owner
     approver: approver
     endDate: endDate
@@ -133,7 +133,7 @@ resource NSG_TP_NESSUS_WINDOWS 'Microsoft.Network/networkSecurityGroups@2022-07-
           sourceApplicationSecurityGroups: []
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
-          destinationAddressPrefix: '*'         
+          destinationAddressPrefix: '*'
           destinationPortRange: '22' //port de destination autorisé (ssh)
         }
       }
@@ -147,7 +147,7 @@ resource NSG_TP_NESSUS_WINDOWS 'Microsoft.Network/networkSecurityGroups@2022-07-
           sourceApplicationSecurityGroups: []
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
-          destinationAddressPrefix: '*'         
+          destinationAddressPrefix: '*'
           destinationPortRange: '23389' //port de destination autorisé (ssh)
         }
       }
@@ -161,7 +161,7 @@ resource NSG_TP_NESSUS_WINDOWS 'Microsoft.Network/networkSecurityGroups@2022-07-
           sourceApplicationSecurityGroups: []
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
-          destinationAddressPrefix: '*'         
+          destinationAddressPrefix: '*'
           destinationPortRange: '80' //port de destination autorisé (http)
         }
       }
@@ -175,7 +175,7 @@ resource NSG_TP_NESSUS_WINDOWS 'Microsoft.Network/networkSecurityGroups@2022-07-
           sourceApplicationSecurityGroups: []
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
-          destinationAddressPrefix: '*'         
+          destinationAddressPrefix: '*'
           destinationPortRange: '443' //port de destination autorisé (https)
         }
       }
@@ -186,7 +186,7 @@ resource NSG_TP_NESSUS_WINDOWS 'Microsoft.Network/networkSecurityGroups@2022-07-
 resource NSG_TP_NESSUS_LINUX 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
   name: NSG_Name_LINUX
   location: location
-  tags:{
+  tags: {
     owner: owner
     approver: approver
     endDate: endDate
@@ -203,8 +203,8 @@ resource NSG_TP_NESSUS_LINUX 'Microsoft.Network/networkSecurityGroups@2022-07-01
           sourceApplicationSecurityGroups: []
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
-          destinationAddressPrefix: '*'         
-          destinationPortRange: '22' 
+          destinationAddressPrefix: '*'
+          destinationPortRange: '22'
         }
       }
       {
@@ -217,8 +217,8 @@ resource NSG_TP_NESSUS_LINUX 'Microsoft.Network/networkSecurityGroups@2022-07-01
           sourceApplicationSecurityGroups: []
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
-          destinationAddressPrefix: '*'         
-          destinationPortRange: '4000' 
+          destinationAddressPrefix: '*'
+          destinationPortRange: '4000'
         }
       }
       {
@@ -231,8 +231,8 @@ resource NSG_TP_NESSUS_LINUX 'Microsoft.Network/networkSecurityGroups@2022-07-01
           sourceApplicationSecurityGroups: []
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
-          destinationAddressPrefix: '*'         
-          destinationPortRange: '8080' 
+          destinationAddressPrefix: '*'
+          destinationPortRange: '8080'
         }
       }
       {
@@ -245,7 +245,7 @@ resource NSG_TP_NESSUS_LINUX 'Microsoft.Network/networkSecurityGroups@2022-07-01
           sourceApplicationSecurityGroups: []
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
-          destinationAddressPrefix: '*'         
+          destinationAddressPrefix: '*'
           destinationPortRange: '9991'
         }
       }
@@ -396,7 +396,7 @@ resource VM_WINDOWS 'Microsoft.Compute/virtualMachines@2022-08-01' = {
           }
         }
       ]
-    }  
+    }
     diagnosticsProfile: {
       bootDiagnostics: {
         enabled: true
@@ -439,7 +439,7 @@ resource VM_LINUX 'Microsoft.Compute/virtualMachines@2022-08-01' = {
           }
         }
       ]
-    }  
+    }
     diagnosticsProfile: {
       bootDiagnostics: {
         enabled: true
@@ -481,7 +481,7 @@ resource VM_SERVER 'Microsoft.Compute/virtualMachines@2022-08-01' = {
           }
         }
       ]
-    }  
+    }
     diagnosticsProfile: {
       bootDiagnostics: {
         enabled: true
