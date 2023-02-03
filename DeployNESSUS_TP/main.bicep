@@ -108,37 +108,6 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
           destinationPortRange: '8834' //port de destination autorisé (nessus)
         }
       }
-<<<<<<< HEAD
-    ]
-  }
-}
-
-resource NSG_TP_NESSUS_WINDOWS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
-  name: NSG_Name_WINDOWS
-  location: location
-  tags: {
-    owner: owner
-    approver: approver
-    endDate: endDate
-  }
-  properties: {
-    securityRules: [
-      {
-        name: 'Allow SSH' //nom de la règle
-        properties: {
-          priority: 340
-          protocol: 'TCP'
-          access: 'Allow'
-          direction: 'Inbound'
-          sourceApplicationSecurityGroups: []
-          destinationApplicationSecurityGroups: []
-          sourcePortRange: '*'
-          destinationAddressPrefix: '*'
-          destinationPortRange: '22' //port de destination autorisé (ssh)
-        }
-      }
-=======
->>>>>>> e53aa54ce121a6fe647804f9e92071b7f5fde49d
       {
         name: 'Allow 4000' //nom de la règle
         properties: {
@@ -149,13 +118,8 @@ resource NSG_TP_NESSUS_WINDOWS 'Microsoft.Network/networkSecurityGroups@2022-07-
           sourceApplicationSecurityGroups: []
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
-<<<<<<< HEAD
-          destinationAddressPrefix: '*'
-          destinationPortRange: '23389' //port de destination autorisé (ssh)
-=======
           destinationAddressPrefix: '*'         
           destinationPortRange: '4000' 
->>>>>>> e53aa54ce121a6fe647804f9e92071b7f5fde49d
         }
       }
       {
@@ -168,13 +132,8 @@ resource NSG_TP_NESSUS_WINDOWS 'Microsoft.Network/networkSecurityGroups@2022-07-
           sourceApplicationSecurityGroups: []
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
-<<<<<<< HEAD
-          destinationAddressPrefix: '*'
-          destinationPortRange: '80' //port de destination autorisé (http)
-=======
           destinationAddressPrefix: '*'         
           destinationPortRange: '8080' 
->>>>>>> e53aa54ce121a6fe647804f9e92071b7f5fde49d
         }
       }
       {
@@ -187,31 +146,10 @@ resource NSG_TP_NESSUS_WINDOWS 'Microsoft.Network/networkSecurityGroups@2022-07-
           sourceApplicationSecurityGroups: []
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
-<<<<<<< HEAD
-          destinationAddressPrefix: '*'
-          destinationPortRange: '443' //port de destination autorisé (https)
-        }
-      }
-    ]
-  }
-}
-
-resource NSG_TP_NESSUS_LINUX 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
-  name: NSG_Name_LINUX
-  location: location
-  tags: {
-    owner: owner
-    approver: approver
-    endDate: endDate
-  }
-  properties: {
-    securityRules: [
-=======
           destinationAddressPrefix: '*'         
           destinationPortRange: '9991'
         }
       }
->>>>>>> e53aa54ce121a6fe647804f9e92071b7f5fde49d
       {
         name: 'Allow RDP' //nom de la règle
         properties: {
@@ -222,27 +160,8 @@ resource NSG_TP_NESSUS_LINUX 'Microsoft.Network/networkSecurityGroups@2022-07-01
           sourceApplicationSecurityGroups: []
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
-<<<<<<< HEAD
-          destinationAddressPrefix: '*'
-          destinationPortRange: '22'
-        }
-      }
-      {
-        name: 'Allow 4000' //nom de la règle
-        properties: {
-          priority: 310
-          protocol: '*'
-          access: 'Allow'
-          direction: 'Inbound'
-          sourceApplicationSecurityGroups: []
-          destinationApplicationSecurityGroups: []
-          sourcePortRange: '*'
-          destinationAddressPrefix: '*'
-          destinationPortRange: '4000'
-=======
           destinationAddressPrefix: '*'         
           destinationPortRange: '23389' //port de destination autorisé (ssh)
->>>>>>> e53aa54ce121a6fe647804f9e92071b7f5fde49d
         }
       }
       {
@@ -255,13 +174,8 @@ resource NSG_TP_NESSUS_LINUX 'Microsoft.Network/networkSecurityGroups@2022-07-01
           sourceApplicationSecurityGroups: []
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
-<<<<<<< HEAD
-          destinationAddressPrefix: '*'
-          destinationPortRange: '8080'
-=======
           destinationAddressPrefix: '*'         
           destinationPortRange: '80' //port de destination autorisé (http)
->>>>>>> e53aa54ce121a6fe647804f9e92071b7f5fde49d
         }
       }
       {
@@ -274,13 +188,8 @@ resource NSG_TP_NESSUS_LINUX 'Microsoft.Network/networkSecurityGroups@2022-07-01
           sourceApplicationSecurityGroups: []
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
-<<<<<<< HEAD
-          destinationAddressPrefix: '*'
-          destinationPortRange: '9991'
-=======
           destinationAddressPrefix: '*'         
           destinationPortRange: '443' //port de destination autorisé (https)
->>>>>>> e53aa54ce121a6fe647804f9e92071b7f5fde49d
         }
       }
     ]
