@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.14.6.61914",
-      "templateHash": "13869882806754191818"
+      "templateHash": "14753195651225093371"
     }
   },
   "parameters": {
@@ -125,112 +125,24 @@
       "properties": {
         "securityRules": [
           {
-            "name": "SSH_FE_to_BE_Inbound",
-            "properties": {
-              "protocol": "Tcp",
-              "sourcePortRange": "*",
-              "sourceApplicationSecurityGroups": [
-                {
-                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', parameters('Front_End_App'))]",
-                  "location": "[parameters('location')]"
-                }
-              ],
-              "destinationPortRange": "22",
-              "destinationApplicationSecurityGroups": [
-                {
-                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', parameters('Front_End_App'))]",
-                  "location": "[parameters('location')]"
-                }
-              ],
-              "access": "Allow",
-              "priority": 100,
-              "direction": "Inbound"
-            }
-          },
-          {
-            "name": "SSH_BE_to_FE_Inbound",
-            "properties": {
-              "protocol": "Tcp",
-              "sourcePortRange": "*",
-              "sourceApplicationSecurityGroups": [
-                {
-                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', parameters('Front_End_App'))]",
-                  "location": "[parameters('location')]"
-                }
-              ],
-              "destinationPortRange": "22",
-              "destinationApplicationSecurityGroups": [
-                {
-                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', parameters('Front_End_App'))]",
-                  "location": "[parameters('location')]"
-                }
-              ],
-              "access": "Allow",
-              "priority": 110,
-              "direction": "Inbound"
-            }
-          },
-          {
             "name": "SSH_Inbound",
             "properties": {
               "protocol": "Tcp",
               "sourcePortRange": "*",
               "destinationPortRange": "22",
-              "sourceAddressPrefix": "*",
-              "destinationApplicationSecurityGroups": [
-                {
-                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', parameters('Front_End_App'))]",
-                  "location": "[parameters('location')]"
-                }
-              ],
               "access": "Allow",
-              "priority": 130,
+              "priority": 100,
               "direction": "Inbound"
             }
           },
           {
-            "name": "SSH_FE_to_BE_Outbound",
+            "name": "SSH_Outbound",
             "properties": {
               "protocol": "Tcp",
               "sourcePortRange": "*",
-              "sourceApplicationSecurityGroups": [
-                {
-                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', parameters('Front_End_App'))]",
-                  "location": "[parameters('location')]"
-                }
-              ],
               "destinationPortRange": "22",
-              "destinationApplicationSecurityGroups": [
-                {
-                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', parameters('Front_End_App'))]",
-                  "location": "[parameters('location')]"
-                }
-              ],
               "access": "Allow",
               "priority": 100,
-              "direction": "Outbound"
-            }
-          },
-          {
-            "name": "SSH_BE_to_FE_Outbound",
-            "properties": {
-              "protocol": "Tcp",
-              "sourcePortRange": "*",
-              "sourceApplicationSecurityGroups": [
-                {
-                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', parameters('Front_End_App'))]",
-                  "location": "[parameters('location')]"
-                }
-              ],
-              "destinationPortRange": "22",
-              "destinationApplicationSecurityGroups": [
-                {
-                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', parameters('Front_End_App'))]",
-                  "location": "[parameters('location')]"
-                }
-              ],
-              "access": "Allow",
-              "priority": 110,
               "direction": "Outbound"
             }
           },
@@ -332,10 +244,7 @@
             }
           }
         ]
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Network/applicationSecurityGroups', parameters('Front_End_App'))]"
-      ]
+      }
     },
     {
       "type": "Microsoft.Network/networkInterfaces",

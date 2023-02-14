@@ -92,112 +92,24 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
   properties: {
     securityRules: [
       {
-        name: 'SSH_FE_to_BE_Inbound'
-        properties: {
-          protocol: 'Tcp'
-          sourcePortRange: '*'
-          sourceApplicationSecurityGroups: [
-            {
-              id: Application_Security_Group.id
-              location: location
-            }
-          ]
-          destinationPortRange: '22'
-          destinationApplicationSecurityGroups: [
-            {
-              id: Application_Security_Group.id
-              location: location
-            }
-          ]
-          access: 'Allow'
-          priority: 100
-          direction: 'Inbound'
-        }
-      }
-      {
-        name: 'SSH_BE_to_FE_Inbound'
-        properties: {
-          protocol: 'Tcp'
-          sourcePortRange: '*'
-          sourceApplicationSecurityGroups: [
-            {
-              id: Application_Security_Group.id
-              location: location
-            }
-          ]
-          destinationPortRange: '22'
-          destinationApplicationSecurityGroups: [
-            {
-              id: Application_Security_Group.id
-              location: location
-            }
-          ]
-          access: 'Allow'
-          priority: 110
-          direction: 'Inbound'
-        }
-      }
-      {
         name: 'SSH_Inbound'
         properties: {
           protocol: 'Tcp'
           sourcePortRange: '*'
           destinationPortRange: '22'
-          sourceAddressPrefix: '*'
-          destinationApplicationSecurityGroups: [
-            {
-              id: Application_Security_Group.id
-              location: location
-            }
-          ]
           access: 'Allow'
-          priority: 130
+          priority: 100
           direction: 'Inbound'
         }
       }
       {
-        name: 'SSH_FE_to_BE_Outbound'
+        name: 'SSH_Outbound'
         properties: {
           protocol: 'Tcp'
           sourcePortRange: '*'
-          sourceApplicationSecurityGroups: [
-            {
-              id: Application_Security_Group.id
-              location: location
-            }
-          ]
           destinationPortRange: '22'
-          destinationApplicationSecurityGroups: [
-            {
-              id: Application_Security_Group.id
-              location: location
-            }
-          ]
           access: 'Allow'
           priority: 100
-          direction: 'Outbound'
-        }
-      }
-              {
-        name: 'SSH_BE_to_FE_Outbound'
-        properties: {
-          protocol: 'Tcp'
-          sourcePortRange: '*'
-          sourceApplicationSecurityGroups: [
-            {
-              id: Application_Security_Group.id
-              location: location
-            }
-          ]
-          destinationPortRange: '22'
-          destinationApplicationSecurityGroups: [
-            {
-              id: Application_Security_Group.id
-              location: location
-            }
-          ]
-          access: 'Allow'
-          priority: 110
           direction: 'Outbound'
         }
       }
