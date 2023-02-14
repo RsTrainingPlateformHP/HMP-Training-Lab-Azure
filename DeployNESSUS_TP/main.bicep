@@ -18,7 +18,7 @@ var ImageID_VM_LINUX = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/reso
 
 resource Application_Security_Group 'Microsoft.Network/applicationSecurityGroups@2022-07-01' = {
   name: Front_End_App
-  location : location
+  location: location
   tags: {
     owner: owner
     approver: approver
@@ -114,7 +114,7 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
         }
       }
       {
-        name: 'Allow Nessus Web' //nom de la règle
+        name: 'Allow_Nessus_Web' //nom de la règle
         properties: {
           priority: 310
           protocol: '*'
@@ -127,7 +127,7 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
         }
       }
       {
-        name: 'Allow 4000' //nom de la règle
+        name: 'Allow_4000' //nom de la règle
         properties: {
           priority: 320
           protocol: '*'
@@ -141,12 +141,12 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
         }
       }
       {
-        name: 'Allow 8080' //nom de la règle
+        name: 'Allow_8080' //nom de la règle
         properties: {
           priority: 330
           protocol: '*'
           access: 'Allow'
-          direction: 'Inbound'    
+          direction: 'Inbound'
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
           sourceAddressPrefix: '*'
@@ -155,7 +155,7 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
         }
       }
       {
-        name: 'Allow 9991' //nom de la règle
+        name: 'Allow_9991' //nom de la règle
         properties: {
           priority: 340
           protocol: '*'
@@ -169,12 +169,12 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
         }
       }
       {
-        name: 'Allow RDP' //nom de la règle
+        name: 'Allow_RDP' //nom de la règle
         properties: {
           priority: 360
           protocol: 'TCP'
           access: 'Allow'
-          direction: 'Inbound'    
+          direction: 'Inbound'
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
           sourceAddressPrefix: '*'
@@ -183,12 +183,12 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
         }
       }
       {
-        name: 'Allow http' //nom de la règle
+        name: 'Allow_http' //nom de la règle
         properties: {
           priority: 350
           protocol: '*'
           access: 'Allow'
-          direction: 'Inbound'   
+          direction: 'Inbound'
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
           sourceAddressPrefix: '*'
@@ -197,12 +197,12 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
         }
       }
       {
-        name: 'Allow https' //nom de la règle
+        name: 'Allow_https' //nom de la règle
         properties: {
           priority: 370
           protocol: '*'
           access: 'Allow'
-          direction: 'Inbound' 
+          direction: 'Inbound'
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
           sourceAddressPrefix: '*'
@@ -242,7 +242,7 @@ resource networkInterface_VM_SERVER 'Microsoft.Network/networkInterfaces@2020-11
           applicationSecurityGroups: [
             {
               id: Application_Security_Group.id
-            }            
+            }
           ]
         }
       }
