@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.14.6.61914",
-      "templateHash": "8629672714933825500"
+      "templateHash": "13162845311070156922"
     }
   },
   "parameters": {
@@ -113,15 +113,14 @@
           {
             "name": "Allow SSH",
             "properties": {
-              "priority": 300,
-              "protocol": "TCP",
-              "access": "Allow",
-              "direction": "Inbound",
-              "sourceApplicationSecurityGroups": [],
-              "destinationApplicationSecurityGroups": [],
+              "protocol": "Tcp",
               "sourcePortRange": "*",
-              "destinationAddressPrefix": "*",
-              "destinationPortRange": "22"
+              "destinationPortRange": "22",
+              "sourceAddressPrefix": "*",
+              "destinationApplicationSecurityGroups": [],
+              "access": "Allow",
+              "priority": 130,
+              "direction": "Inbound"
             }
           },
           {
@@ -131,7 +130,6 @@
               "protocol": "*",
               "access": "Allow",
               "direction": "Inbound",
-              "sourceApplicationSecurityGroups": [],
               "destinationApplicationSecurityGroups": [],
               "sourcePortRange": "*",
               "destinationAddressPrefix": "*",
@@ -145,7 +143,6 @@
               "protocol": "*",
               "access": "Allow",
               "direction": "Inbound",
-              "sourceApplicationSecurityGroups": [],
               "destinationApplicationSecurityGroups": [],
               "sourcePortRange": "*",
               "destinationAddressPrefix": "*",
@@ -159,7 +156,6 @@
               "protocol": "*",
               "access": "Allow",
               "direction": "Inbound",
-              "sourceApplicationSecurityGroups": [],
               "destinationApplicationSecurityGroups": [],
               "sourcePortRange": "*",
               "destinationAddressPrefix": "*",
@@ -173,7 +169,6 @@
               "protocol": "*",
               "access": "Allow",
               "direction": "Inbound",
-              "sourceApplicationSecurityGroups": [],
               "destinationApplicationSecurityGroups": [],
               "sourcePortRange": "*",
               "destinationAddressPrefix": "*",
@@ -187,7 +182,6 @@
               "protocol": "TCP",
               "access": "Allow",
               "direction": "Inbound",
-              "sourceApplicationSecurityGroups": [],
               "destinationApplicationSecurityGroups": [],
               "sourcePortRange": "*",
               "destinationAddressPrefix": "*",
@@ -201,7 +195,6 @@
               "protocol": "*",
               "access": "Allow",
               "direction": "Inbound",
-              "sourceApplicationSecurityGroups": [],
               "destinationApplicationSecurityGroups": [],
               "sourcePortRange": "*",
               "destinationAddressPrefix": "*",
@@ -215,7 +208,6 @@
               "protocol": "*",
               "access": "Allow",
               "direction": "Inbound",
-              "sourceApplicationSecurityGroups": [],
               "destinationApplicationSecurityGroups": [],
               "sourcePortRange": "*",
               "destinationAddressPrefix": "*",
