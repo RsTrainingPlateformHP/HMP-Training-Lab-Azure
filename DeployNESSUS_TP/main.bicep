@@ -10,11 +10,9 @@ param VM_SERVER_name string
 param VNET_name string
 param NSG_Name string
 
-param ImageID_VM_SERVER string
-param ImageID_VM_WINDOWS string
-param ImageID_VM_LINUX string
-
-
+var ImageID_VM_SERVER = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_SERVER_VM/versions/1.0.0'
+var ImageID_VM_WINDOWS = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_WINDOWS_VM/versions/1.0.0'
+var ImageID_VM_LINUX = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_LINUX_VM/versions/1.0.0'
 
 //////////////////////////////////////////////////////////////////////////////////SERVER PUBLIC IP/////////////////////////////////////////////////////////////////////////////////////
 
@@ -69,7 +67,6 @@ resource VNET_TP_NESSUS 'Microsoft.Network/virtualNetworks@2022-07-01' = {
   }
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////Network Security Groups//////////////////////////////////////////////////////////////////////////////
 
 resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
@@ -83,121 +80,125 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
   properties: {
     securityRules: [
       {
-        name: 'Allow SSH' //nom de la règle
+        name: 'SSH_Inbound'
         properties: {
-          priority: 300
-          protocol: 'TCP'
-          access: 'Allow'
-          direction: 'Inbound'
-          sourceApplicationSecurityGroups: []
-          destinationApplicationSecurityGroups: []
+          protocol: 'Tcp'
           sourcePortRange: '*'
+          destinationPortRange: '22'
+          sourceAddressPrefix: '*'
           destinationAddressPrefix: '*'
-          destinationPortRange: '22' //port de destination autorisé (ssh)
+          access: 'Allow'
+          priority: 100
+          direction: 'Inbound'
         }
       }
       {
-        name: 'Allow Nessus Web' //nom de la règle
+        name: 'SSH_Outbound'
+        properties: {
+          protocol: 'Tcp'
+          sourcePortRange: '*'
+          destinationPortRange: '22'
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
+          access: 'Allow'
+          priority: 110
+          direction: 'Outbound'
+        }
+      }
+      {
+        name: 'Allow_Nessus_Web' //nom de la règle
         properties: {
           priority: 310
           protocol: '*'
           access: 'Allow'
           direction: 'Inbound'
-          sourceApplicationSecurityGroups: []
-          destinationApplicationSecurityGroups: []
+          sourceAddressPrefix: '*'
           sourcePortRange: '*'
           destinationAddressPrefix: '*'
           destinationPortRange: '8834' //port de destination autorisé (nessus)
         }
       }
       {
-        name: 'Allow 4000' //nom de la règle
+        name: 'Allow_4000' //nom de la règle
         properties: {
           priority: 320
           protocol: '*'
           access: 'Allow'
           direction: 'Inbound'
-          sourceApplicationSecurityGroups: []
-          destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
-          destinationAddressPrefix: '*'         
-          destinationPortRange: '4000' 
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
+          destinationPortRange: '4000'
         }
       }
       {
-        name: 'Allow 8080' //nom de la règle
+        name: 'Allow_8080' //nom de la règle
         properties: {
           priority: 330
           protocol: '*'
           access: 'Allow'
           direction: 'Inbound'
-          sourceApplicationSecurityGroups: []
-          destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
-          destinationAddressPrefix: '*'         
-          destinationPortRange: '8080' 
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
+          destinationPortRange: '8080'
         }
       }
       {
-        name: 'Allow 9991' //nom de la règle
+        name: 'Allow_9991' //nom de la règle
         properties: {
           priority: 340
           protocol: '*'
           access: 'Allow'
           direction: 'Inbound'
-          sourceApplicationSecurityGroups: []
-          destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
-          destinationAddressPrefix: '*'         
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
           destinationPortRange: '9991'
         }
       }
       {
-        name: 'Allow RDP' //nom de la règle
+        name: 'Allow_RDP' //nom de la règle
         properties: {
           priority: 360
           protocol: 'TCP'
           access: 'Allow'
           direction: 'Inbound'
-          sourceApplicationSecurityGroups: []
-          destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
-          destinationAddressPrefix: '*'         
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
           destinationPortRange: '23389' //port de destination autorisé (ssh)
         }
       }
       {
-        name: 'Allow http' //nom de la règle
+        name: 'Allow_http' //nom de la règle
         properties: {
           priority: 350
           protocol: '*'
           access: 'Allow'
           direction: 'Inbound'
-          sourceApplicationSecurityGroups: []
-          destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
-          destinationAddressPrefix: '*'         
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
           destinationPortRange: '80' //port de destination autorisé (http)
         }
       }
       {
-        name: 'Allow https' //nom de la règle
+        name: 'Allow_https' //nom de la règle
         properties: {
           priority: 370
           protocol: '*'
           access: 'Allow'
           direction: 'Inbound'
-          sourceApplicationSecurityGroups: []
-          destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
-          destinationAddressPrefix: '*'         
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
           destinationPortRange: '443' //port de destination autorisé (https)
         }
       }
     ]
   }
 }
-
 
 //////////////////////////////////////////////////////////////////////////////////Network Interface////////////////////////////////////////////////////////////////////////////////////
 
@@ -215,7 +216,7 @@ resource networkInterface_VM_SERVER 'Microsoft.Network/networkInterfaces@2020-11
         name: 'ipconfig1'
         properties: {
           privateIPAllocationMethod: 'Static'
-          privateIPAddress: '10.4.0.3'
+          privateIPAddress: '10.4.0.4'
           publicIPAddress: {
             id: publicIP_VM_SERVER.id
           }
@@ -289,7 +290,7 @@ resource networkInterface_VM_LINUX 'Microsoft.Network/networkInterfaces@2022-07-
             id: VNET_TP_NESSUS.properties.subnets[0].id
           }
           privateIPAllocationMethod: 'Static'
-          privateIPAddress: '10.4.0.4'
+          privateIPAddress: '10.4.0.6'
           primary: true
           privateIPAddressVersion: 'IPv4'
         }
