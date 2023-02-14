@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.14.6.61914",
-      "templateHash": "14931622694145254656"
+      "templateHash": "12823959208388596115"
     }
   },
   "parameters": {
@@ -79,7 +79,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.14.6.61914",
-              "templateHash": "17342077384712983114"
+              "templateHash": "5495373620000744549"
             }
           },
           "parameters": {
@@ -190,6 +190,8 @@
                       "protocol": "Tcp",
                       "sourcePortRange": "*",
                       "destinationPortRange": "22",
+                      "sourceAddressPrefix": "*",
+                      "destinationAddressPrefix": "*",
                       "access": "Allow",
                       "priority": 100,
                       "direction": "Inbound"
@@ -201,6 +203,8 @@
                       "protocol": "Tcp",
                       "sourcePortRange": "*",
                       "destinationPortRange": "22",
+                      "sourceAddressPrefix": "*",
+                      "destinationAddressPrefix": "*",
                       "access": "Allow",
                       "priority": 110,
                       "direction": "Outbound"

@@ -85,6 +85,8 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
           protocol: 'Tcp'
           sourcePortRange: '*'
           destinationPortRange: '22'
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
           access: 'Allow'
           priority: 100
           direction: 'Inbound'
@@ -96,6 +98,8 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
           protocol: 'Tcp'
           sourcePortRange: '*'
           destinationPortRange: '22'
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
           access: 'Allow'
           priority: 110
           direction: 'Outbound'
