@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.14.6.61914",
-      "templateHash": "12823959208388596115"
+      "templateHash": "4210514508325245550"
     }
   },
   "parameters": {
@@ -79,7 +79,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.14.6.61914",
-              "templateHash": "5495373620000744549"
+              "templateHash": "1975178838255466359"
             }
           },
           "parameters": {
@@ -320,7 +320,7 @@
                     "name": "ipconfig1",
                     "properties": {
                       "privateIPAllocationMethod": "Static",
-                      "privateIPAddress": "10.4.0.3",
+                      "privateIPAddress": "10.4.0.4",
                       "publicIPAddress": {
                         "id": "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', parameters('VM_SERVER_name')))]"
                       },
@@ -405,7 +405,7 @@
                         "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', parameters('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name))), '2022-07-01').subnets[0].id]"
                       },
                       "privateIPAllocationMethod": "Static",
-                      "privateIPAddress": "10.4.0.4",
+                      "privateIPAddress": "10.4.0.6",
                       "primary": true,
                       "privateIPAddressVersion": "IPv4"
                     }

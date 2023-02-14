@@ -216,7 +216,7 @@ resource networkInterface_VM_SERVER 'Microsoft.Network/networkInterfaces@2020-11
         name: 'ipconfig1'
         properties: {
           privateIPAllocationMethod: 'Static'
-          privateIPAddress: '10.4.0.3'
+          privateIPAddress: '10.4.0.4'
           publicIPAddress: {
             id: publicIP_VM_SERVER.id
           }
@@ -290,7 +290,7 @@ resource networkInterface_VM_LINUX 'Microsoft.Network/networkInterfaces@2022-07-
             id: VNET_TP_NESSUS.properties.subnets[0].id
           }
           privateIPAllocationMethod: 'Static'
-          privateIPAddress: '10.4.0.4'
+          privateIPAddress: '10.4.0.6'
           primary: true
           privateIPAddressVersion: 'IPv4'
         }
