@@ -17,5 +17,6 @@ module deploy_tp_ad 'main.bicep' = [for i in range(0, count): {
     VM_LINUX_name:'${i}_VM-NESSUS-TP-LINUX'
     NSG_Name: '${i}_NSG-NESSUS-TP'
     VNET_name: '${i}_VNET-NESSUS-TP'
+    Front_End_App: '${i}_FrontEndServer'
   }
 }]

@@ -10,9 +10,21 @@ param VM_SERVER_name string
 param VNET_name string
 param NSG_Name string
 
+param Front_End_App string
+
 var ImageID_VM_SERVER = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_SERVER_VM/versions/1.0.0'
 var ImageID_VM_WINDOWS = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_WINDOWS_VM/versions/1.0.0'
 var ImageID_VM_LINUX = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_LINUX_VM/versions/1.0.0'
+
+resource Application_Security_Group 'Microsoft.Network/applicationSecurityGroups@2022-07-01' = {
+  name: Front_End_App
+  location : location
+  tags: {
+    owner: owner
+    approver: approver
+    endDate: endDate
+  }
+}
 
 //////////////////////////////////////////////////////////////////////////////////SERVER PUBLIC IP/////////////////////////////////////////////////////////////////////////////////////
 
@@ -80,16 +92,113 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
   properties: {
     securityRules: [
       {
-        name: 'Allow SSH'
+        name: 'SSH_FE_to_BE_Inbound'
+        properties: {
+          protocol: 'Tcp'
+          sourcePortRange: '*'
+          sourceApplicationSecurityGroups: [
+            {
+              id: Application_Security_Group.id
+              location: location
+            }
+          ]
+          destinationPortRange: '22'
+          destinationApplicationSecurityGroups: [
+            {
+              id: Application_Security_Group.id
+              location: location
+            }
+          ]
+          access: 'Allow'
+          priority: 100
+          direction: 'Inbound'
+        }
+      }
+      {
+        name: 'SSH_BE_to_FE_Inbound'
+        properties: {
+          protocol: 'Tcp'
+          sourcePortRange: '*'
+          sourceApplicationSecurityGroups: [
+            {
+              id: Application_Security_Group.id
+              location: location
+            }
+          ]
+          destinationPortRange: '22'
+          destinationApplicationSecurityGroups: [
+            {
+              id: Application_Security_Group.id
+              location: location
+            }
+          ]
+          access: 'Allow'
+          priority: 110
+          direction: 'Inbound'
+        }
+      }
+      {
+        name: 'SSH_Inbound'
         properties: {
           protocol: 'Tcp'
           sourcePortRange: '*'
           destinationPortRange: '22'
           sourceAddressPrefix: '*'
-          destinationApplicationSecurityGroups: []
+          destinationApplicationSecurityGroups: [
+            {
+              id: Application_Security_Group.id
+              location: location
+            }
+          ]
           access: 'Allow'
           priority: 130
           direction: 'Inbound'
+        }
+      }
+      {
+        name: 'SSH_FE_to_BE_Outbound'
+        properties: {
+          protocol: 'Tcp'
+          sourcePortRange: '*'
+          sourceApplicationSecurityGroups: [
+            {
+              id: Application_Security_Group.id
+              location: location
+            }
+          ]
+          destinationPortRange: '22'
+          destinationApplicationSecurityGroups: [
+            {
+              id: Application_Security_Group.id
+              location: location
+            }
+          ]
+          access: 'Allow'
+          priority: 100
+          direction: 'Outbound'
+        }
+      }
+              {
+        name: 'SSH_BE_to_FE_Outbound'
+        properties: {
+          protocol: 'Tcp'
+          sourcePortRange: '*'
+          sourceApplicationSecurityGroups: [
+            {
+              id: Application_Security_Group.id
+              location: location
+            }
+          ]
+          destinationPortRange: '22'
+          destinationApplicationSecurityGroups: [
+            {
+              id: Application_Security_Group.id
+              location: location
+            }
+          ]
+          access: 'Allow'
+          priority: 110
+          direction: 'Outbound'
         }
       }
       {
@@ -99,7 +208,7 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
           protocol: '*'
           access: 'Allow'
           direction: 'Inbound'
-          destinationApplicationSecurityGroups: []
+          sourceAddressPrefix: '*'
           sourcePortRange: '*'
           destinationAddressPrefix: '*'
           destinationPortRange: '8834' //port de destination autorisé (nessus)
@@ -114,6 +223,7 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
           direction: 'Inbound'
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
+          sourceAddressPrefix: '*'
           destinationAddressPrefix: '*'
           destinationPortRange: '4000'
         }
@@ -127,6 +237,7 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
           direction: 'Inbound'    
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
+          sourceAddressPrefix: '*'
           destinationAddressPrefix: '*'
           destinationPortRange: '8080'
         }
@@ -140,6 +251,7 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
           direction: 'Inbound'
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
+          sourceAddressPrefix: '*'
           destinationAddressPrefix: '*'
           destinationPortRange: '9991'
         }
@@ -153,6 +265,7 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
           direction: 'Inbound'    
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
+          sourceAddressPrefix: '*'
           destinationAddressPrefix: '*'
           destinationPortRange: '23389' //port de destination autorisé (ssh)
         }
@@ -166,6 +279,7 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
           direction: 'Inbound'   
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
+          sourceAddressPrefix: '*'
           destinationAddressPrefix: '*'
           destinationPortRange: '80' //port de destination autorisé (http)
         }
@@ -179,6 +293,7 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
           direction: 'Inbound' 
           destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
+          sourceAddressPrefix: '*'
           destinationAddressPrefix: '*'
           destinationPortRange: '443' //port de destination autorisé (https)
         }
@@ -212,6 +327,11 @@ resource networkInterface_VM_SERVER 'Microsoft.Network/networkInterfaces@2020-11
           }
           primary: true
           privateIPAddressVersion: 'IPv4'
+          applicationSecurityGroups: [
+            {
+              id: Application_Security_Group.id
+            }            
+          ]
         }
       }
     ]
