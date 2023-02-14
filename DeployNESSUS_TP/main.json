@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.14.6.61914",
-      "templateHash": "13162845311070156922"
+      "templateHash": "13869882806754191818"
     }
   },
   "parameters": {
@@ -39,6 +39,9 @@
     },
     "NSG_Name": {
       "type": "string"
+    },
+    "Front_End_App": {
+      "type": "string"
     }
   },
   "variables": {
@@ -47,6 +50,17 @@
     "ImageID_VM_LINUX": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_LINUX_VM/versions/1.0.0"
   },
   "resources": [
+    {
+      "type": "Microsoft.Network/applicationSecurityGroups",
+      "apiVersion": "2022-07-01",
+      "name": "[parameters('Front_End_App')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "owner": "[parameters('owner')]",
+        "approver": "[parameters('approver')]",
+        "endDate": "[parameters('endDate')]"
+      }
+    },
     {
       "type": "Microsoft.Network/publicIPAddresses",
       "apiVersion": "2022-07-01",
@@ -111,16 +125,113 @@
       "properties": {
         "securityRules": [
           {
-            "name": "Allow SSH",
+            "name": "SSH_FE_to_BE_Inbound",
+            "properties": {
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "sourceApplicationSecurityGroups": [
+                {
+                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', parameters('Front_End_App'))]",
+                  "location": "[parameters('location')]"
+                }
+              ],
+              "destinationPortRange": "22",
+              "destinationApplicationSecurityGroups": [
+                {
+                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', parameters('Front_End_App'))]",
+                  "location": "[parameters('location')]"
+                }
+              ],
+              "access": "Allow",
+              "priority": 100,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "SSH_BE_to_FE_Inbound",
+            "properties": {
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "sourceApplicationSecurityGroups": [
+                {
+                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', parameters('Front_End_App'))]",
+                  "location": "[parameters('location')]"
+                }
+              ],
+              "destinationPortRange": "22",
+              "destinationApplicationSecurityGroups": [
+                {
+                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', parameters('Front_End_App'))]",
+                  "location": "[parameters('location')]"
+                }
+              ],
+              "access": "Allow",
+              "priority": 110,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "SSH_Inbound",
             "properties": {
               "protocol": "Tcp",
               "sourcePortRange": "*",
               "destinationPortRange": "22",
               "sourceAddressPrefix": "*",
-              "destinationApplicationSecurityGroups": [],
+              "destinationApplicationSecurityGroups": [
+                {
+                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', parameters('Front_End_App'))]",
+                  "location": "[parameters('location')]"
+                }
+              ],
               "access": "Allow",
               "priority": 130,
               "direction": "Inbound"
+            }
+          },
+          {
+            "name": "SSH_FE_to_BE_Outbound",
+            "properties": {
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "sourceApplicationSecurityGroups": [
+                {
+                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', parameters('Front_End_App'))]",
+                  "location": "[parameters('location')]"
+                }
+              ],
+              "destinationPortRange": "22",
+              "destinationApplicationSecurityGroups": [
+                {
+                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', parameters('Front_End_App'))]",
+                  "location": "[parameters('location')]"
+                }
+              ],
+              "access": "Allow",
+              "priority": 100,
+              "direction": "Outbound"
+            }
+          },
+          {
+            "name": "SSH_BE_to_FE_Outbound",
+            "properties": {
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "sourceApplicationSecurityGroups": [
+                {
+                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', parameters('Front_End_App'))]",
+                  "location": "[parameters('location')]"
+                }
+              ],
+              "destinationPortRange": "22",
+              "destinationApplicationSecurityGroups": [
+                {
+                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', parameters('Front_End_App'))]",
+                  "location": "[parameters('location')]"
+                }
+              ],
+              "access": "Allow",
+              "priority": 110,
+              "direction": "Outbound"
             }
           },
           {
@@ -130,7 +241,7 @@
               "protocol": "*",
               "access": "Allow",
               "direction": "Inbound",
-              "destinationApplicationSecurityGroups": [],
+              "sourceAddressPrefix": "*",
               "sourcePortRange": "*",
               "destinationAddressPrefix": "*",
               "destinationPortRange": "8834"
@@ -145,6 +256,7 @@
               "direction": "Inbound",
               "destinationApplicationSecurityGroups": [],
               "sourcePortRange": "*",
+              "sourceAddressPrefix": "*",
               "destinationAddressPrefix": "*",
               "destinationPortRange": "4000"
             }
@@ -158,6 +270,7 @@
               "direction": "Inbound",
               "destinationApplicationSecurityGroups": [],
               "sourcePortRange": "*",
+              "sourceAddressPrefix": "*",
               "destinationAddressPrefix": "*",
               "destinationPortRange": "8080"
             }
@@ -171,6 +284,7 @@
               "direction": "Inbound",
               "destinationApplicationSecurityGroups": [],
               "sourcePortRange": "*",
+              "sourceAddressPrefix": "*",
               "destinationAddressPrefix": "*",
               "destinationPortRange": "9991"
             }
@@ -184,6 +298,7 @@
               "direction": "Inbound",
               "destinationApplicationSecurityGroups": [],
               "sourcePortRange": "*",
+              "sourceAddressPrefix": "*",
               "destinationAddressPrefix": "*",
               "destinationPortRange": "23389"
             }
@@ -197,6 +312,7 @@
               "direction": "Inbound",
               "destinationApplicationSecurityGroups": [],
               "sourcePortRange": "*",
+              "sourceAddressPrefix": "*",
               "destinationAddressPrefix": "*",
               "destinationPortRange": "80"
             }
@@ -210,12 +326,16 @@
               "direction": "Inbound",
               "destinationApplicationSecurityGroups": [],
               "sourcePortRange": "*",
+              "sourceAddressPrefix": "*",
               "destinationAddressPrefix": "*",
               "destinationPortRange": "443"
             }
           }
         ]
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/applicationSecurityGroups', parameters('Front_End_App'))]"
+      ]
     },
     {
       "type": "Microsoft.Network/networkInterfaces",
@@ -241,7 +361,12 @@
                 "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', parameters('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name))), '2022-07-01').subnets[0].id]"
               },
               "primary": true,
-              "privateIPAddressVersion": "IPv4"
+              "privateIPAddressVersion": "IPv4",
+              "applicationSecurityGroups": [
+                {
+                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', parameters('Front_End_App'))]"
+                }
+              ]
             }
           }
         ],
@@ -255,6 +380,7 @@
         }
       },
       "dependsOn": [
+        "[resourceId('Microsoft.Network/applicationSecurityGroups', parameters('Front_End_App'))]",
         "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('NSG_Name'))]",
         "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', parameters('VM_SERVER_name')))]",
         "[resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', parameters('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name)))]"
