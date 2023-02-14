@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.14.6.61914",
-      "templateHash": "14753195651225093371"
+      "templateHash": "15013522358914864747"
     }
   },
   "parameters": {
@@ -147,7 +147,7 @@
             }
           },
           {
-            "name": "Allow Nessus Web",
+            "name": "Allow_Nessus_Web",
             "properties": {
               "priority": 310,
               "protocol": "*",
@@ -160,7 +160,7 @@
             }
           },
           {
-            "name": "Allow 4000",
+            "name": "Allow_4000",
             "properties": {
               "priority": 320,
               "protocol": "*",
@@ -174,7 +174,7 @@
             }
           },
           {
-            "name": "Allow 8080",
+            "name": "Allow_8080",
             "properties": {
               "priority": 330,
               "protocol": "*",
@@ -188,7 +188,7 @@
             }
           },
           {
-            "name": "Allow 9991",
+            "name": "Allow_9991",
             "properties": {
               "priority": 340,
               "protocol": "*",
@@ -202,7 +202,7 @@
             }
           },
           {
-            "name": "Allow RDP",
+            "name": "Allow_RDP",
             "properties": {
               "priority": 360,
               "protocol": "TCP",
@@ -216,7 +216,7 @@
             }
           },
           {
-            "name": "Allow http",
+            "name": "Allow_http",
             "properties": {
               "priority": 350,
               "protocol": "*",
@@ -230,7 +230,7 @@
             }
           },
           {
-            "name": "Allow https",
+            "name": "Allow_https",
             "properties": {
               "priority": 370,
               "protocol": "*",
