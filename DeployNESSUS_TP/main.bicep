@@ -10,21 +10,9 @@ param VM_SERVER_name string
 param VNET_name string
 param NSG_Name string
 
-param Front_End_App string
-
 var ImageID_VM_SERVER = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_SERVER_VM/versions/1.0.0'
 var ImageID_VM_WINDOWS = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_WINDOWS_VM/versions/1.0.0'
 var ImageID_VM_LINUX = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_LINUX_VM/versions/1.0.0'
-
-resource Application_Security_Group 'Microsoft.Network/applicationSecurityGroups@2022-07-01' = {
-  name: Front_End_App
-  location: location
-  tags: {
-    owner: owner
-    approver: approver
-    endDate: endDate
-  }
-}
 
 //////////////////////////////////////////////////////////////////////////////////SERVER PUBLIC IP/////////////////////////////////////////////////////////////////////////////////////
 
@@ -109,7 +97,7 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
           sourcePortRange: '*'
           destinationPortRange: '22'
           access: 'Allow'
-          priority: 100
+          priority: 110
           direction: 'Outbound'
         }
       }
@@ -133,7 +121,6 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
           protocol: '*'
           access: 'Allow'
           direction: 'Inbound'
-          destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
           sourceAddressPrefix: '*'
           destinationAddressPrefix: '*'
@@ -147,7 +134,6 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
           protocol: '*'
           access: 'Allow'
           direction: 'Inbound'
-          destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
           sourceAddressPrefix: '*'
           destinationAddressPrefix: '*'
@@ -161,7 +147,6 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
           protocol: '*'
           access: 'Allow'
           direction: 'Inbound'
-          destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
           sourceAddressPrefix: '*'
           destinationAddressPrefix: '*'
@@ -175,7 +160,6 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
           protocol: 'TCP'
           access: 'Allow'
           direction: 'Inbound'
-          destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
           sourceAddressPrefix: '*'
           destinationAddressPrefix: '*'
@@ -189,7 +173,6 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
           protocol: '*'
           access: 'Allow'
           direction: 'Inbound'
-          destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
           sourceAddressPrefix: '*'
           destinationAddressPrefix: '*'
@@ -203,7 +186,6 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
           protocol: '*'
           access: 'Allow'
           direction: 'Inbound'
-          destinationApplicationSecurityGroups: []
           sourcePortRange: '*'
           sourceAddressPrefix: '*'
           destinationAddressPrefix: '*'
@@ -239,11 +221,6 @@ resource networkInterface_VM_SERVER 'Microsoft.Network/networkInterfaces@2020-11
           }
           primary: true
           privateIPAddressVersion: 'IPv4'
-          applicationSecurityGroups: [
-            {
-              id: Application_Security_Group.id
-            }
-          ]
         }
       }
     ]

@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.14.6.61914",
-      "templateHash": "15013522358914864747"
+      "templateHash": "17342077384712983114"
     }
   },
   "parameters": {
@@ -39,9 +39,6 @@
     },
     "NSG_Name": {
       "type": "string"
-    },
-    "Front_End_App": {
-      "type": "string"
     }
   },
   "variables": {
@@ -50,17 +47,6 @@
     "ImageID_VM_LINUX": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_LINUX_VM/versions/1.0.0"
   },
   "resources": [
-    {
-      "type": "Microsoft.Network/applicationSecurityGroups",
-      "apiVersion": "2022-07-01",
-      "name": "[parameters('Front_End_App')]",
-      "location": "[parameters('location')]",
-      "tags": {
-        "owner": "[parameters('owner')]",
-        "approver": "[parameters('approver')]",
-        "endDate": "[parameters('endDate')]"
-      }
-    },
     {
       "type": "Microsoft.Network/publicIPAddresses",
       "apiVersion": "2022-07-01",
@@ -142,7 +128,7 @@
               "sourcePortRange": "*",
               "destinationPortRange": "22",
               "access": "Allow",
-              "priority": 100,
+              "priority": 110,
               "direction": "Outbound"
             }
           },
@@ -166,7 +152,6 @@
               "protocol": "*",
               "access": "Allow",
               "direction": "Inbound",
-              "destinationApplicationSecurityGroups": [],
               "sourcePortRange": "*",
               "sourceAddressPrefix": "*",
               "destinationAddressPrefix": "*",
@@ -180,7 +165,6 @@
               "protocol": "*",
               "access": "Allow",
               "direction": "Inbound",
-              "destinationApplicationSecurityGroups": [],
               "sourcePortRange": "*",
               "sourceAddressPrefix": "*",
               "destinationAddressPrefix": "*",
@@ -194,7 +178,6 @@
               "protocol": "*",
               "access": "Allow",
               "direction": "Inbound",
-              "destinationApplicationSecurityGroups": [],
               "sourcePortRange": "*",
               "sourceAddressPrefix": "*",
               "destinationAddressPrefix": "*",
@@ -208,7 +191,6 @@
               "protocol": "TCP",
               "access": "Allow",
               "direction": "Inbound",
-              "destinationApplicationSecurityGroups": [],
               "sourcePortRange": "*",
               "sourceAddressPrefix": "*",
               "destinationAddressPrefix": "*",
@@ -222,7 +204,6 @@
               "protocol": "*",
               "access": "Allow",
               "direction": "Inbound",
-              "destinationApplicationSecurityGroups": [],
               "sourcePortRange": "*",
               "sourceAddressPrefix": "*",
               "destinationAddressPrefix": "*",
@@ -236,7 +217,6 @@
               "protocol": "*",
               "access": "Allow",
               "direction": "Inbound",
-              "destinationApplicationSecurityGroups": [],
               "sourcePortRange": "*",
               "sourceAddressPrefix": "*",
               "destinationAddressPrefix": "*",
@@ -270,12 +250,7 @@
                 "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', parameters('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name))), '2022-07-01').subnets[0].id]"
               },
               "primary": true,
-              "privateIPAddressVersion": "IPv4",
-              "applicationSecurityGroups": [
-                {
-                  "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', parameters('Front_End_App'))]"
-                }
-              ]
+              "privateIPAddressVersion": "IPv4"
             }
           }
         ],
@@ -289,7 +264,6 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Network/applicationSecurityGroups', parameters('Front_End_App'))]",
         "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('NSG_Name'))]",
         "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', parameters('VM_SERVER_name')))]",
         "[resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', parameters('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name)))]"
