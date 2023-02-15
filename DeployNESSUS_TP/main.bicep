@@ -86,9 +86,9 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
           protocol: '*'
           access: 'Allow'
           direction: 'Inbound'
-          sourceAddressPrefix: 'VirtualNetwork'
+          sourceAddressPrefix: '*'
           sourcePortRange: '*'
-          destinationAddressPrefix: 'VirtualNetwork'
+          destinationAddressPrefix: '*'
           destinationPortRange: '8834' //port de destination autorisé (nessus)
         }
       }

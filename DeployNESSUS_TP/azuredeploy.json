@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.14.46.61228",
-      "templateHash": "7167160843259189250"
+      "templateHash": "8043138633308538354"
     }
   },
   "parameters": {
@@ -79,7 +79,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.14.46.61228",
-              "templateHash": "2612644886762162145"
+              "templateHash": "3676306515318348364"
             }
           },
           "parameters": {
@@ -185,41 +185,15 @@
               "properties": {
                 "securityRules": [
                   {
-                    "name": "SSH_Inbound",
-                    "properties": {
-                      "protocol": "Tcp",
-                      "sourcePortRange": "*",
-                      "destinationPortRange": "22",
-                      "sourceAddressPrefix": "VirtualNetwork",
-                      "destinationAddressPrefix": "VirtualNetwork",
-                      "access": "Allow",
-                      "priority": 100,
-                      "direction": "Inbound"
-                    }
-                  },
-                  {
-                    "name": "SSH_Outbound",
-                    "properties": {
-                      "protocol": "Tcp",
-                      "sourcePortRange": "*",
-                      "destinationPortRange": "22",
-                      "sourceAddressPrefix": "VirtualNetwork",
-                      "destinationAddressPrefix": "VirtualNetwork",
-                      "access": "Allow",
-                      "priority": 110,
-                      "direction": "Outbound"
-                    }
-                  },
-                  {
                     "name": "Allow_Nessus_Web",
                     "properties": {
                       "priority": 310,
                       "protocol": "*",
                       "access": "Allow",
                       "direction": "Inbound",
-                      "sourceAddressPrefix": "VirtualNetwork",
+                      "sourceAddressPrefix": "*",
                       "sourcePortRange": "*",
-                      "destinationAddressPrefix": "VirtualNetwork",
+                      "destinationAddressPrefix": "*",
                       "destinationPortRange": "8834"
                     }
                   },
