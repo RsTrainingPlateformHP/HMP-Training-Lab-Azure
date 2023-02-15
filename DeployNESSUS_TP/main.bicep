@@ -80,32 +80,6 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
   properties: {
     securityRules: [
       {
-        name: 'SSH_Inbound'
-        properties: {
-          protocol: 'Tcp'
-          sourcePortRange: '*'
-          destinationPortRange: '22'
-          sourceAddressPrefix: 'VirtualNetwork'
-          destinationAddressPrefix: 'VirtualNetwork'
-          access: 'Allow'
-          priority: 100
-          direction: 'Inbound'
-        }
-      }
-      {
-        name: 'SSH_Outbound'
-        properties: {
-          protocol: 'Tcp'
-          sourcePortRange: '*'
-          destinationPortRange: '22'
-          sourceAddressPrefix: 'VirtualNetwork'
-          destinationAddressPrefix: 'VirtualNetwork'
-          access: 'Allow'
-          priority: 110
-          direction: 'Outbound'
-        }
-      }
-      {
         name: 'Allow_Nessus_Web' //nom de la règle
         properties: {
           priority: 310
