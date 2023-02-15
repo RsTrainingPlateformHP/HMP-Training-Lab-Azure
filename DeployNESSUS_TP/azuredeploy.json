@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.14.6.61914",
-      "templateHash": "4210514508325245550"
+      "version": "0.14.46.61228",
+      "templateHash": "7167160843259189250"
     }
   },
   "parameters": {
@@ -78,8 +78,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.14.6.61914",
-              "templateHash": "1975178838255466359"
+              "version": "0.14.46.61228",
+              "templateHash": "2612644886762162145"
             }
           },
           "parameters": {
@@ -116,7 +116,7 @@
             }
           },
           "variables": {
-            "ImageID_VM_SERVER": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_SERVER_VM/versions/1.0.0",
+            "ImageID_VM_SERVER": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_SERVER_VM/versions/1.0.1",
             "ImageID_VM_WINDOWS": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_WINDOWS_VM/versions/1.0.0",
             "ImageID_VM_LINUX": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_LINUX_VM/versions/1.0.0"
           },
@@ -190,8 +190,8 @@
                       "protocol": "Tcp",
                       "sourcePortRange": "*",
                       "destinationPortRange": "22",
-                      "sourceAddressPrefix": "*",
-                      "destinationAddressPrefix": "*",
+                      "sourceAddressPrefix": "VirtualNetwork",
+                      "destinationAddressPrefix": "VirtualNetwork",
                       "access": "Allow",
                       "priority": 100,
                       "direction": "Inbound"
@@ -203,8 +203,8 @@
                       "protocol": "Tcp",
                       "sourcePortRange": "*",
                       "destinationPortRange": "22",
-                      "sourceAddressPrefix": "*",
-                      "destinationAddressPrefix": "*",
+                      "sourceAddressPrefix": "VirtualNetwork",
+                      "destinationAddressPrefix": "VirtualNetwork",
                       "access": "Allow",
                       "priority": 110,
                       "direction": "Outbound"
@@ -217,9 +217,9 @@
                       "protocol": "*",
                       "access": "Allow",
                       "direction": "Inbound",
-                      "sourceAddressPrefix": "*",
+                      "sourceAddressPrefix": "VirtualNetwork",
                       "sourcePortRange": "*",
-                      "destinationAddressPrefix": "*",
+                      "destinationAddressPrefix": "VirtualNetwork",
                       "destinationPortRange": "8834"
                     }
                   },
@@ -231,8 +231,8 @@
                       "access": "Allow",
                       "direction": "Inbound",
                       "sourcePortRange": "*",
-                      "sourceAddressPrefix": "*",
-                      "destinationAddressPrefix": "*",
+                      "sourceAddressPrefix": "VirtualNetwork",
+                      "destinationAddressPrefix": "VirtualNetwork",
                       "destinationPortRange": "4000"
                     }
                   },
@@ -244,8 +244,8 @@
                       "access": "Allow",
                       "direction": "Inbound",
                       "sourcePortRange": "*",
-                      "sourceAddressPrefix": "*",
-                      "destinationAddressPrefix": "*",
+                      "sourceAddressPrefix": "VirtualNetwork",
+                      "destinationAddressPrefix": "VirtualNetwork",
                       "destinationPortRange": "8080"
                     }
                   },
@@ -257,8 +257,8 @@
                       "access": "Allow",
                       "direction": "Inbound",
                       "sourcePortRange": "*",
-                      "sourceAddressPrefix": "*",
-                      "destinationAddressPrefix": "*",
+                      "sourceAddressPrefix": "VirtualNetwork",
+                      "destinationAddressPrefix": "VirtualNetwork",
                       "destinationPortRange": "9991"
                     }
                   },
@@ -270,8 +270,8 @@
                       "access": "Allow",
                       "direction": "Inbound",
                       "sourcePortRange": "*",
-                      "sourceAddressPrefix": "*",
-                      "destinationAddressPrefix": "*",
+                      "sourceAddressPrefix": "VirtualNetwork",
+                      "destinationAddressPrefix": "VirtualNetwork",
                       "destinationPortRange": "23389"
                     }
                   },
@@ -283,8 +283,8 @@
                       "access": "Allow",
                       "direction": "Inbound",
                       "sourcePortRange": "*",
-                      "sourceAddressPrefix": "*",
-                      "destinationAddressPrefix": "*",
+                      "sourceAddressPrefix": "VirtualNetwork",
+                      "destinationAddressPrefix": "VirtualNetwork",
                       "destinationPortRange": "80"
                     }
                   },
@@ -296,8 +296,8 @@
                       "access": "Allow",
                       "direction": "Inbound",
                       "sourcePortRange": "*",
-                      "sourceAddressPrefix": "*",
-                      "destinationAddressPrefix": "*",
+                      "sourceAddressPrefix": "VirtualNetwork",
+                      "destinationAddressPrefix": "VirtualNetwork",
                       "destinationPortRange": "443"
                     }
                   }
