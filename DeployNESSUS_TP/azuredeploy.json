@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.14.46.61228",
-      "templateHash": "8043138633308538354"
+      "version": "0.13.1.58284",
+      "templateHash": "11104930119492257958"
     }
   },
   "parameters": {
@@ -78,8 +78,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.14.46.61228",
-              "templateHash": "3676306515318348364"
+              "version": "0.13.1.58284",
+              "templateHash": "1367278129123812695"
             }
           },
           "parameters": {
@@ -195,6 +195,32 @@
                       "sourcePortRange": "*",
                       "destinationAddressPrefix": "*",
                       "destinationPortRange": "8834"
+                    }
+                  },
+                  {
+                    "name": "Allow_SSH_Inbound",
+                    "properties": {
+                      "priority": 320,
+                      "protocol": "*",
+                      "access": "Allow",
+                      "direction": "Inbound",
+                      "sourcePortRange": "*",
+                      "sourceAddressPrefix": "VirtualNetwork",
+                      "destinationAddressPrefix": "VirtualNetwork",
+                      "destinationPortRange": "22"
+                    }
+                  },
+                  {
+                    "name": "Allow_SSH_Outbound",
+                    "properties": {
+                      "priority": 320,
+                      "protocol": "*",
+                      "access": "Allow",
+                      "direction": "Outbound",
+                      "sourcePortRange": "*",
+                      "sourceAddressPrefix": "VirtualNetwork",
+                      "destinationAddressPrefix": "VirtualNetwork",
+                      "destinationPortRange": "22"
                     }
                   },
                   {
