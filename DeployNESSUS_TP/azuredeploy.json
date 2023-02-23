@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.13.1.58284",
-      "templateHash": "11104930119492257958"
+      "version": "0.14.85.62628",
+      "templateHash": "13543646183093461410"
     }
   },
   "parameters": {
@@ -78,8 +78,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.13.1.58284",
-              "templateHash": "1367278129123812695"
+              "version": "0.14.85.62628",
+              "templateHash": "15992910977252832803"
             }
           },
           "parameters": {
@@ -187,7 +187,7 @@
                   {
                     "name": "Allow_Nessus_Web",
                     "properties": {
-                      "priority": 310,
+                      "priority": 150,
                       "protocol": "*",
                       "access": "Allow",
                       "direction": "Inbound",
@@ -200,7 +200,7 @@
                   {
                     "name": "Allow_SSH_Inbound",
                     "properties": {
-                      "priority": 320,
+                      "priority": 300,
                       "protocol": "*",
                       "access": "Allow",
                       "direction": "Inbound",
@@ -213,7 +213,7 @@
                   {
                     "name": "Allow_SSH_Outbound",
                     "properties": {
-                      "priority": 320,
+                      "priority": 310,
                       "protocol": "*",
                       "access": "Allow",
                       "direction": "Outbound",

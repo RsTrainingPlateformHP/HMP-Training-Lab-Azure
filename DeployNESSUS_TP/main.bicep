@@ -82,7 +82,7 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
       {
         name: 'Allow_Nessus_Web' //nom de la règle
         properties: {
-          priority: 310
+          priority: 150
           protocol: '*'
           access: 'Allow'
           direction: 'Inbound'
@@ -95,7 +95,7 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
       {
         name: 'Allow_SSH_Inbound' //nom de la règle
         properties: {
-          priority: 320
+          priority: 300
           protocol: '*'
           access: 'Allow'
           direction: 'Inbound'
@@ -108,7 +108,7 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
       {
         name: 'Allow_SSH_Outbound' //nom de la règle
         properties: {
-          priority: 320
+          priority: 310
           protocol: '*'
           access: 'Allow'
           direction: 'Outbound'
