@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.14.85.62628",
-      "templateHash": "9891877819323580622"
+      "templateHash": "4317609290295157724"
     }
   },
   "parameters": {
@@ -79,7 +79,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.14.85.62628",
-              "templateHash": "3489087917740411489"
+              "templateHash": "11149129512626685197"
             }
           },
           "parameters": {
@@ -198,9 +198,9 @@
                     }
                   },
                   {
-                    "name": "Allow_SSH_Inbound",
+                    "name": "Allow_SSH",
                     "properties": {
-                      "priority": 300,
+                      "priority": 180,
                       "protocol": "*",
                       "access": "Allow",
                       "direction": "Inbound",
