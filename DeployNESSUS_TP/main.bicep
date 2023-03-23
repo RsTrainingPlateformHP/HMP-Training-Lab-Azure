@@ -100,6 +100,19 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
           access: 'Allow'
           direction: 'Inbound'
           sourcePortRange: '*'
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
+          destinationPortRange: '22'
+        }
+      }
+      {
+        name: 'Allow_SSH_Inbound' //nom de la règle
+        properties: {
+          priority: 300
+          protocol: '*'
+          access: 'Allow'
+          direction: 'Inbound'
+          sourcePortRange: '*'
           sourceAddressPrefix: 'VirtualNetwork'
           destinationAddressPrefix: 'VirtualNetwork'
           destinationPortRange: '22'
