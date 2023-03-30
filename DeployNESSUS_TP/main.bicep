@@ -93,19 +93,6 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
         }
       }
       {
-        name: 'Allow_SSH' //nom de la règle
-        properties: {
-          priority: 180
-          protocol: '*'
-          access: 'Allow'
-          direction: 'Inbound'
-          sourcePortRange: '*'
-          sourceAddressPrefix: '*'
-          destinationAddressPrefix: '*'
-          destinationPortRange: '22'
-        }
-      }
-      {
         name: 'Allow_SSH_Inbound' //nom de la règle
         properties: {
           priority: 300
