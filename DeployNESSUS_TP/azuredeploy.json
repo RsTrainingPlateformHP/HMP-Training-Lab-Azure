@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.14.85.62628",
-      "templateHash": "4317609290295157724"
+      "version": "0.15.31.15270",
+      "templateHash": "8202903292898555359"
     }
   },
   "parameters": {
@@ -78,8 +78,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.14.85.62628",
-              "templateHash": "11149129512626685197"
+              "version": "0.15.31.15270",
+              "templateHash": "13238524648984437678"
             }
           },
           "parameters": {
@@ -116,7 +116,7 @@
             }
           },
           "variables": {
-            "ImageID_VM_SERVER": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_SERVER_VM/versions/1.0.1",
+            "ImageID_VM_SERVER": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_SERVER_VM/versions/1.0.2",
             "ImageID_VM_WINDOWS": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_WINDOWS_VM/versions/1.0.0",
             "ImageID_VM_LINUX": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_LINUX_VM/versions/1.0.0"
           },
