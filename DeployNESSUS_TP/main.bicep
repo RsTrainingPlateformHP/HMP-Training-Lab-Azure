@@ -362,7 +362,7 @@ resource VM_LINUX 'Microsoft.Compute/virtualMachines@2022-08-01' = {
   }
   properties: {
     hardwareProfile: {
-      vmSize: 'Standard_B2s'
+      vmSize: 'Standard_B1ms'
     }
     storageProfile: {
       osDisk: {
