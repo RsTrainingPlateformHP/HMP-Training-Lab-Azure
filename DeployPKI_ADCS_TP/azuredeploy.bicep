@@ -13,7 +13,7 @@ module deploy_tp_ad 'main.bicep' = [for i in range(0, count): {
     owner: owner
     approver: approver
     endDate: endDate
-    storageAccount_name: '${i}_ca01toca02'
+    storageAccount_name: '${i}ca01toca02'
     VM_DC_name:'${i}_VM-ADCS-TP-DC'
     VM_SR_name:'${i}_VM-ADCS-TP-SR'
     VM_CA01_name: '${i}_VM-ADCS-TP-CA01'

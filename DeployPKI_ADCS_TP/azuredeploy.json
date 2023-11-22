@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "6282170947279097162"
+      "templateHash": "11014399737642816914"
     }
   },
   "parameters": {
@@ -57,7 +57,7 @@
             "value": "[parameters('endDate')]"
           },
           "storageAccount_name": {
-            "value": "[format('{0}_ca01toca02', range(0, parameters('count'))[copyIndex()])]"
+            "value": "[format('{0}ca01toca02', range(0, parameters('count'))[copyIndex()])]"
           },
           "VM_DC_name": {
             "value": "[format('{0}_VM-ADCS-TP-DC', range(0, parameters('count'))[copyIndex()])]"
