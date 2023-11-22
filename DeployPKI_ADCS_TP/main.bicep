@@ -1,5 +1,5 @@
 param location string = 'francecentral'
-param storageAccounts_ca01toca02_name string = 'ca01toca02'
+param storageAccount_name string
 
 param owner string
 param approver string
@@ -12,7 +12,8 @@ param VM_SR_name string
 param VM_Win10_name string
 
 param VNET_name string
-param NSG_Name string
+param NSG_ONLINE_name string
+param NSG_OFFLINE_name string
 
 var ImageID_VM_CA01   = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/tp_pki_adcs_ca01/versions/1.0.0'
 var ImageID_VM_CA02   = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/tp_pki_adcs_ca02/versions/1.0.0'
@@ -152,7 +153,7 @@ resource VNET_TP_ADCS 'Microsoft.Network/virtualNetworks@2022-07-01' = {
 //////////////////////////////////////////////////////////////////////////////////Network Security Groups//////////////////////////////////////////////////////////////////////////////
 
 resource NSG_TP_ADCS_ONLINE 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
-  name: '${NSG_Name}-Online'
+  name: NSG_ONLINE_name
   location: location
   tags: {
     owner: owner
@@ -177,9 +178,9 @@ resource NSG_TP_ADCS_ONLINE 'Microsoft.Network/networkSecurityGroups@2022-07-01'
     ]
   }
 }
-/*
+
 resource NSG_TP_ADCS_OFFLINE 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
-  name: '${NSG_Name}-Offline'
+  name: NSG_OFFLINE_name
   location: location
   tags: {
     owner: owner
@@ -243,7 +244,6 @@ resource NSG_TP_ADCS_OFFLINE 'Microsoft.Network/networkSecurityGroups@2022-07-01
     ]
   }
 }
-*/
 
 //////////////////////////////////////////////////////////////////////////////////Network Interface////////////////////////////////////////////////////////////////////////////////////
 
@@ -353,7 +353,7 @@ resource networkInterface_VM_CA01 'Microsoft.Network/networkInterfaces@2020-11-0
     enableAcceleratedNetworking: false
     enableIPForwarding: false
     networkSecurityGroup: {
-      id: NSG_TP_ADCS_ONLINE.id
+      id: NSG_TP_ADCS_OFFLINE.id
     }
   }
 }
@@ -435,8 +435,8 @@ resource networkInterface_VM_Win10 'Microsoft.Network/networkInterfaces@2020-11-
 
 //////////////////////////////////////////////////////////////////////////////////Storage Account/////////////////////////////////////////////////////////////////////////////////////
 
-resource storageAccounts_ca01toca02_name_resource 'Microsoft.Storage/storageAccounts@2023-01-01' = {
-  name: storageAccounts_ca01toca02_name
+resource storageAccounts_ca01toca 'Microsoft.Storage/storageAccounts@2023-01-01' = {
+  name: storageAccount_name
   location: location
   tags: {
     owner: owner
@@ -488,7 +488,7 @@ resource storageAccounts_ca01toca02_name_resource 'Microsoft.Storage/storageAcco
 }
 
 resource storageAccounts_ca01toca02_name_default 'Microsoft.Storage/storageAccounts/blobServices@2023-01-01' = {
-  parent: storageAccounts_ca01toca02_name_resource
+  parent: storageAccounts_ca01toca
   name: 'default'
   sku: {
     name: 'Standard_LRS'
@@ -516,7 +516,7 @@ resource storageAccounts_ca01toca02_name_default 'Microsoft.Storage/storageAccou
 }
 
 resource Microsoft_Storage_storageAccounts_fileServices_storageAccounts_ca01toca02_name_default 'Microsoft.Storage/storageAccounts/fileServices@2023-01-01' = {
-  parent: storageAccounts_ca01toca02_name_resource
+  parent: storageAccounts_ca01toca
   name: 'default'
   sku: {
     name: 'Standard_LRS'
@@ -537,7 +537,7 @@ resource Microsoft_Storage_storageAccounts_fileServices_storageAccounts_ca01toca
 }
 
 resource Microsoft_Storage_storageAccounts_queueServices_storageAccounts_ca01toca02_name_default 'Microsoft.Storage/storageAccounts/queueServices@2023-01-01' = {
-  parent: storageAccounts_ca01toca02_name_resource
+  parent: storageAccounts_ca01toca
   name: 'default'
   properties: {
     cors: {
@@ -547,7 +547,7 @@ resource Microsoft_Storage_storageAccounts_queueServices_storageAccounts_ca01toc
 }
 
 resource Microsoft_Storage_storageAccounts_tableServices_storageAccounts_ca01toca02_name_default 'Microsoft.Storage/storageAccounts/tableServices@2023-01-01' = {
-  parent: storageAccounts_ca01toca02_name_resource
+  parent: storageAccounts_ca01toca
   name: 'default'
   properties: {
     cors: {
@@ -556,7 +556,7 @@ resource Microsoft_Storage_storageAccounts_tableServices_storageAccounts_ca01toc
   }
 }
 
-resource storageAccounts_ca01toca02_name_default_shared 'Microsoft.Storage/storageAccounts/fileServices/shares@2023-01-01' = {
+resource storageAccounts_ca01toca02_shared 'Microsoft.Storage/storageAccounts/fileServices/shares@2023-01-01' = {
   parent: Microsoft_Storage_storageAccounts_fileServices_storageAccounts_ca01toca02_name_default
   name: 'shared'
   properties: {
@@ -565,7 +565,7 @@ resource storageAccounts_ca01toca02_name_default_shared 'Microsoft.Storage/stora
     enabledProtocols: 'SMB'
   }
   dependsOn: [
-    storageAccounts_ca01toca02_name_resource
+    storageAccounts_ca01toca
   ]
 }
 

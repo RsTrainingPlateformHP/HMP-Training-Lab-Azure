@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "9348029565398897508"
+      "templateHash": "6282170947279097162"
     }
   },
   "parameters": {
@@ -20,9 +20,6 @@
       "type": "string"
     },
     "endDate": {
-      "type": "string"
-    },
-    "test": {
       "type": "string"
     },
     "count": {
@@ -59,6 +56,9 @@
           "endDate": {
             "value": "[parameters('endDate')]"
           },
+          "storageAccount_name": {
+            "value": "[format('{0}_ca01toca02', range(0, parameters('count'))[copyIndex()])]"
+          },
           "VM_DC_name": {
             "value": "[format('{0}_VM-ADCS-TP-DC', range(0, parameters('count'))[copyIndex()])]"
           },
@@ -74,8 +74,11 @@
           "VM_Win10_name": {
             "value": "[format('{0}_VM-ADCS-TP-Win10', range(0, parameters('count'))[copyIndex()])]"
           },
-          "NSG_Name": {
-            "value": "[format('{0}_NSG-ADCS-TP', range(0, parameters('count'))[copyIndex()])]"
+          "NSG_ONLINE_name": {
+            "value": "[format('{0}_NSG-ONLINE-ADCS-TP', range(0, parameters('count'))[copyIndex()])]"
+          },
+          "NSG_OFFLINE_name": {
+            "value": "[format('{0}_NSG-OFFLINE--ADCS-TP', range(0, parameters('count'))[copyIndex()])]"
           },
           "VNET_name": {
             "value": "[format('{0}_VNET-ADCS-TP', range(0, parameters('count'))[copyIndex()])]"
@@ -88,7 +91,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.23.1.45101",
-              "templateHash": "8028500906700819758"
+              "templateHash": "1544040700019287947"
             }
           },
           "parameters": {
@@ -96,9 +99,8 @@
               "type": "string",
               "defaultValue": "francecentral"
             },
-            "storageAccounts_ca01toca02_name": {
-              "type": "string",
-              "defaultValue": "ca01toca02"
+            "storageAccount_name": {
+              "type": "string"
             },
             "owner": {
               "type": "string"
@@ -127,7 +129,10 @@
             "VNET_name": {
               "type": "string"
             },
-            "NSG_Name": {
+            "NSG_ONLINE_name": {
+              "type": "string"
+            },
+            "NSG_OFFLINE_name": {
               "type": "string"
             }
           },
@@ -273,7 +278,7 @@
             {
               "type": "Microsoft.Network/networkSecurityGroups",
               "apiVersion": "2022-07-01",
-              "name": "[format('{0}-Online', parameters('NSG_Name'))]",
+              "name": "[parameters('NSG_ONLINE_name')]",
               "location": "[parameters('location')]",
               "tags": {
                 "owner": "[parameters('owner')]",
@@ -293,6 +298,73 @@
                       "access": "Allow",
                       "priority": 300,
                       "direction": "Inbound"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Microsoft.Network/networkSecurityGroups",
+              "apiVersion": "2022-07-01",
+              "name": "[parameters('NSG_OFFLINE_name')]",
+              "location": "[parameters('location')]",
+              "tags": {
+                "owner": "[parameters('owner')]",
+                "approver": "[parameters('approver')]",
+                "endDate": "[parameters('endDate')]"
+              },
+              "properties": {
+                "securityRules": [
+                  {
+                    "name": "Allow_RDP",
+                    "properties": {
+                      "protocol": "TCP",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "3389",
+                      "sourceAddressPrefix": "*",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 300,
+                      "direction": "Inbound"
+                    }
+                  },
+                  {
+                    "name": "DenyAnyCustomAnyOutbound",
+                    "properties": {
+                      "protocol": "*",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "*",
+                      "sourceAddressPrefix": "*",
+                      "destinationAddressPrefix": "*",
+                      "access": "Deny",
+                      "priority": 4096,
+                      "direction": "Outbound"
+                    }
+                  },
+                  {
+                    "name": "DenyAnyCustomAnyInbound",
+                    "properties": {
+                      "protocol": "*",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "*",
+                      "sourceAddressPrefix": "*",
+                      "destinationAddressPrefix": "*",
+                      "access": "Deny",
+                      "priority": 4096,
+                      "direction": "Inbound"
+                    }
+                  },
+                  {
+                    "name": "AllowAnyCustom445Outbound",
+                    "properties": {
+                      "protocol": "*",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "445",
+                      "sourceAddressPrefix": "*",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 400,
+                      "direction": "Outbound"
                     }
                   }
                 ]
@@ -332,11 +404,11 @@
                 "enableAcceleratedNetworking": false,
                 "enableIPForwarding": false,
                 "networkSecurityGroup": {
-                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-Online', parameters('NSG_Name')))]"
+                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('NSG_ONLINE_name'))]"
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-Online', parameters('NSG_Name')))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('NSG_ONLINE_name'))]",
                 "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', parameters('VM_DC_name')))]",
                 "[resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', parameters('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name)))]"
               ]
@@ -375,11 +447,11 @@
                 "enableAcceleratedNetworking": false,
                 "enableIPForwarding": false,
                 "networkSecurityGroup": {
-                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-Online', parameters('NSG_Name')))]"
+                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('NSG_ONLINE_name'))]"
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-Online', parameters('NSG_Name')))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('NSG_ONLINE_name'))]",
                 "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', parameters('VM_SR_name')))]",
                 "[resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', parameters('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name)))]"
               ]
@@ -418,11 +490,11 @@
                 "enableAcceleratedNetworking": false,
                 "enableIPForwarding": false,
                 "networkSecurityGroup": {
-                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-Online', parameters('NSG_Name')))]"
+                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('NSG_OFFLINE_name'))]"
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-Online', parameters('NSG_Name')))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('NSG_OFFLINE_name'))]",
                 "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', parameters('VM_CA01_name')))]",
                 "[resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', parameters('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name)))]"
               ]
@@ -461,11 +533,11 @@
                 "enableAcceleratedNetworking": false,
                 "enableIPForwarding": false,
                 "networkSecurityGroup": {
-                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-Online', parameters('NSG_Name')))]"
+                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('NSG_ONLINE_name'))]"
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-Online', parameters('NSG_Name')))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('NSG_ONLINE_name'))]",
                 "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', parameters('VM_CA02_name')))]",
                 "[resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', parameters('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name)))]"
               ]
@@ -504,11 +576,11 @@
                 "enableAcceleratedNetworking": false,
                 "enableIPForwarding": false,
                 "networkSecurityGroup": {
-                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-Online', parameters('NSG_Name')))]"
+                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('NSG_ONLINE_name'))]"
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-Online', parameters('NSG_Name')))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('NSG_ONLINE_name'))]",
                 "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', parameters('VM_Win10_name')))]",
                 "[resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', parameters('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name)))]"
               ]
@@ -516,7 +588,7 @@
             {
               "type": "Microsoft.Storage/storageAccounts",
               "apiVersion": "2023-01-01",
-              "name": "[parameters('storageAccounts_ca01toca02_name')]",
+              "name": "[parameters('storageAccount_name')]",
               "location": "[parameters('location')]",
               "tags": {
                 "owner": "[parameters('owner')]",
@@ -572,7 +644,7 @@
             {
               "type": "Microsoft.Storage/storageAccounts/blobServices",
               "apiVersion": "2023-01-01",
-              "name": "[format('{0}/{1}', parameters('storageAccounts_ca01toca02_name'), 'default')]",
+              "name": "[format('{0}/{1}', parameters('storageAccount_name'), 'default')]",
               "sku": {
                 "name": "Standard_LRS",
                 "tier": "Standard"
@@ -597,13 +669,13 @@
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_ca01toca02_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount_name'))]"
               ]
             },
             {
               "type": "Microsoft.Storage/storageAccounts/fileServices",
               "apiVersion": "2023-01-01",
-              "name": "[format('{0}/{1}', parameters('storageAccounts_ca01toca02_name'), 'default')]",
+              "name": "[format('{0}/{1}', parameters('storageAccount_name'), 'default')]",
               "sku": {
                 "name": "Standard_LRS",
                 "tier": "Standard"
@@ -621,46 +693,46 @@
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_ca01toca02_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount_name'))]"
               ]
             },
             {
               "type": "Microsoft.Storage/storageAccounts/queueServices",
               "apiVersion": "2023-01-01",
-              "name": "[format('{0}/{1}', parameters('storageAccounts_ca01toca02_name'), 'default')]",
+              "name": "[format('{0}/{1}', parameters('storageAccount_name'), 'default')]",
               "properties": {
                 "cors": {
                   "corsRules": []
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_ca01toca02_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount_name'))]"
               ]
             },
             {
               "type": "Microsoft.Storage/storageAccounts/tableServices",
               "apiVersion": "2023-01-01",
-              "name": "[format('{0}/{1}', parameters('storageAccounts_ca01toca02_name'), 'default')]",
+              "name": "[format('{0}/{1}', parameters('storageAccount_name'), 'default')]",
               "properties": {
                 "cors": {
                   "corsRules": []
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_ca01toca02_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount_name'))]"
               ]
             },
             {
               "type": "Microsoft.Storage/storageAccounts/fileServices/shares",
               "apiVersion": "2023-01-01",
-              "name": "[format('{0}/{1}/{2}', parameters('storageAccounts_ca01toca02_name'), 'default', 'shared')]",
+              "name": "[format('{0}/{1}/{2}', parameters('storageAccount_name'), 'default', 'shared')]",
               "properties": {
                 "accessTier": "TransactionOptimized",
                 "shareQuota": 5120,
                 "enabledProtocols": "SMB"
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/fileServices', parameters('storageAccounts_ca01toca02_name'), 'default')]"
+                "[resourceId('Microsoft.Storage/storageAccounts/fileServices', parameters('storageAccount_name'), 'default')]"
               ]
             },
             {
