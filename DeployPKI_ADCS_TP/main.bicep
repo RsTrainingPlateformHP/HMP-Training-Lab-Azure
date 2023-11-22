@@ -5,11 +5,11 @@ param approver string
 param endDate string
 @description('Choisir nom du compte admin et son password')
 
-param VM_CA01_name string   = 'CA01'
-param VM_CA02_name string   = 'CA02'
-param VM_DC_name string     = 'DC01'
-param VM_SR_name string     = 'SRV1'
-param VM_Win10_name string  = 'Win10'
+param VM_CA01_name string
+param VM_CA02_name string
+param VM_DC_name string
+param VM_SR_name string
+param VM_Win10_name string
 
 param VNET_name string
 param NSG_Name string
