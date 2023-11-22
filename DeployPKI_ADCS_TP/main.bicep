@@ -571,6 +571,7 @@ resource storageAccounts_ca01toca02_shared 'Microsoft.Storage/storageAccounts/fi
 
 //////////////////////////////////////////////////////////////////////////////////Virtual Machines/////////////////////////////////////////////////////////////////////////////////////
 
+/*
 resource VM_DC01 'Microsoft.Compute/virtualMachines@2022-08-01' = {
   name: VM_DC_name
   location: location
@@ -785,4 +786,4 @@ resource VM_Win10 'Microsoft.Compute/virtualMachines@2022-08-01' = {
     }
   }
 }
-
+*/

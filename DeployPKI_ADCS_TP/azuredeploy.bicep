@@ -9,7 +9,7 @@ param count int
 module deploy_tp_ad 'main.bicep' = [for i in range(0, count): {
   name: '${i}tpADCS'
   params: {
-    location:location
+    location: location
     owner: owner
     approver: approver
     endDate: endDate
