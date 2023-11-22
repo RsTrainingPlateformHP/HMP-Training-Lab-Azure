@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "4800247102593031957"
+      "templateHash": "12719171242042522786"
     }
   },
   "parameters": {
@@ -91,7 +91,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.23.1.45101",
-              "templateHash": "5529213545549406340"
+              "templateHash": "17462789676245279659"
             }
           },
           "parameters": {
@@ -586,153 +586,238 @@
               ]
             },
             {
-              "type": "Microsoft.Storage/storageAccounts",
-              "apiVersion": "2023-01-01",
-              "name": "[parameters('storageAccount_name')]",
+              "type": "Microsoft.Compute/virtualMachines",
+              "apiVersion": "2022-08-01",
+              "name": "[parameters('VM_DC_name')]",
               "location": "[parameters('location')]",
               "tags": {
                 "owner": "[parameters('owner')]",
                 "approver": "[parameters('approver')]",
                 "endDate": "[parameters('endDate')]"
               },
-              "sku": {
-                "name": "Standard_LRS",
-                "tier": "Standard"
-              },
-              "kind": "StorageV2",
               "properties": {
-                "dnsEndpointType": "Standard",
-                "defaultToOAuthAuthentication": false,
-                "publicNetworkAccess": "Enabled",
-                "allowCrossTenantReplication": false,
-                "minimumTlsVersion": "TLS1_2",
-                "allowBlobPublicAccess": false,
-                "allowSharedKeyAccess": true,
-                "networkAcls": {
-                  "bypass": "AzureServices",
-                  "virtualNetworkRules": [
-                    {
-                      "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', parameters('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name))), '2022-07-01').subnets[0].id]",
-                      "action": "Allow",
-                      "state": "Succeeded"
-                    }
-                  ],
-                  "ipRules": [],
-                  "defaultAction": "Deny"
+                "hardwareProfile": {
+                  "vmSize": "Standard_B2s"
                 },
-                "supportsHttpsTrafficOnly": true,
-                "encryption": {
-                  "requireInfrastructureEncryption": false,
-                  "services": {
-                    "file": {
-                      "keyType": "Account",
-                      "enabled": true
+                "storageProfile": {
+                  "osDisk": {
+                    "name": "[format('{0}_OSdisk', parameters('VM_DC_name'))]",
+                    "createOption": "FromImage",
+                    "managedDisk": {
+                      "storageAccountType": "Standard_LRS"
                     },
-                    "blob": {
-                      "keyType": "Account",
-                      "enabled": true
-                    }
+                    "deleteOption": "Delete"
                   },
-                  "keySource": "Microsoft.Storage"
+                  "imageReference": {
+                    "id": "[variables('ImageID_VM_DC')]"
+                  }
                 },
-                "accessTier": "Hot"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', parameters('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name)))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Storage/storageAccounts/blobServices",
-              "apiVersion": "2023-01-01",
-              "name": "[format('{0}/{1}', parameters('storageAccount_name'), 'default')]",
-              "sku": {
-                "name": "Standard_LRS",
-                "tier": "Standard"
-              },
-              "properties": {
-                "cors": {
-                  "corsRules": []
+                "networkProfile": {
+                  "networkInterfaces": [
+                    {
+                      "id": "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface', parameters('VM_DC_name')))]",
+                      "properties": {
+                        "deleteOption": "Delete"
+                      }
+                    }
+                  ]
                 },
-                "deleteRetentionPolicy": {
-                  "allowPermanentDelete": false,
-                  "enabled": false
-                },
-                "isVersioningEnabled": false,
-                "changeFeed": {
-                  "enabled": false
-                },
-                "restorePolicy": {
-                  "enabled": false
-                },
-                "containerDeleteRetentionPolicy": {
-                  "enabled": false
+                "diagnosticsProfile": {
+                  "bootDiagnostics": {
+                    "enabled": true
+                  }
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount_name'))]"
+                "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface', parameters('VM_DC_name')))]"
               ]
             },
             {
-              "type": "Microsoft.Storage/storageAccounts/fileServices",
-              "apiVersion": "2023-01-01",
-              "name": "[format('{0}/{1}', parameters('storageAccount_name'), 'default')]",
-              "sku": {
-                "name": "Standard_LRS",
-                "tier": "Standard"
+              "type": "Microsoft.Compute/virtualMachines",
+              "apiVersion": "2022-08-01",
+              "name": "[parameters('VM_SR_name')]",
+              "location": "[parameters('location')]",
+              "tags": {
+                "owner": "[parameters('owner')]",
+                "approver": "[parameters('approver')]",
+                "endDate": "[parameters('endDate')]"
               },
               "properties": {
-                "protocolSettings": {
-                  "smb": {}
+                "hardwareProfile": {
+                  "vmSize": "Standard_B1ms"
                 },
-                "cors": {
-                  "corsRules": []
+                "storageProfile": {
+                  "osDisk": {
+                    "name": "[format('{0}_OSdisk', parameters('VM_SR_name'))]",
+                    "createOption": "FromImage",
+                    "managedDisk": {
+                      "storageAccountType": "Standard_LRS"
+                    },
+                    "deleteOption": "Delete"
+                  },
+                  "imageReference": {
+                    "id": "[variables('ImageID_VM_SR')]"
+                  }
                 },
-                "shareDeleteRetentionPolicy": {
-                  "enabled": false,
-                  "days": 0
+                "networkProfile": {
+                  "networkInterfaces": [
+                    {
+                      "id": "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface', parameters('VM_SR_name')))]",
+                      "properties": {
+                        "deleteOption": "Delete"
+                      }
+                    }
+                  ]
+                },
+                "diagnosticsProfile": {
+                  "bootDiagnostics": {
+                    "enabled": true
+                  }
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount_name'))]"
+                "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface', parameters('VM_SR_name')))]"
               ]
             },
             {
-              "type": "Microsoft.Storage/storageAccounts/queueServices",
-              "apiVersion": "2023-01-01",
-              "name": "[format('{0}/{1}', parameters('storageAccount_name'), 'default')]",
+              "type": "Microsoft.Compute/virtualMachines",
+              "apiVersion": "2022-08-01",
+              "name": "[parameters('VM_CA01_name')]",
+              "location": "[parameters('location')]",
+              "tags": {
+                "owner": "[parameters('owner')]",
+                "approver": "[parameters('approver')]",
+                "endDate": "[parameters('endDate')]"
+              },
               "properties": {
-                "cors": {
-                  "corsRules": []
+                "hardwareProfile": {
+                  "vmSize": "Standard_B2s"
+                },
+                "storageProfile": {
+                  "osDisk": {
+                    "name": "[format('{0}_OSdisk', parameters('VM_CA01_name'))]",
+                    "createOption": "FromImage",
+                    "managedDisk": {
+                      "storageAccountType": "Standard_LRS"
+                    },
+                    "deleteOption": "Delete"
+                  },
+                  "imageReference": {
+                    "id": "[variables('ImageID_VM_CA01')]"
+                  }
+                },
+                "networkProfile": {
+                  "networkInterfaces": [
+                    {
+                      "id": "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface', parameters('VM_CA01_name')))]",
+                      "properties": {
+                        "deleteOption": "Delete"
+                      }
+                    }
+                  ]
+                },
+                "diagnosticsProfile": {
+                  "bootDiagnostics": {
+                    "enabled": true
+                  }
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount_name'))]"
+                "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface', parameters('VM_CA01_name')))]"
               ]
             },
             {
-              "type": "Microsoft.Storage/storageAccounts/tableServices",
-              "apiVersion": "2023-01-01",
-              "name": "[format('{0}/{1}', parameters('storageAccount_name'), 'default')]",
+              "type": "Microsoft.Compute/virtualMachines",
+              "apiVersion": "2022-08-01",
+              "name": "[parameters('VM_CA02_name')]",
+              "location": "[parameters('location')]",
+              "tags": {
+                "owner": "[parameters('owner')]",
+                "approver": "[parameters('approver')]",
+                "endDate": "[parameters('endDate')]"
+              },
               "properties": {
-                "cors": {
-                  "corsRules": []
+                "hardwareProfile": {
+                  "vmSize": "Standard_B2s"
+                },
+                "storageProfile": {
+                  "osDisk": {
+                    "name": "[format('{0}_OSdisk', parameters('VM_CA02_name'))]",
+                    "createOption": "FromImage",
+                    "managedDisk": {
+                      "storageAccountType": "Standard_LRS"
+                    },
+                    "deleteOption": "Delete"
+                  },
+                  "imageReference": {
+                    "id": "[variables('ImageID_VM_CA02')]"
+                  }
+                },
+                "networkProfile": {
+                  "networkInterfaces": [
+                    {
+                      "id": "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface', parameters('VM_CA02_name')))]",
+                      "properties": {
+                        "deleteOption": "Delete"
+                      }
+                    }
+                  ]
+                },
+                "diagnosticsProfile": {
+                  "bootDiagnostics": {
+                    "enabled": true
+                  }
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount_name'))]"
+                "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface', parameters('VM_CA02_name')))]"
               ]
             },
             {
-              "type": "Microsoft.Storage/storageAccounts/fileServices/shares",
-              "apiVersion": "2023-01-01",
-              "name": "[format('{0}/{1}/{2}', parameters('storageAccount_name'), 'default', 'shared')]",
+              "type": "Microsoft.Compute/virtualMachines",
+              "apiVersion": "2022-08-01",
+              "name": "[parameters('VM_Win10_name')]",
+              "location": "[parameters('location')]",
+              "tags": {
+                "owner": "[parameters('owner')]",
+                "approver": "[parameters('approver')]",
+                "endDate": "[parameters('endDate')]"
+              },
               "properties": {
-                "accessTier": "TransactionOptimized",
-                "shareQuota": 5120,
-                "enabledProtocols": "SMB"
+                "hardwareProfile": {
+                  "vmSize": "Standard_B2s"
+                },
+                "storageProfile": {
+                  "osDisk": {
+                    "name": "[format('{0}_OSdisk', parameters('VM_Win10_name'))]",
+                    "createOption": "FromImage",
+                    "managedDisk": {
+                      "storageAccountType": "Standard_LRS"
+                    },
+                    "deleteOption": "Delete"
+                  },
+                  "imageReference": {
+                    "id": "[variables('ImageID_VM_Win10')]"
+                  }
+                },
+                "networkProfile": {
+                  "networkInterfaces": [
+                    {
+                      "id": "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface', parameters('VM_Win10_name')))]",
+                      "properties": {
+                        "deleteOption": "Delete"
+                      }
+                    }
+                  ]
+                },
+                "diagnosticsProfile": {
+                  "bootDiagnostics": {
+                    "enabled": true
+                  }
+                }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/fileServices', parameters('storageAccount_name'), 'default')]"
+                "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface', parameters('VM_Win10_name')))]"
               ]
             }
           ]
