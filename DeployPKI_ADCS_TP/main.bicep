@@ -435,7 +435,6 @@ resource networkInterface_VM_Win10 'Microsoft.Network/networkInterfaces@2020-11-
 
 //////////////////////////////////////////////////////////////////////////////////Storage Account/////////////////////////////////////////////////////////////////////////////////////
 
-/*
 resource storageAccounts_ca01toca 'Microsoft.Storage/storageAccounts@2023-01-01' = {
   name: storageAccount_name
   location: location
@@ -569,7 +568,7 @@ resource storageAccounts_ca01toca02_shared 'Microsoft.Storage/storageAccounts/fi
     storageAccounts_ca01toca
   ]
 }
-*/
+
 //////////////////////////////////////////////////////////////////////////////////Virtual Machines/////////////////////////////////////////////////////////////////////////////////////
 
 resource VM_DC01 'Microsoft.Compute/virtualMachines@2022-08-01' = {
