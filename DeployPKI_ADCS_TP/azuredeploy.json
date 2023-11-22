@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "13727097449571119167"
+      "templateHash": "16732745233234984567"
     }
   },
   "parameters": {
@@ -85,7 +85,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.23.1.45101",
-              "templateHash": "4820695939027415660"
+              "templateHash": "13019291225547503859"
             }
           },
           "parameters": {
@@ -585,20 +585,26 @@
               "apiVersion": "2023-01-01",
               "name": "[parameters('storageAccounts_ca01toca02_name')]",
               "location": "[parameters('location')]",
-              "kind": "StorageV2",
               "tags": {
                 "owner": "[parameters('owner')]",
                 "approver": "[parameters('approver')]",
                 "endDate": "[parameters('endDate')]"
               },
               "sku": {
-                "name": "Standard_LRS"
+                "name": "Standard_LRS",
+                "tier": "Standard"
               },
+              "kind": "StorageV2",
               "properties": {
-                "accessTier": "Hot",
+                "dnsEndpointType": "Standard",
+                "defaultToOAuthAuthentication": false,
+                "publicNetworkAccess": "Enabled",
+                "allowCrossTenantReplication": false,
+                "minimumTlsVersion": "TLS1_2",
+                "allowBlobPublicAccess": false,
+                "allowSharedKeyAccess": true,
                 "networkAcls": {
                   "bypass": "AzureServices",
-                  "defaultAction": "Deny",
                   "virtualNetworkRules": [
                     {
                       "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', parameters('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name))), '2022-07-01').subnets[0].id]",
@@ -606,17 +612,69 @@
                       "state": "Succeeded"
                     }
                   ],
-                  "ipRules": []
-                }
+                  "ipRules": [],
+                  "defaultAction": "Deny"
+                },
+                "supportsHttpsTrafficOnly": true,
+                "encryption": {
+                  "requireInfrastructureEncryption": false,
+                  "services": {
+                    "file": {
+                      "keyType": "Account",
+                      "enabled": true
+                    },
+                    "blob": {
+                      "keyType": "Account",
+                      "enabled": true
+                    }
+                  },
+                  "keySource": "Microsoft.Storage"
+                },
+                "accessTier": "Hot"
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', parameters('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name)))]"
               ]
             },
             {
+              "type": "Microsoft.Storage/storageAccounts/blobServices",
+              "apiVersion": "2023-01-01",
+              "name": "[format('{0}/{1}', parameters('storageAccounts_ca01toca02_name'), 'default')]",
+              "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+              },
+              "properties": {
+                "cors": {
+                  "corsRules": []
+                },
+                "deleteRetentionPolicy": {
+                  "allowPermanentDelete": false,
+                  "enabled": false
+                },
+                "isVersioningEnabled": false,
+                "changeFeed": {
+                  "enabled": false
+                },
+                "restorePolicy": {
+                  "enabled": false
+                },
+                "containerDeleteRetentionPolicy": {
+                  "enabled": false
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_ca01toca02_name'))]"
+              ]
+            },
+            {
               "type": "Microsoft.Storage/storageAccounts/fileServices",
               "apiVersion": "2023-01-01",
               "name": "[format('{0}/{1}', parameters('storageAccounts_ca01toca02_name'), 'default')]",
+              "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+              },
               "properties": {
                 "protocolSettings": {
                   "smb": {}
@@ -625,7 +683,34 @@
                   "corsRules": []
                 },
                 "shareDeleteRetentionPolicy": {
-                  "enabled": false
+                  "enabled": false,
+                  "days": 0
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_ca01toca02_name'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts/queueServices",
+              "apiVersion": "2023-01-01",
+              "name": "[format('{0}/{1}', parameters('storageAccounts_ca01toca02_name'), 'default')]",
+              "properties": {
+                "cors": {
+                  "corsRules": []
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_ca01toca02_name'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts/tableServices",
+              "apiVersion": "2023-01-01",
+              "name": "[format('{0}/{1}', parameters('storageAccounts_ca01toca02_name'), 'default')]",
+              "properties": {
+                "cors": {
+                  "corsRules": []
                 }
               },
               "dependsOn": [

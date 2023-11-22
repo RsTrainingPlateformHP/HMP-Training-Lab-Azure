@@ -437,7 +437,6 @@ resource networkInterface_VM_Win10 'Microsoft.Network/networkInterfaces@2020-11-
 resource storageAccounts_ca01toca02_name_resource 'Microsoft.Storage/storageAccounts@2023-01-01' = {
   name: storageAccounts_ca01toca02_name
   location: location
-  kind: 'StorageV2'
   tags: {
     owner: owner
     approver: approver
@@ -445,12 +444,19 @@ resource storageAccounts_ca01toca02_name_resource 'Microsoft.Storage/storageAcco
   }
   sku: {
     name: 'Standard_LRS'
+    tier: 'Standard'
   }
+  kind: 'StorageV2'
   properties: {
-    accessTier: 'Hot'
+    dnsEndpointType: 'Standard'
+    defaultToOAuthAuthentication: false
+    publicNetworkAccess: 'Enabled'
+    allowCrossTenantReplication: false
+    minimumTlsVersion: 'TLS1_2'
+    allowBlobPublicAccess: false
+    allowSharedKeyAccess: true
     networkAcls: {
       bypass: 'AzureServices'
-      defaultAction: 'Deny'
       virtualNetworkRules: [
         {
           id: VNET_TP_ADCS.properties.subnets[0].id
@@ -459,6 +465,51 @@ resource storageAccounts_ca01toca02_name_resource 'Microsoft.Storage/storageAcco
         }
       ]
       ipRules: []
+      defaultAction: 'Deny'
+    }
+    supportsHttpsTrafficOnly: true
+    encryption: {
+      requireInfrastructureEncryption: false
+      services: {
+        file: {
+          keyType: 'Account'
+          enabled: true
+        }
+        blob: {
+          keyType: 'Account'
+          enabled: true
+        }
+      }
+      keySource: 'Microsoft.Storage'
+    }
+    accessTier: 'Hot'
+  }
+}
+
+resource storageAccounts_ca01toca02_name_default 'Microsoft.Storage/storageAccounts/blobServices@2023-01-01' = {
+  parent: storageAccounts_ca01toca02_name_resource
+  name: 'default'
+  sku: {
+    name: 'Standard_LRS'
+    tier: 'Standard'
+  }
+  properties: {
+    cors: {
+      corsRules: []
+    }
+    deleteRetentionPolicy: {
+      allowPermanentDelete: false
+      enabled: false
+    }
+    isVersioningEnabled: false
+    changeFeed: {
+      enabled: false
+    }
+    restorePolicy: {
+      enabled: false
+    }
+    containerDeleteRetentionPolicy: {
+      enabled: false
     }
   }
 }
@@ -466,16 +517,40 @@ resource storageAccounts_ca01toca02_name_resource 'Microsoft.Storage/storageAcco
 resource Microsoft_Storage_storageAccounts_fileServices_storageAccounts_ca01toca02_name_default 'Microsoft.Storage/storageAccounts/fileServices@2023-01-01' = {
   parent: storageAccounts_ca01toca02_name_resource
   name: 'default'
+  sku: {
+    name: 'Standard_LRS'
+    tier: 'Standard'
+  }
   properties: {
     protocolSettings: {
-      smb: {
-      }
+      smb: {}
     }
     cors: {
       corsRules: []
     }
     shareDeleteRetentionPolicy: {
       enabled: false
+      days: 0
+    }
+  }
+}
+
+resource Microsoft_Storage_storageAccounts_queueServices_storageAccounts_ca01toca02_name_default 'Microsoft.Storage/storageAccounts/queueServices@2023-01-01' = {
+  parent: storageAccounts_ca01toca02_name_resource
+  name: 'default'
+  properties: {
+    cors: {
+      corsRules: []
+    }
+  }
+}
+
+resource Microsoft_Storage_storageAccounts_tableServices_storageAccounts_ca01toca02_name_default 'Microsoft.Storage/storageAccounts/tableServices@2023-01-01' = {
+  parent: storageAccounts_ca01toca02_name_resource
+  name: 'default'
+  properties: {
+    cors: {
+      corsRules: []
     }
   }
 }
@@ -488,6 +563,9 @@ resource storageAccounts_ca01toca02_name_default_shared 'Microsoft.Storage/stora
     shareQuota: 5120
     enabledProtocols: 'SMB'
   }
+  dependsOn: [
+    storageAccounts_ca01toca02_name_resource
+  ]
 }
 
 //////////////////////////////////////////////////////////////////////////////////Virtual Machines/////////////////////////////////////////////////////////////////////////////////////
@@ -706,3 +784,4 @@ resource VM_Win10 'Microsoft.Compute/virtualMachines@2022-08-01' = {
     }
   }
 }
+
