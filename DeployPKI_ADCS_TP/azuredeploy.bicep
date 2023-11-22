@@ -2,6 +2,7 @@ param location string = 'francecentral'
 param owner string
 param approver string
 param endDate string
+param test string
 @description('Nombre d\'instances à déployer')
 param count int
 

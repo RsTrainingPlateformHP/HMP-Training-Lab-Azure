@@ -1,9 +1,9 @@
 param location string = 'francecentral'
 param storageAccounts_ca01toca02_name string = 'ca01toca02'
+
 param owner string
 param approver string
 param endDate string
-@description('Choisir nom du compte admin et son password')
 
 param VM_CA01_name string
 param VM_CA02_name string
@@ -152,7 +152,7 @@ resource VNET_TP_ADCS 'Microsoft.Network/virtualNetworks@2022-07-01' = {
 //////////////////////////////////////////////////////////////////////////////////Network Security Groups//////////////////////////////////////////////////////////////////////////////
 
 resource NSG_TP_ADCS_ONLINE 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
-  name: NSG_Name
+  name: '${NSG_Name}-Online'
   location: location
   tags: {
     owner: owner
@@ -177,9 +177,9 @@ resource NSG_TP_ADCS_ONLINE 'Microsoft.Network/networkSecurityGroups@2022-07-01'
     ]
   }
 }
-
+/*
 resource NSG_TP_ADCS_OFFLINE 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
-  name: NSG_Name
+  name: '${NSG_Name}-Offline'
   location: location
   tags: {
     owner: owner
@@ -243,6 +243,7 @@ resource NSG_TP_ADCS_OFFLINE 'Microsoft.Network/networkSecurityGroups@2022-07-01
     ]
   }
 }
+*/
 
 //////////////////////////////////////////////////////////////////////////////////Network Interface////////////////////////////////////////////////////////////////////////////////////
 
@@ -352,7 +353,7 @@ resource networkInterface_VM_CA01 'Microsoft.Network/networkInterfaces@2020-11-0
     enableAcceleratedNetworking: false
     enableIPForwarding: false
     networkSecurityGroup: {
-      id: NSG_TP_ADCS_OFFLINE.id
+      id: NSG_TP_ADCS_ONLINE.id
     }
   }
 }
