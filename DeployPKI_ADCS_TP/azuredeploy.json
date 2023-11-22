@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "14414052318799185084"
+      "templateHash": "9348029565398897508"
     }
   },
   "parameters": {
@@ -88,7 +88,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.23.1.45101",
-              "templateHash": "5481080551735117396"
+              "templateHash": "8028500906700819758"
             }
           },
           "parameters": {
@@ -301,7 +301,7 @@
             {
               "type": "Microsoft.Network/networkInterfaces",
               "apiVersion": "2020-11-01",
-              "name": "[format('{0}-network-interface', parameters('VM_CA01_name'))]",
+              "name": "[format('{0}-network-interface', parameters('VM_DC_name'))]",
               "location": "[parameters('location')]",
               "tags": {
                 "owner": "[parameters('owner')]",
@@ -693,7 +693,7 @@
                 "networkProfile": {
                   "networkInterfaces": [
                     {
-                      "id": "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface', parameters('VM_CA01_name')))]",
+                      "id": "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface', parameters('VM_DC_name')))]",
                       "properties": {
                         "deleteOption": "Delete"
                       }
@@ -707,7 +707,7 @@
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface', parameters('VM_CA01_name')))]"
+                "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface', parameters('VM_DC_name')))]"
               ]
             },
             {

@@ -248,7 +248,7 @@ resource NSG_TP_ADCS_OFFLINE 'Microsoft.Network/networkSecurityGroups@2022-07-01
 //////////////////////////////////////////////////////////////////////////////////Network Interface////////////////////////////////////////////////////////////////////////////////////
 
 resource networkInterface_VM_DC 'Microsoft.Network/networkInterfaces@2020-11-01' = {
-  name: '${VM_CA01_name}-network-interface'
+  name: '${VM_DC_name}-network-interface'
   location: location
   tags: {
     owner: owner
