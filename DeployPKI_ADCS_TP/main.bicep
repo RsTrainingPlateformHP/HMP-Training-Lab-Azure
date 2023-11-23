@@ -434,7 +434,7 @@ resource networkInterface_VM_Win10 'Microsoft.Network/networkInterfaces@2020-11-
 
 //////////////////////////////////////////////////////////////////////////////////Storage Account/////////////////////////////////////////////////////////////////////////////////////
 
-resource storageaccount 'Microsoft.Storage/storageAccounts@2021-02-01' = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2021-02-01' = {
   name: storageAccount_name
   location: location
   kind: 'StorageV2'
@@ -446,6 +446,33 @@ resource storageaccount 'Microsoft.Storage/storageAccounts@2021-02-01' = {
     accessTier: 'Hot'
   }
 }
+
+
+
+resource filesServices 'Microsoft.Storage/storageAccounts/fileServices@2023-01-01' = {
+  parent: storageAccount
+  name: 'default'
+  properties: {
+    protocolSettings: {
+      smb: {}
+    }
+    cors: {
+      corsRules: []
+    }
+  }
+}
+
+/*
+resource shares 'Microsoft.Storage/storageAccounts/fileServices/shares@2021-08-01' = {
+  parent: filesServices
+  name: 'shared'
+  properties: {
+    accessTier: 'TransactionOptimized'
+    enabledProtocols:'SMB'
+    shareQuota: 5120
+  }
+}
+*/
 
 //////////////////////////////////////////////////////////////////////////////////Virtual Machines/////////////////////////////////////////////////////////////////////////////////////
 
