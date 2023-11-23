@@ -432,6 +432,21 @@ resource networkInterface_VM_Win10 'Microsoft.Network/networkInterfaces@2020-11-
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////Storage Account/////////////////////////////////////////////////////////////////////////////////////
+
+resource storageaccount 'Microsoft.Storage/storageAccounts@2021-02-01' = {
+  name: storageAccount_name
+  location: location
+  kind: 'StorageV2'
+  sku: {
+    name: 'Standard_LRS'
+  }
+  properties: {
+    minimumTlsVersion: 'TLS1_2'
+    accessTier: 'Hot'
+  }
+}
+
 //////////////////////////////////////////////////////////////////////////////////Virtual Machines/////////////////////////////////////////////////////////////////////////////////////
 
 resource VM_DC01 'Microsoft.Compute/virtualMachines@2022-08-01' = {
@@ -681,20 +696,5 @@ resource VM_Win10 'Microsoft.Compute/virtualMachines@2022-08-01' = {
         enabled: true
       }
     }
-  }
-}
-
-//////////////////////////////////////////////////////////////////////////////////Storage Account/////////////////////////////////////////////////////////////////////////////////////
-
-resource storageaccount 'Microsoft.Storage/storageAccounts@2021-02-01' = {
-  name: storageAccount_name
-  location: location
-  kind: 'StorageV2'
-  sku: {
-    name: 'Standard_LRS'
-  }
-  properties: {
-    minimumTlsVersion: 'TLS1_2'
-    accessTier: 'Hot'
   }
 }
