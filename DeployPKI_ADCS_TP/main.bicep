@@ -432,13 +432,11 @@ resource networkInterface_VM_Win10 'Microsoft.Network/networkInterfaces@2020-11-
   }
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////Storage Account/////////////////////////////////////////////////////////////////////////////////////
-
-resource storageAccounts_ca01toca 'Microsoft.Storage/storageAccounts@2021-02-01' = {
+/*
+resource storageAccounts_ca01toca 'Microsoft.Storage/storageAccounts@2023-01-01' = {
   name: storageAccount_name
   location: location
-  kind: 'StorageV2'
   tags: {
     owner: owner
     approver: approver
@@ -448,41 +446,46 @@ resource storageAccounts_ca01toca 'Microsoft.Storage/storageAccounts@2021-02-01'
     name: 'Standard_LRS'
     tier: 'Standard'
   }
+  kind: 'StorageV2'
   properties: {
-    accessTier: 'Hot'    
-    supportsHttpsTrafficOnly: true
+    dnsEndpointType: 'Standard'
+    defaultToOAuthAuthentication: false
+    publicNetworkAccess: 'Enabled'
+    allowCrossTenantReplication: false
     minimumTlsVersion: 'TLS1_2'
     allowBlobPublicAccess: false
     allowSharedKeyAccess: true
     networkAcls: {
       bypass: 'AzureServices'
-      defaultAction: 'Deny'
       virtualNetworkRules: [
         {
           id: VNET_TP_ADCS.properties.subnets[0].id
           action: 'Allow'
+          state: 'Succeeded'
         }
       ]
+      ipRules: []
+      defaultAction: 'Deny'
     }
-  }
-}
-/*
-  resource fileservices_ca01toca02 'fileServices' = {
-    name: 'default'
-    properties: {}
-
-    resource shares_ca01toca02 'shares' = {
-      name: 'shared'
-      properties: {
-        accessTier: 'TransactionOptimized'
-        shareQuota: 5120
-        enabledProtocols: 'SMB'
+    supportsHttpsTrafficOnly: true
+    encryption: {
+      requireInfrastructureEncryption: false
+      services: {
+        file: {
+          keyType: 'Account'
+          enabled: true
+        }
+        blob: {
+          keyType: 'Account'
+          enabled: true
+        }
       }
+      keySource: 'Microsoft.Storage'
     }
+    accessTier: 'Hot'
   }
 }
 */
-
 //////////////////////////////////////////////////////////////////////////////////Virtual Machines/////////////////////////////////////////////////////////////////////////////////////
 
 resource VM_DC01 'Microsoft.Compute/virtualMachines@2022-08-01' = {

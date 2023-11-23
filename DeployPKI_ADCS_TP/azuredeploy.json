@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "992548964168740952"
+      "templateHash": "3334381365267113942"
     }
   },
   "parameters": {
@@ -91,7 +91,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.23.1.45101",
-              "templateHash": "7723023731833857354"
+              "templateHash": "11853046181080515441"
             }
           },
           "parameters": {
@@ -582,42 +582,6 @@
               "dependsOn": [
                 "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('NSG_ONLINE_name'))]",
                 "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', parameters('VM_Win10_name')))]",
-                "[resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', parameters('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name)))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Storage/storageAccounts",
-              "apiVersion": "2021-02-01",
-              "name": "[parameters('storageAccount_name')]",
-              "location": "[parameters('location')]",
-              "kind": "StorageV2",
-              "tags": {
-                "owner": "[parameters('owner')]",
-                "approver": "[parameters('approver')]",
-                "endDate": "[parameters('endDate')]"
-              },
-              "sku": {
-                "name": "Standard_LRS",
-                "tier": "Standard"
-              },
-              "properties": {
-                "accessTier": "Hot",
-                "supportsHttpsTrafficOnly": true,
-                "minimumTlsVersion": "TLS1_2",
-                "allowBlobPublicAccess": false,
-                "allowSharedKeyAccess": true,
-                "networkAcls": {
-                  "bypass": "AzureServices",
-                  "defaultAction": "Deny",
-                  "virtualNetworkRules": [
-                    {
-                      "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', parameters('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name))), '2022-07-01').subnets[0].id]",
-                      "action": "Allow"
-                    }
-                  ]
-                }
-              },
-              "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', parameters('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name)))]"
               ]
             },
