@@ -1,5 +1,4 @@
 param location string = 'francecentral'
-param storageAccount_name string
 
 param owner string
 param approver string
@@ -15,11 +14,11 @@ param VNET_name string
 param NSG_ONLINE_name string
 param NSG_OFFLINE_name string
 
-var ImageID_VM_CA01   = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/tp_pki_adcs_ca01/versions/1.0.0'
-var ImageID_VM_CA02   = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/tp_pki_adcs_ca02/versions/1.0.0'
-var ImageID_VM_DC     = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/tp_pki_adcs_DC/versions/1.0.0'
-var ImageID_VM_SR     = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/tp_pki_adcs_sr/versions/1.0.0'
-var ImageID_VM_Win10  = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/tp_pki_adcs_win10/versions/1.0.0'
+var ImageID_VM_CA01 = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/tp_pki_adcs_ca01/versions/1.0.0'
+var ImageID_VM_CA02 = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/tp_pki_adcs_ca02/versions/1.0.0'
+var ImageID_VM_DC = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/tp_pki_adcs_DC/versions/1.0.0'
+var ImageID_VM_SR = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/tp_pki_adcs_sr/versions/1.0.0'
+var ImageID_VM_Win10 = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/tp_pki_adcs_win10/versions/1.0.0'
 
 //////////////////////////////////////////////////////////////////////////////////SERVER PUBLIC IP/////////////////////////////////////////////////////////////////////////////////////
 
@@ -431,48 +430,6 @@ resource networkInterface_VM_Win10 'Microsoft.Network/networkInterfaces@2020-11-
     }
   }
 }
-
-//////////////////////////////////////////////////////////////////////////////////Storage Account/////////////////////////////////////////////////////////////////////////////////////
-
-resource storageAccount 'Microsoft.Storage/storageAccounts@2021-02-01' = {
-  name: storageAccount_name
-  location: location
-  kind: 'StorageV2'
-  sku: {
-    name: 'Standard_LRS'
-  }
-  properties: {
-    minimumTlsVersion: 'TLS1_2'
-    accessTier: 'Hot'
-  }
-}
-
-
-
-resource filesServices 'Microsoft.Storage/storageAccounts/fileServices@2023-01-01' = {
-  parent: storageAccount
-  name: 'default'
-  properties: {
-    protocolSettings: {
-      smb: {}
-    }
-    cors: {
-      corsRules: []
-    }
-  }
-}
-
-/*
-resource shares 'Microsoft.Storage/storageAccounts/fileServices/shares@2021-08-01' = {
-  parent: filesServices
-  name: 'shared'
-  properties: {
-    accessTier: 'TransactionOptimized'
-    enabledProtocols:'SMB'
-    shareQuota: 5120
-  }
-}
-*/
 
 //////////////////////////////////////////////////////////////////////////////////Virtual Machines/////////////////////////////////////////////////////////////////////////////////////
 

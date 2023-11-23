@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "13680454554883369519"
+      "templateHash": "5813851449976277468"
     }
   },
   "parameters": {
@@ -56,9 +56,6 @@
           "endDate": {
             "value": "[parameters('endDate')]"
           },
-          "storageAccount_name": {
-            "value": "[format('{0}ca01toca02', range(0, parameters('count'))[copyIndex()])]"
-          },
           "VM_DC_name": {
             "value": "[format('{0}_VM-ADCS-TP-DC', range(0, parameters('count'))[copyIndex()])]"
           },
@@ -91,16 +88,13 @@
             "_generator": {
               "name": "bicep",
               "version": "0.23.1.45101",
-              "templateHash": "13407418540921094007"
+              "templateHash": "2158601227275533369"
             }
           },
           "parameters": {
             "location": {
               "type": "string",
               "defaultValue": "francecentral"
-            },
-            "storageAccount_name": {
-              "type": "string"
             },
             "owner": {
               "type": "string"
@@ -584,20 +578,6 @@
                 "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', parameters('VM_Win10_name')))]",
                 "[resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', parameters('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name)))]"
               ]
-            },
-            {
-              "type": "Microsoft.Storage/storageAccounts",
-              "apiVersion": "2021-02-01",
-              "name": "[parameters('storageAccount_name')]",
-              "location": "[parameters('location')]",
-              "kind": "StorageV2",
-              "sku": {
-                "name": "Standard_LRS"
-              },
-              "properties": {
-                "minimumTlsVersion": "TLS1_2",
-                "accessTier": "Hot"
-              }
             },
             {
               "type": "Microsoft.Compute/virtualMachines",
