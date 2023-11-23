@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "7355103321939821892"
+      "templateHash": "14016314410142168608"
     }
   },
   "parameters": {
@@ -91,7 +91,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.23.1.45101",
-              "templateHash": "10748752950233217869"
+              "templateHash": "12473867552723492903"
             }
           },
           "parameters": {
@@ -772,6 +772,13 @@
                     }
                   ]
                 },
+                "securityProfile": {
+                  "uefiSettings": {
+                    "secureBootEnabled": true,
+                    "vTpmEnabled": true
+                  },
+                  "securityType": "TrustedLaunch"
+                },
                 "diagnosticsProfile": {
                   "bootDiagnostics": {
                     "enabled": true
@@ -818,6 +825,13 @@
                       }
                     }
                   ]
+                },
+                "securityProfile": {
+                  "uefiSettings": {
+                    "secureBootEnabled": true,
+                    "vTpmEnabled": true
+                  },
+                  "securityType": "TrustedLaunch"
                 },
                 "diagnosticsProfile": {
                   "bootDiagnostics": {
@@ -866,6 +880,13 @@
                     }
                   ]
                 },
+                "securityProfile": {
+                  "uefiSettings": {
+                    "secureBootEnabled": true,
+                    "vTpmEnabled": true
+                  },
+                  "securityType": "TrustedLaunch"
+                },
                 "diagnosticsProfile": {
                   "bootDiagnostics": {
                     "enabled": true
@@ -912,6 +933,13 @@
                       }
                     }
                   ]
+                },
+                "securityProfile": {
+                  "uefiSettings": {
+                    "secureBootEnabled": true,
+                    "vTpmEnabled": true
+                  },
+                  "securityType": "TrustedLaunch"
                 },
                 "diagnosticsProfile": {
                   "bootDiagnostics": {
