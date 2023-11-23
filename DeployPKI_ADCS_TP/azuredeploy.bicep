@@ -13,7 +13,7 @@ module deploy_tp_ad 'main.bicep' = [for i in range(0, count): {
     owner: owner
     approver: approver
     endDate: endDate
-    storageAccount_name: '${i}ca01toca02'
+    //storageAccount_name: '${i}ca01toca02'
     VM_DC_name:'${i}_VM-ADCS-TP-DC'
     VM_SR_name:'${i}_VM-ADCS-TP-SR'
     VM_CA01_name: '${i}_VM-ADCS-TP-CA01'
@@ -24,16 +24,3 @@ module deploy_tp_ad 'main.bicep' = [for i in range(0, count): {
     VNET_name: '${i}_VNET-ADCS-TP'
   }
 }]
-
-resource storageaccount 'Microsoft.Storage/storageAccounts@2021-02-01' = {
-  name: 'ca01toca02'
-  location: location
-  kind: 'StorageV2'
-  sku: {
-    name: 'Standard_LRS'
-  }
-  properties: {
-    minimumTlsVersion: 'TLS1_2'
-    accessTier: 'Hot'
-  }
-}

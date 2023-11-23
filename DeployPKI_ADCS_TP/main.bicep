@@ -1,5 +1,5 @@
 param location string = 'francecentral'
-param storageAccount_name string
+//param storageAccount_name string
 
 param owner string
 param approver string
@@ -681,5 +681,20 @@ resource VM_Win10 'Microsoft.Compute/virtualMachines@2022-08-01' = {
         enabled: true
       }
     }
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////////Storage Account/////////////////////////////////////////////////////////////////////////////////////
+
+resource storageaccount 'Microsoft.Storage/storageAccounts@2021-02-01' = {
+  name: 'ca01toca02'
+  location: location
+  kind: 'StorageV2'
+  sku: {
+    name: 'Standard_LRS'
+  }
+  properties: {
+    minimumTlsVersion: 'TLS1_2'
+    accessTier: 'Hot'
   }
 }

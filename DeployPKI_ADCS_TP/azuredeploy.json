@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "16792585089061546626"
+      "templateHash": "10632212717616736251"
     }
   },
   "parameters": {
@@ -31,20 +31,6 @@
   },
   "resources": [
     {
-      "type": "Microsoft.Storage/storageAccounts",
-      "apiVersion": "2021-02-01",
-      "name": "ca01toca02",
-      "location": "[parameters('location')]",
-      "kind": "StorageV2",
-      "sku": {
-        "name": "Standard_LRS"
-      },
-      "properties": {
-        "minimumTlsVersion": "TLS1_2",
-        "accessTier": "Hot"
-      }
-    },
-    {
       "copy": {
         "name": "deploy_tp_ad",
         "count": "[length(range(0, parameters('count')))]"
@@ -69,9 +55,6 @@
           },
           "endDate": {
             "value": "[parameters('endDate')]"
-          },
-          "storageAccount_name": {
-            "value": "[format('{0}ca01toca02', range(0, parameters('count'))[copyIndex()])]"
           },
           "VM_DC_name": {
             "value": "[format('{0}_VM-ADCS-TP-DC', range(0, parameters('count'))[copyIndex()])]"
@@ -105,16 +88,13 @@
             "_generator": {
               "name": "bicep",
               "version": "0.23.1.45101",
-              "templateHash": "11853046181080515441"
+              "templateHash": "5590965148889614310"
             }
           },
           "parameters": {
             "location": {
               "type": "string",
               "defaultValue": "francecentral"
-            },
-            "storageAccount_name": {
-              "type": "string"
             },
             "owner": {
               "type": "string"
@@ -868,6 +848,20 @@
               "dependsOn": [
                 "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface', parameters('VM_Win10_name')))]"
               ]
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts",
+              "apiVersion": "2021-02-01",
+              "name": "ca01toca02",
+              "location": "[parameters('location')]",
+              "kind": "StorageV2",
+              "sku": {
+                "name": "Standard_LRS"
+              },
+              "properties": {
+                "minimumTlsVersion": "TLS1_2",
+                "accessTier": "Hot"
+              }
             }
           ]
         }
