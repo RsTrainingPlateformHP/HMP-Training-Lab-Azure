@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "11014399737642816914"
+      "templateHash": "7355103321939821892"
     }
   },
   "parameters": {
@@ -91,7 +91,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.23.1.45101",
-              "templateHash": "1544040700019287947"
+              "templateHash": "10748752950233217869"
             }
           },
           "parameters": {
@@ -959,6 +959,13 @@
                       }
                     }
                   ]
+                },
+                "securityProfile": {
+                  "uefiSettings": {
+                    "secureBootEnabled": true,
+                    "vTpmEnabled": true
+                  },
+                  "securityType": "TrustedLaunch"
                 },
                 "diagnosticsProfile": {
                   "bootDiagnostics": {

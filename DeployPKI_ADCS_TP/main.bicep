@@ -778,6 +778,13 @@ resource VM_Win10 'Microsoft.Compute/virtualMachines@2022-08-01' = {
         }
       ]
     }
+    securityProfile: {
+      uefiSettings: {
+        secureBootEnabled: true
+        vTpmEnabled: true
+      }
+      securityType: 'TrustedLaunch'
+    }
     diagnosticsProfile: {
       bootDiagnostics: {
         enabled: true
