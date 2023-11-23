@@ -1,5 +1,5 @@
 param location string = 'francecentral'
-//param storageAccount_name string
+param storageAccount_name string
 
 param owner string
 param approver string
@@ -686,15 +686,8 @@ resource VM_Win10 'Microsoft.Compute/virtualMachines@2022-08-01' = {
 
 //////////////////////////////////////////////////////////////////////////////////Storage Account/////////////////////////////////////////////////////////////////////////////////////
 
-@allowed([
-  'new'
-  'existing'
-])
-
-param newOrExisting string = 'new'
-
-resource storageaccountNew 'Microsoft.Storage/storageAccounts@2021-02-01' = if (newOrExisting == 'new') {
-  name: 'ca01toca02'
+resource storageaccount 'Microsoft.Storage/storageAccounts@2021-02-01' = {
+  name: storageAccount_name
   location: location
   kind: 'StorageV2'
   sku: {
@@ -705,9 +698,3 @@ resource storageaccountNew 'Microsoft.Storage/storageAccounts@2021-02-01' = if (
     accessTier: 'Hot'
   }
 }
-
-resource storageaccountExisting 'Microsoft.Storage/storageAccounts@2021-02-01' existing = if (newOrExisting == 'existing') {
-  name: 'ca01toca02'
-}
-
-output storageAccountId string = ((newOrExisting == 'new') ? storageaccountNew.id : storageaccountExisting.id)
