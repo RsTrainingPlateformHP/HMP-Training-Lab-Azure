@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "14016314410142168608"
+      "templateHash": "3442395520776473798"
     }
   },
   "parameters": {
@@ -91,7 +91,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.23.1.45101",
-              "templateHash": "12473867552723492903"
+              "templateHash": "10310606912020434957"
             }
           },
           "parameters": {
@@ -144,6 +144,28 @@
             "ImageID_VM_Win10": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/tp_pki_adcs_win10/versions/1.0.0"
           },
           "resources": [
+            {
+              "type": "Microsoft.Storage/storageAccounts/fileServices/shares",
+              "apiVersion": "2021-02-01",
+              "name": "[format('{0}/{1}/{2}', parameters('storageAccount_name'), 'default', 'shared')]",
+              "properties": {
+                "accessTier": "TransactionOptimized",
+                "shareQuota": 5120,
+                "enabledProtocols": "SMB"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/fileServices', parameters('storageAccount_name'), 'default')]"
+              ]
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts/fileServices",
+              "apiVersion": "2021-02-01",
+              "name": "[format('{0}/{1}', parameters('storageAccount_name'), 'default')]",
+              "properties": {},
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount_name'))]"
+              ]
+            },
             {
               "type": "Microsoft.Network/publicIPAddresses",
               "apiVersion": "2022-07-01",
@@ -587,9 +609,10 @@
             },
             {
               "type": "Microsoft.Storage/storageAccounts",
-              "apiVersion": "2023-01-01",
+              "apiVersion": "2021-02-01",
               "name": "[parameters('storageAccount_name')]",
               "location": "[parameters('location')]",
+              "kind": "StorageV2",
               "tags": {
                 "owner": "[parameters('owner')]",
                 "approver": "[parameters('approver')]",
@@ -599,140 +622,25 @@
                 "name": "Standard_LRS",
                 "tier": "Standard"
               },
-              "kind": "StorageV2",
               "properties": {
-                "dnsEndpointType": "Standard",
-                "defaultToOAuthAuthentication": false,
-                "publicNetworkAccess": "Enabled",
-                "allowCrossTenantReplication": false,
+                "accessTier": "Hot",
+                "supportsHttpsTrafficOnly": true,
                 "minimumTlsVersion": "TLS1_2",
                 "allowBlobPublicAccess": false,
                 "allowSharedKeyAccess": true,
                 "networkAcls": {
                   "bypass": "AzureServices",
+                  "defaultAction": "Deny",
                   "virtualNetworkRules": [
                     {
                       "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', parameters('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name))), '2022-07-01').subnets[0].id]",
-                      "action": "Allow",
-                      "state": "Succeeded"
+                      "action": "Allow"
                     }
-                  ],
-                  "ipRules": [],
-                  "defaultAction": "Deny"
-                },
-                "supportsHttpsTrafficOnly": true,
-                "encryption": {
-                  "requireInfrastructureEncryption": false,
-                  "services": {
-                    "file": {
-                      "keyType": "Account",
-                      "enabled": true
-                    },
-                    "blob": {
-                      "keyType": "Account",
-                      "enabled": true
-                    }
-                  },
-                  "keySource": "Microsoft.Storage"
-                },
-                "accessTier": "Hot"
+                  ]
+                }
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', parameters('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name)))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Storage/storageAccounts/blobServices",
-              "apiVersion": "2023-01-01",
-              "name": "[format('{0}/{1}', parameters('storageAccount_name'), 'default')]",
-              "sku": {
-                "name": "Standard_LRS",
-                "tier": "Standard"
-              },
-              "properties": {
-                "cors": {
-                  "corsRules": []
-                },
-                "deleteRetentionPolicy": {
-                  "allowPermanentDelete": false,
-                  "enabled": false
-                },
-                "isVersioningEnabled": false,
-                "changeFeed": {
-                  "enabled": false
-                },
-                "restorePolicy": {
-                  "enabled": false
-                },
-                "containerDeleteRetentionPolicy": {
-                  "enabled": false
-                }
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount_name'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Storage/storageAccounts/fileServices",
-              "apiVersion": "2023-01-01",
-              "name": "[format('{0}/{1}', parameters('storageAccount_name'), 'default')]",
-              "sku": {
-                "name": "Standard_LRS",
-                "tier": "Standard"
-              },
-              "properties": {
-                "protocolSettings": {
-                  "smb": {}
-                },
-                "cors": {
-                  "corsRules": []
-                },
-                "shareDeleteRetentionPolicy": {
-                  "enabled": false,
-                  "days": 0
-                }
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount_name'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Storage/storageAccounts/queueServices",
-              "apiVersion": "2023-01-01",
-              "name": "[format('{0}/{1}', parameters('storageAccount_name'), 'default')]",
-              "properties": {
-                "cors": {
-                  "corsRules": []
-                }
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount_name'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Storage/storageAccounts/tableServices",
-              "apiVersion": "2023-01-01",
-              "name": "[format('{0}/{1}', parameters('storageAccount_name'), 'default')]",
-              "properties": {
-                "cors": {
-                  "corsRules": []
-                }
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount_name'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Storage/storageAccounts/fileServices/shares",
-              "apiVersion": "2023-01-01",
-              "name": "[format('{0}/{1}/{2}', parameters('storageAccount_name'), 'default', 'shared')]",
-              "properties": {
-                "accessTier": "TransactionOptimized",
-                "shareQuota": 5120,
-                "enabledProtocols": "SMB"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/fileServices', parameters('storageAccount_name'), 'default')]"
               ]
             },
             {
