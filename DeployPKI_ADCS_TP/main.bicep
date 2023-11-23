@@ -465,12 +465,13 @@ resource storageAccounts_ca01toca 'Microsoft.Storage/storageAccounts@2021-02-01'
       ]
     }
   }
-
+}
+/*
   resource fileservices_ca01toca02 'fileServices' = {
     name: 'default'
     properties: {}
 
-    resource shares 'shares' = {
+    resource shares_ca01toca02 'shares' = {
       name: 'shared'
       properties: {
         accessTier: 'TransactionOptimized'
@@ -480,6 +481,7 @@ resource storageAccounts_ca01toca 'Microsoft.Storage/storageAccounts@2021-02-01'
     }
   }
 }
+*/
 
 //////////////////////////////////////////////////////////////////////////////////Virtual Machines/////////////////////////////////////////////////////////////////////////////////////
 
