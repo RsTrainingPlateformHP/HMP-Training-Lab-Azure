@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "5147816877478934006"
+      "templateHash": "5778608736732840348"
     }
   },
   "parameters": {
@@ -91,7 +91,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.23.1.45101",
-              "templateHash": "1962059452521262023"
+              "templateHash": "336267760227139682"
             }
           },
           "parameters": {
@@ -587,59 +587,13 @@
             },
             {
               "type": "Microsoft.Storage/storageAccounts",
-              "apiVersion": "2023-01-01",
+              "apiVersion": "2021-02-01",
               "name": "[parameters('storageAccount_name')]",
               "location": "[parameters('location')]",
-              "tags": {
-                "owner": "[parameters('owner')]",
-                "approver": "[parameters('approver')]",
-                "endDate": "[parameters('endDate')]"
-              },
-              "sku": {
-                "name": "Standard_LRS",
-                "tier": "Standard"
-              },
               "kind": "StorageV2",
-              "properties": {
-                "dnsEndpointType": "Standard",
-                "defaultToOAuthAuthentication": false,
-                "publicNetworkAccess": "Enabled",
-                "allowCrossTenantReplication": false,
-                "minimumTlsVersion": "TLS1_2",
-                "allowBlobPublicAccess": false,
-                "allowSharedKeyAccess": true,
-                "networkAcls": {
-                  "bypass": "AzureServices",
-                  "virtualNetworkRules": [
-                    {
-                      "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', parameters('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name))), '2022-07-01').subnets[0].id]",
-                      "action": "Allow",
-                      "state": "Succeeded"
-                    }
-                  ],
-                  "ipRules": [],
-                  "defaultAction": "Deny"
-                },
-                "supportsHttpsTrafficOnly": true,
-                "encryption": {
-                  "requireInfrastructureEncryption": false,
-                  "services": {
-                    "file": {
-                      "keyType": "Account",
-                      "enabled": true
-                    },
-                    "blob": {
-                      "keyType": "Account",
-                      "enabled": true
-                    }
-                  },
-                  "keySource": "Microsoft.Storage"
-                },
-                "accessTier": "Hot"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', parameters('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name)))]"
-              ]
+              "sku": {
+                "name": "Standard_LRS"
+              }
             },
             {
               "type": "Microsoft.Compute/virtualMachines",

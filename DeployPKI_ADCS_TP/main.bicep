@@ -434,6 +434,16 @@ resource networkInterface_VM_Win10 'Microsoft.Network/networkInterfaces@2020-11-
 
 //////////////////////////////////////////////////////////////////////////////////Storage Account/////////////////////////////////////////////////////////////////////////////////////
 
+resource storageaccount 'Microsoft.Storage/storageAccounts@2021-02-01' = {
+  name: storageAccount_name
+  location: location
+  kind: 'StorageV2'
+  sku: {
+    name: 'Standard_LRS'
+  }
+}
+
+/*
 resource storageAccounts_ca01toca 'Microsoft.Storage/storageAccounts@2023-01-01' = {
   name: storageAccount_name
   location: location
@@ -485,6 +495,7 @@ resource storageAccounts_ca01toca 'Microsoft.Storage/storageAccounts@2023-01-01'
     accessTier: 'Hot'
   }
 }
+*/
 
 //////////////////////////////////////////////////////////////////////////////////Virtual Machines/////////////////////////////////////////////////////////////////////////////////////
 
