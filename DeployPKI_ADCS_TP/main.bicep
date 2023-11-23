@@ -686,7 +686,14 @@ resource VM_Win10 'Microsoft.Compute/virtualMachines@2022-08-01' = {
 
 //////////////////////////////////////////////////////////////////////////////////Storage Account/////////////////////////////////////////////////////////////////////////////////////
 
-resource storageaccount 'Microsoft.Storage/storageAccounts@2021-02-01' = {
+@allowed([
+  'new'
+  'existing'
+])
+
+param newOrExisting string = 'new'
+
+resource storageaccountNew 'Microsoft.Storage/storageAccounts@2021-02-01' = if (newOrExisting == 'new') {
   name: 'ca01toca02'
   location: location
   kind: 'StorageV2'
@@ -698,3 +705,9 @@ resource storageaccount 'Microsoft.Storage/storageAccounts@2021-02-01' = {
     accessTier: 'Hot'
   }
 }
+
+resource storageaccountExisting 'Microsoft.Storage/storageAccounts@2021-02-01' existing = if (newOrExisting == 'existing') {
+  name: 'ca01toca02'
+}
+
+output storageAccountId string = ((newOrExisting == 'new') ? storageaccountNew.id : storageaccountExisting.id)
