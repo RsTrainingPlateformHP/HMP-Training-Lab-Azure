@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "5778608736732840348"
+      "templateHash": "16792585089061546626"
     }
   },
   "parameters": {
@@ -30,6 +30,20 @@
     }
   },
   "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2021-02-01",
+      "name": "ca01toca02",
+      "location": "[parameters('location')]",
+      "kind": "StorageV2",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "properties": {
+        "minimumTlsVersion": "TLS1_2",
+        "accessTier": "Hot"
+      }
+    },
     {
       "copy": {
         "name": "deploy_tp_ad",
@@ -91,7 +105,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.23.1.45101",
-              "templateHash": "336267760227139682"
+              "templateHash": "11853046181080515441"
             }
           },
           "parameters": {
@@ -584,16 +598,6 @@
                 "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', parameters('VM_Win10_name')))]",
                 "[resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', parameters('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name)))]"
               ]
-            },
-            {
-              "type": "Microsoft.Storage/storageAccounts",
-              "apiVersion": "2021-02-01",
-              "name": "[parameters('storageAccount_name')]",
-              "location": "[parameters('location')]",
-              "kind": "StorageV2",
-              "sku": {
-                "name": "Standard_LRS"
-              }
             },
             {
               "type": "Microsoft.Compute/virtualMachines",

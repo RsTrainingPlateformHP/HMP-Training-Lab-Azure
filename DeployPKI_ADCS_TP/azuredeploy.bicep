@@ -24,3 +24,16 @@ module deploy_tp_ad 'main.bicep' = [for i in range(0, count): {
     VNET_name: '${i}_VNET-ADCS-TP'
   }
 }]
+
+resource storageaccount 'Microsoft.Storage/storageAccounts@2021-02-01' = {
+  name: 'ca01toca02'
+  location: location
+  kind: 'StorageV2'
+  sku: {
+    name: 'Standard_LRS'
+  }
+  properties: {
+    minimumTlsVersion: 'TLS1_2'
+    accessTier: 'Hot'
+  }
+}
