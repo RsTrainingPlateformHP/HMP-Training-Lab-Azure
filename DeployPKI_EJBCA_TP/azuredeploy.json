@@ -1,0 +1,300 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.23.1.45101",
+      "templateHash": "18376044886872202749"
+    }
+  },
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "francecentral"
+    },
+    "owner": {
+      "type": "string"
+    },
+    "approver": {
+      "type": "string"
+    },
+    "endDate": {
+      "type": "string"
+    },
+    "count": {
+      "type": "int",
+      "metadata": {
+        "description": "Nombre d'instances à déployer"
+      }
+    }
+  },
+  "resources": [
+    {
+      "copy": {
+        "name": "deploy_tp_ad",
+        "count": "[length(range(0, parameters('count')))]"
+      },
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "[format('{0}tpADCS', range(0, parameters('count'))[copyIndex()])]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "owner": {
+            "value": "[parameters('owner')]"
+          },
+          "approver": {
+            "value": "[parameters('approver')]"
+          },
+          "endDate": {
+            "value": "[parameters('endDate')]"
+          },
+          "VM_EJBCA_name": {
+            "value": "[format('{0}_VM-ADCS-TP-DC', range(0, parameters('count'))[copyIndex()])]"
+          },
+          "NSG_name": {
+            "value": "[format('{0}_NSG-ONLINE-ADCS-TP', range(0, parameters('count'))[copyIndex()])]"
+          },
+          "VNET_name": {
+            "value": "[format('{0}_VNET-ADCS-TP', range(0, parameters('count'))[copyIndex()])]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.23.1.45101",
+              "templateHash": "5808244970083403421"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "defaultValue": "francecentral"
+            },
+            "owner": {
+              "type": "string"
+            },
+            "approver": {
+              "type": "string"
+            },
+            "endDate": {
+              "type": "string"
+            },
+            "VM_EJBCA_name": {
+              "type": "string"
+            },
+            "VNET_name": {
+              "type": "string"
+            },
+            "NSG_name": {
+              "type": "string"
+            }
+          },
+          "variables": {
+            "ImageID_VM_EJBCA": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/tp_pki_adcs_ca01/versions/1.0.0"
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Network/publicIPAddresses",
+              "apiVersion": "2022-07-01",
+              "name": "[format('{0}-public-IP', parameters('VM_EJBCA_name'))]",
+              "location": "[parameters('location')]",
+              "tags": {
+                "owner": "[parameters('owner')]",
+                "approver": "[parameters('approver')]",
+                "endDate": "[parameters('endDate')]"
+              },
+              "sku": {
+                "name": "Basic",
+                "tier": "Regional"
+              },
+              "properties": {
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Dynamic",
+                "idleTimeoutInMinutes": 4
+              }
+            },
+            {
+              "type": "Microsoft.Network/virtualNetworks",
+              "apiVersion": "2022-07-01",
+              "name": "[format('{0}{1}', parameters('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name))]",
+              "location": "[parameters('location')]",
+              "tags": {
+                "owner": "[parameters('owner')]",
+                "approver": "[parameters('approver')]",
+                "endDate": "[parameters('endDate')]"
+              },
+              "properties": {
+                "addressSpace": {
+                  "addressPrefixes": [
+                    "192.168.0.0/16"
+                  ]
+                },
+                "subnets": [
+                  {
+                    "name": "default",
+                    "properties": {
+                      "addressPrefix": "192.168.0.0/24",
+                      "delegations": [],
+                      "privateEndpointNetworkPolicies": "Enabled",
+                      "privateLinkServiceNetworkPolicies": "Enabled"
+                    }
+                  }
+                ],
+                "virtualNetworkPeerings": [],
+                "enableDdosProtection": false
+              }
+            },
+            {
+              "type": "Microsoft.Network/networkSecurityGroups",
+              "apiVersion": "2022-07-01",
+              "name": "[parameters('NSG_name')]",
+              "location": "[parameters('location')]",
+              "tags": {
+                "owner": "[parameters('owner')]",
+                "approver": "[parameters('approver')]",
+                "endDate": "[parameters('endDate')]"
+              },
+              "properties": {
+                "securityRules": [
+                  {
+                    "name": "Allow_SSH",
+                    "properties": {
+                      "protocol": "TCP",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "22",
+                      "sourceAddressPrefix": "*",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 300,
+                      "direction": "Inbound"
+                    }
+                  },
+                  {
+                    "name": "Allow_RDP",
+                    "properties": {
+                      "protocol": "TCP",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "3389",
+                      "sourceAddressPrefix": "*",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 400,
+                      "direction": "Inbound"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Microsoft.Network/networkInterfaces",
+              "apiVersion": "2020-11-01",
+              "name": "[format('{0}-network-interface', parameters('VM_EJBCA_name'))]",
+              "location": "[parameters('location')]",
+              "tags": {
+                "owner": "[parameters('owner')]",
+                "approver": "[parameters('approver')]",
+                "endDate": "[parameters('endDate')]"
+              },
+              "properties": {
+                "ipConfigurations": [
+                  {
+                    "name": "ipconfig1",
+                    "properties": {
+                      "privateIPAllocationMethod": "Static",
+                      "privateIPAddress": "192.168.0.4",
+                      "publicIPAddress": {
+                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', parameters('VM_EJBCA_name')))]"
+                      },
+                      "subnet": {
+                        "id": "[reference(resourceId('Microsoft.Network/networkSecurityGroups', parameters('NSG_name')), '2022-07-01').subnets[0].id]"
+                      },
+                      "primary": true,
+                      "privateIPAddressVersion": "IPv4"
+                    }
+                  }
+                ],
+                "dnsSettings": {
+                  "dnsServers": []
+                },
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "networkSecurityGroup": {
+                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('NSG_name'))]"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('NSG_name'))]",
+                "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', parameters('VM_EJBCA_name')))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Compute/virtualMachines",
+              "apiVersion": "2022-08-01",
+              "name": "[parameters('VM_EJBCA_name')]",
+              "location": "[parameters('location')]",
+              "tags": {
+                "owner": "[parameters('owner')]",
+                "approver": "[parameters('approver')]",
+                "endDate": "[parameters('endDate')]"
+              },
+              "properties": {
+                "hardwareProfile": {
+                  "vmSize": "Standard_B2s"
+                },
+                "storageProfile": {
+                  "osDisk": {
+                    "name": "[format('{0}_OSdisk', parameters('VM_EJBCA_name'))]",
+                    "createOption": "FromImage",
+                    "managedDisk": {
+                      "storageAccountType": "Standard_LRS"
+                    },
+                    "deleteOption": "Delete"
+                  },
+                  "imageReference": {
+                    "id": "[variables('ImageID_VM_EJBCA')]"
+                  }
+                },
+                "networkProfile": {
+                  "networkInterfaces": [
+                    {
+                      "id": "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface', parameters('VM_EJBCA_name')))]",
+                      "properties": {
+                        "deleteOption": "Delete"
+                      }
+                    }
+                  ]
+                },
+                "securityProfile": {
+                  "uefiSettings": {
+                    "secureBootEnabled": true,
+                    "vTpmEnabled": true
+                  },
+                  "securityType": "TrustedLaunch"
+                },
+                "diagnosticsProfile": {
+                  "bootDiagnostics": {
+                    "enabled": true
+                  }
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', format('{0}-network-interface', parameters('VM_EJBCA_name')))]"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
