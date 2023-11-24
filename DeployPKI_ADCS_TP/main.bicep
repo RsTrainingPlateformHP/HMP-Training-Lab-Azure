@@ -310,7 +310,9 @@ resource networkInterface_VM_SR 'Microsoft.Network/networkInterfaces@2020-11-01'
       }
     ]
     dnsSettings: {
-      dnsServers: []
+      dnsServers: [
+        '192.168.0.4'
+      ]
     }
     enableAcceleratedNetworking: false
     enableIPForwarding: false
@@ -384,7 +386,9 @@ resource networkInterface_VM_CA02 'Microsoft.Network/networkInterfaces@2020-11-0
       }
     ]
     dnsSettings: {
-      dnsServers: []
+      dnsServers: [
+        '192.168.0.4'
+      ]
     }
     enableAcceleratedNetworking: false
     enableIPForwarding: false
@@ -421,7 +425,9 @@ resource networkInterface_VM_Win10 'Microsoft.Network/networkInterfaces@2020-11-
       }
     ]
     dnsSettings: {
-      dnsServers: []
+      dnsServers: [
+        '192.168.0.4'
+      ]
     }
     enableAcceleratedNetworking: false
     enableIPForwarding: false
