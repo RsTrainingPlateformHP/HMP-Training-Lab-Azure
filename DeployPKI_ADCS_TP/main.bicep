@@ -499,7 +499,7 @@ resource VM_SR 'Microsoft.Compute/virtualMachines@2022-08-01' = {
   }
   properties: {
     hardwareProfile: {
-      vmSize: 'Standard_B1ms'
+      vmSize: 'Standard_B2s'
     }
     storageProfile: {
       osDisk: {
