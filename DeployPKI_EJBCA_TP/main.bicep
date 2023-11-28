@@ -13,7 +13,7 @@ var ImageID_VM_EJBCA = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/reso
 
 //////////////////////////////////////////////////////////////////////////////////SERVER PUBLIC IP/////////////////////////////////////////////////////////////////////////////////////
 
-resource publicIP_VM_DC 'Microsoft.Network/publicIPAddresses@2022-07-01' = {
+resource publicIP_VM_EJBCA 'Microsoft.Network/publicIPAddresses@2022-07-01' = {
   name: '${VM_EJBCA_name}-public-IP'
   location: location
   tags: {
@@ -35,7 +35,7 @@ resource publicIP_VM_DC 'Microsoft.Network/publicIPAddresses@2022-07-01' = {
 //////////////////////////////////////////////////////////////////////////////////VNET/////////////////////////////////////////////////////////////////////////////////////////////////
 
 resource VNET_TP_EJBCA 'Microsoft.Network/virtualNetworks@2022-07-01' = {
-  name: '${VNET_name}${uniqueString(subscription().subscriptionId, deployment().name)}'
+  name: VNET_name
   location: location
   tags: {
     owner: owner
@@ -108,7 +108,7 @@ resource NSG_TP_EJBCA 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
 
 //////////////////////////////////////////////////////////////////////////////////Network Interface////////////////////////////////////////////////////////////////////////////////////
 
-resource networkInterface_VM_DC 'Microsoft.Network/networkInterfaces@2020-11-01' = {
+resource networkInterface_VM_EJBCA 'Microsoft.Network/networkInterfaces@2020-11-01' = {
   name: '${VM_EJBCA_name}-network-interface'
   location: location
   tags: {
@@ -124,7 +124,7 @@ resource networkInterface_VM_DC 'Microsoft.Network/networkInterfaces@2020-11-01'
           privateIPAllocationMethod: 'Static'
           privateIPAddress: '192.168.0.4'
           publicIPAddress: {
-            id: publicIP_VM_DC.id
+            id: publicIP_VM_EJBCA.id
           }
           subnet: {
             id: NSG_TP_EJBCA.properties.subnets[0].id
@@ -175,7 +175,7 @@ resource VM_EJBCA 'Microsoft.Compute/virtualMachines@2022-08-01' = {
     networkProfile: {
       networkInterfaces: [
         {
-          id: networkInterface_VM_DC.id
+          id: networkInterface_VM_EJBCA.id
           properties: {
             deleteOption: 'Delete'
           }

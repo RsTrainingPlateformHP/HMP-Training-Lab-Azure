@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "17337387705091514039"
+      "templateHash": "4580079539684459622"
     }
   },
   "parameters": {
@@ -37,7 +37,7 @@
       },
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2022-09-01",
-      "name": "[format('{0}tpADCS', range(0, parameters('count'))[copyIndex()])]",
+      "name": "[format('{0}tpEJBCA', range(0, parameters('count'))[copyIndex()])]",
       "properties": {
         "expressionEvaluationOptions": {
           "scope": "inner"
@@ -57,13 +57,13 @@
             "value": "[parameters('endDate')]"
           },
           "VM_EJBCA_name": {
-            "value": "[format('{0}_VM-ADCS-TP-DC', range(0, parameters('count'))[copyIndex()])]"
+            "value": "[format('{0}_VM-EJBCA-TP-DC', range(0, parameters('count'))[copyIndex()])]"
           },
           "NSG_name": {
-            "value": "[format('{0}_NSG-ONLINE-ADCS-TP', range(0, parameters('count'))[copyIndex()])]"
+            "value": "[format('{0}_NSG-EJBCA-TP', range(0, parameters('count'))[copyIndex()])]"
           },
           "VNET_name": {
-            "value": "[format('{0}_VNET-ADCS-TP', range(0, parameters('count'))[copyIndex()])]"
+            "value": "[format('{0}_VNET-EJBCA-TP', range(0, parameters('count'))[copyIndex()])]"
           }
         },
         "template": {
@@ -73,7 +73,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.23.1.45101",
-              "templateHash": "15850887290225874970"
+              "templateHash": "10805763437777754485"
             }
           },
           "parameters": {
@@ -127,7 +127,7 @@
             {
               "type": "Microsoft.Network/virtualNetworks",
               "apiVersion": "2022-07-01",
-              "name": "[format('{0}{1}', parameters('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name))]",
+              "name": "[parameters('VNET_name')]",
               "location": "[parameters('location')]",
               "tags": {
                 "owner": "[parameters('owner')]",
