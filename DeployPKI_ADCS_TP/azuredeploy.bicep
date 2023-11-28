@@ -7,19 +7,14 @@ param endDate string
 param count int
 
 module deploy_tp_ad 'main.bicep' = [for i in range(0, count): {
-  name: '${i}tpADCS'
+  name: '${i}tpEJBCA'
   params: {
     location: location
     owner: owner
     approver: approver
     endDate: endDate
-    VM_DC_name: '${i}_VM-ADCS-TP-DC'
-    VM_SR_name: '${i}_VM-ADCS-TP-SR'
-    VM_CA01_name: '${i}_VM-ADCS-TP-CA01'
-    VM_CA02_name: '${i}_VM-ADCS-TP-CA02'
-    VM_Win10_name: '${i}_VM-ADCS-TP-Win10'
-    NSG_ONLINE_name: '${i}_NSG-ONLINE-ADCS-TP'
-    NSG_OFFLINE_name: '${i}_NSG-OFFLINE--ADCS-TP'
-    VNET_name: '${i}_VNET-ADCS-TP'
+    VM_EJBCA_name: '${i}_VM-EJBCA-TP-DC'
+    NSG_name: '${i}_NSG-EJBCA-TP'
+    VNET_name: '${i}_VNET-EJBCA-TP'
   }
 }]
