@@ -1,6 +1,6 @@
 {
-    "itemDisplayName": "Deploy TP PKI EJBCA",
+    "itemDisplayName": "Deploy TP PKI ADCS",
     "githubUsername": "Pierre Bruleaux",
-    "description": "Deployment of a TP PKI EJBCA environment",
-    "summary": "The template deploys 1 vm on a subnet with nsg and security rules configured"
+    "description": "Deployment of a TP PKI ADCS environment",
+    "summary": "The template deploys 5 vm on a subnet with nsg and security rules configured"
 }
