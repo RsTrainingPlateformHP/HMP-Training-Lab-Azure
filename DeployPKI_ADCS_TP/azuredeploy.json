@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "7999331742046507797"
+      "templateHash": "13364635859716362399"
     }
   },
   "parameters": {
@@ -75,7 +75,7 @@
             "value": "[format('{0}_NSG-ONLINE-ADCS-TP', range(0, parameters('count'))[copyIndex()])]"
           },
           "NSG_OFFLINE_name": {
-            "value": "[format('{0}_NSG-OFFLINE--ADCS-TP', range(0, parameters('count'))[copyIndex()])]"
+            "value": "[format('{0}_NSG-OFFLINE-ADCS-TP', range(0, parameters('count'))[copyIndex()])]"
           },
           "VNET_name": {
             "value": "[format('{0}_VNET-ADCS-TP', range(0, parameters('count'))[copyIndex()])]"

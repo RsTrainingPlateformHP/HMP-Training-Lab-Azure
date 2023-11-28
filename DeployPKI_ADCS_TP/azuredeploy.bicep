@@ -19,7 +19,7 @@ module deploy_tp_ad 'main.bicep' = [for i in range(0, count): {
     VM_CA02_name: '${i}_VM-ADCS-TP-CA02'
     VM_Win10_name: '${i}_VM-ADCS-TP-Win10'
     NSG_ONLINE_name: '${i}_NSG-ONLINE-ADCS-TP'
-    NSG_OFFLINE_name: '${i}_NSG-OFFLINE--ADCS-TP'
+    NSG_OFFLINE_name: '${i}_NSG-OFFLINE-ADCS-TP'
     VNET_name: '${i}_VNET-ADCS-TP'
   }
 }]
