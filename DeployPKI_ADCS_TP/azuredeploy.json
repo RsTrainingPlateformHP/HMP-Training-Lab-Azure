@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "14616973626589437135"
+      "templateHash": "10012913693836816106"
     }
   },
   "parameters": {
@@ -88,7 +88,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.23.1.45101",
-              "templateHash": "14143717615241362897"
+              "templateHash": "10062841822225221223"
             }
           },
           "parameters": {
@@ -393,7 +393,9 @@
                   }
                 ],
                 "dnsSettings": {
-                  "dnsServers": []
+                  "dnsServers": [
+                    "192.168.0.4"
+                  ]
                 },
                 "enableAcceleratedNetworking": false,
                 "enableIPForwarding": false,

@@ -273,7 +273,9 @@ resource networkInterface_VM_DC 'Microsoft.Network/networkInterfaces@2020-11-01'
       }
     ]
     dnsSettings: {
-      dnsServers: []
+      dnsServers: [
+        '192.168.0.4'
+      ]
     }
     enableAcceleratedNetworking: false
     enableIPForwarding: false
