@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "4580079539684459622"
+      "templateHash": "7108590869331712847"
     }
   },
   "parameters": {
@@ -57,7 +57,7 @@
             "value": "[parameters('endDate')]"
           },
           "VM_EJBCA_name": {
-            "value": "[format('{0}_VM-EJBCA-TP-DC', range(0, parameters('count'))[copyIndex()])]"
+            "value": "[format('{0}_VM-EJBCA-TP', range(0, parameters('count'))[copyIndex()])]"
           },
           "NSG_name": {
             "value": "[format('{0}_NSG-EJBCA-TP', range(0, parameters('count'))[copyIndex()])]"
@@ -73,7 +73,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.23.1.45101",
-              "templateHash": "10805763437777754485"
+              "templateHash": "16465126553036958412"
             }
           },
           "parameters": {
@@ -217,7 +217,7 @@
                         "id": "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', parameters('VM_EJBCA_name')))]"
                       },
                       "subnet": {
-                        "id": "[reference(resourceId('Microsoft.Network/networkSecurityGroups', parameters('NSG_name')), '2022-07-01').subnets[0].id]"
+                        "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', parameters('VNET_name')), '2022-07-01').subnets[0].id]"
                       },
                       "primary": true,
                       "privateIPAddressVersion": "IPv4"
@@ -235,7 +235,8 @@
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('NSG_name'))]",
-                "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', parameters('VM_EJBCA_name')))]"
+                "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', parameters('VM_EJBCA_name')))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('VNET_name'))]"
               ]
             },
             {

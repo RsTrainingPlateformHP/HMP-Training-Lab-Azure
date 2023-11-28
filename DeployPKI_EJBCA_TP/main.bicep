@@ -127,7 +127,7 @@ resource networkInterface_VM_EJBCA 'Microsoft.Network/networkInterfaces@2020-11-
             id: publicIP_VM_EJBCA.id
           }
           subnet: {
-            id: NSG_TP_EJBCA.properties.subnets[0].id
+            id: VNET_TP_EJBCA.properties.subnets[0].id
           }
           primary: true
           privateIPAddressVersion: 'IPv4'
