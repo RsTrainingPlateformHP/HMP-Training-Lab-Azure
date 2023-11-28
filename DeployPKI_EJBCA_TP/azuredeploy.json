@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "18376044886872202749"
+      "templateHash": "17337387705091514039"
     }
   },
   "parameters": {
@@ -73,7 +73,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.23.1.45101",
-              "templateHash": "5808244970083403421"
+              "templateHash": "15850887290225874970"
             }
           },
           "parameters": {
@@ -101,7 +101,7 @@
             }
           },
           "variables": {
-            "ImageID_VM_EJBCA": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/tp_pki_adcs_ca01/versions/1.0.0"
+            "ImageID_VM_EJBCA": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourcegroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/tp_pki_ejbca_vm/versions/1.0.0"
           },
           "resources": [
             {

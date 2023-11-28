@@ -9,7 +9,7 @@ param VM_EJBCA_name string
 param VNET_name string
 param NSG_name string
 
-var ImageID_VM_EJBCA = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/tp_pki_adcs_ca01/versions/1.0.0'
+var ImageID_VM_EJBCA = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourcegroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/tp_pki_ejbca_vm/versions/1.0.0'
 
 //////////////////////////////////////////////////////////////////////////////////SERVER PUBLIC IP/////////////////////////////////////////////////////////////////////////////////////
 
