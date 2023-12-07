@@ -3,7 +3,6 @@ param location string = 'francecentral'
 param owner string
 param approver string
 param endDate string
-@description('Choisir nom du compte admin et son password')
 param VM_WINDOWS_name string
 param VM_LINUX_name string
 
