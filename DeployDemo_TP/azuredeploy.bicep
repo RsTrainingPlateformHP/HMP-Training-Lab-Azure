@@ -12,9 +12,9 @@ module deploy_tp_ad 'main.bicep' = [for i in range(0, count): {
     owner: owner
     approver: approver
     endDate: endDate
-    VM_WINDOWS_name: '${i}_VM-NESSUS-TP-WINDOWS'
-    VM_LINUX_name:'${i}_VM-NESSUS-TP-LINUX'
-    NSG_Name: '${i}_NSG-NESSUS-TP'
-    VNET_name: '${i}_VNET-NESSUS-TP'
+    VM_WINDOWS_name: '${i}_VM-DEMO-TP-WINDOWS'
+    VM_LINUX_name:'${i}_VM-DEMO-TP-LINUX'
+    NSG_Name: '${i}_NSG-DEMO-TP'
+    VNET_name: '${i}_VNET-DEMO-TP'
   }
 }]
