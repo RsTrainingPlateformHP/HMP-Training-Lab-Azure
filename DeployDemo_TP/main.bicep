@@ -156,6 +156,9 @@ resource networkInterface_VM_WINDOWS 'Microsoft.Network/networkInterfaces@2022-0
           }
           privateIPAllocationMethod: 'Static'
           privateIPAddress: '10.0.0.4'
+          publicIPAddress: {
+            id: publicIP_VM_WINDOWS.id
+          }
           primary: true
           privateIPAddressVersion: 'IPv4'
         }
@@ -167,7 +170,7 @@ resource networkInterface_VM_WINDOWS 'Microsoft.Network/networkInterfaces@2022-0
     enableAcceleratedNetworking: false
     enableIPForwarding: false
     networkSecurityGroup: {
-      id: NSG_TP_NESSUS.id
+      id: NSG_TP_DEMO.id
     }
   }
 }
@@ -190,6 +193,9 @@ resource networkInterface_VM_LINUX 'Microsoft.Network/networkInterfaces@2022-07-
           }
           privateIPAllocationMethod: 'Static'
           privateIPAddress: '10.0.1.4'
+          publicIPAddress: {
+            id: publicIP_VM_LINUX.id
+          }
           primary: true
           privateIPAddressVersion: 'IPv4'
         }
@@ -201,7 +207,7 @@ resource networkInterface_VM_LINUX 'Microsoft.Network/networkInterfaces@2022-07-
     enableAcceleratedNetworking: false
     enableIPForwarding: false
     networkSecurityGroup: {
-      id: NSG_TP_NESSUS.id
+      id: NSG_TP_DEMO.id
     }
   }
 }
