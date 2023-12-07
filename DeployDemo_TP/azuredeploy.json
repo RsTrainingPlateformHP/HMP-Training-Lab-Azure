@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "11973057390542689922"
+      "templateHash": "8788163266488743829"
     }
   },
   "parameters": {
@@ -76,7 +76,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.23.1.45101",
-              "templateHash": "10024701763433161089"
+              "templateHash": "8013998121063961664"
             }
           },
           "parameters": {
@@ -107,8 +107,8 @@
             }
           },
           "variables": {
-            "ImageID_VM_WINDOWS": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/demolinuxversion/versions/1.0.0",
-            "ImageID_VM_LINUX": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/demoversionlinux/versions/1.0.1"
+            "ImageID_VM_WINDOWS": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/DEMO-windows/versions/1.0.0",
+            "ImageID_VM_LINUX": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/DEMO-linux/versions/1.0.0"
           },
           "resources": [
             {
