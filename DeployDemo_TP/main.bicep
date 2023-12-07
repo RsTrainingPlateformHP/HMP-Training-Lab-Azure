@@ -9,8 +9,8 @@ param VM_LINUX_name string
 param VNET_name string
 param NSG_Name string
 
-var ImageID_VM_WINDOWS = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/demolinuxversion/versions/1.0.0'
-var ImageID_VM_LINUX = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/demoversionlinux/versions/1.0.1'
+var ImageID_VM_WINDOWS = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/DEMO-windows/versions/1.0.0'
+var ImageID_VM_LINUX = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/DEMO-linux/versions/1.0.0'
 
 //////////////////////////////////////////////////////////////////////////////////VMS PUBLIC IPs/////////////////////////////////////////////////////////////////////////////////////
 
