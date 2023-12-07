@@ -1,1 +1,7 @@
 
+{
+    "itemDisplayName": "Deploy TP DEMO",
+    "githubUsername": "CLEGOUPIL",
+    "description": "Deployment of a TP DEMO environment",
+    "summary": "The template deploys two vms on two different subnets with nsg and security rules configured"
+}
