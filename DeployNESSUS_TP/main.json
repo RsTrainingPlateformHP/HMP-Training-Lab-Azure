@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.14.6.61914",
-      "templateHash": "2502467234362234249"
+      "version": "0.25.53.49325",
+      "templateHash": "15240153344511668468"
     }
   },
   "parameters": {
@@ -39,16 +39,12 @@
     },
     "NSG_Name": {
       "type": "string"
-    },
-    "ImageID_VM_SERVER": {
-      "type": "string"
-    },
-    "ImageID_VM_WINDOWS": {
-      "type": "string"
-    },
-    "ImageID_VM_LINUX": {
-      "type": "string"
     }
+  },
+  "variables": {
+    "ImageID_VM_SERVER": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_SERVER_VM/versions/1.0.4",
+    "ImageID_VM_WINDOWS": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_WINDOWS_VM/versions/1.0.0",
+    "ImageID_VM_LINUX": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_LINUX_VM/versions/1.0.0"
   },
   "resources": [
     {
@@ -115,114 +111,119 @@
       "properties": {
         "securityRules": [
           {
-            "name": "Allow SSH",
+            "name": "Allow_Nessus_Web",
             "properties": {
-              "priority": 300,
-              "protocol": "TCP",
-              "access": "Allow",
-              "direction": "Inbound",
-              "sourceApplicationSecurityGroups": [],
-              "destinationApplicationSecurityGroups": [],
-              "sourcePortRange": "*",
-              "destinationAddressPrefix": "*",
-              "destinationPortRange": "22"
-            }
-          },
-          {
-            "name": "Allow Nessus Web",
-            "properties": {
-              "priority": 310,
+              "priority": 150,
               "protocol": "*",
               "access": "Allow",
               "direction": "Inbound",
-              "sourceApplicationSecurityGroups": [],
-              "destinationApplicationSecurityGroups": [],
+              "sourceAddressPrefix": "*",
               "sourcePortRange": "*",
               "destinationAddressPrefix": "*",
               "destinationPortRange": "8834"
             }
           },
           {
-            "name": "Allow 4000",
+            "name": "Allow_SSH_Inbound",
+            "properties": {
+              "priority": 300,
+              "protocol": "*",
+              "access": "Allow",
+              "direction": "Inbound",
+              "sourcePortRange": "*",
+              "sourceAddressPrefix": "VirtualNetwork",
+              "destinationAddressPrefix": "VirtualNetwork",
+              "destinationPortRange": "22"
+            }
+          },
+          {
+            "name": "Allow_SSH_Outbound",
+            "properties": {
+              "priority": 310,
+              "protocol": "*",
+              "access": "Allow",
+              "direction": "Outbound",
+              "sourcePortRange": "*",
+              "sourceAddressPrefix": "VirtualNetwork",
+              "destinationAddressPrefix": "VirtualNetwork",
+              "destinationPortRange": "22"
+            }
+          },
+          {
+            "name": "Allow_4000",
             "properties": {
               "priority": 320,
               "protocol": "*",
               "access": "Allow",
               "direction": "Inbound",
-              "sourceApplicationSecurityGroups": [],
-              "destinationApplicationSecurityGroups": [],
               "sourcePortRange": "*",
-              "destinationAddressPrefix": "*",
+              "sourceAddressPrefix": "VirtualNetwork",
+              "destinationAddressPrefix": "VirtualNetwork",
               "destinationPortRange": "4000"
             }
           },
           {
-            "name": "Allow 8080",
+            "name": "Allow_8080",
             "properties": {
               "priority": 330,
               "protocol": "*",
               "access": "Allow",
               "direction": "Inbound",
-              "sourceApplicationSecurityGroups": [],
-              "destinationApplicationSecurityGroups": [],
               "sourcePortRange": "*",
-              "destinationAddressPrefix": "*",
+              "sourceAddressPrefix": "VirtualNetwork",
+              "destinationAddressPrefix": "VirtualNetwork",
               "destinationPortRange": "8080"
             }
           },
           {
-            "name": "Allow 9991",
+            "name": "Allow_9991",
             "properties": {
               "priority": 340,
               "protocol": "*",
               "access": "Allow",
               "direction": "Inbound",
-              "sourceApplicationSecurityGroups": [],
-              "destinationApplicationSecurityGroups": [],
               "sourcePortRange": "*",
-              "destinationAddressPrefix": "*",
+              "sourceAddressPrefix": "VirtualNetwork",
+              "destinationAddressPrefix": "VirtualNetwork",
               "destinationPortRange": "9991"
             }
           },
           {
-            "name": "Allow RDP",
+            "name": "Allow_RDP",
             "properties": {
               "priority": 360,
               "protocol": "TCP",
               "access": "Allow",
               "direction": "Inbound",
-              "sourceApplicationSecurityGroups": [],
-              "destinationApplicationSecurityGroups": [],
               "sourcePortRange": "*",
-              "destinationAddressPrefix": "*",
+              "sourceAddressPrefix": "VirtualNetwork",
+              "destinationAddressPrefix": "VirtualNetwork",
               "destinationPortRange": "23389"
             }
           },
           {
-            "name": "Allow http",
+            "name": "Allow_http",
             "properties": {
               "priority": 350,
               "protocol": "*",
               "access": "Allow",
               "direction": "Inbound",
-              "sourceApplicationSecurityGroups": [],
-              "destinationApplicationSecurityGroups": [],
               "sourcePortRange": "*",
-              "destinationAddressPrefix": "*",
+              "sourceAddressPrefix": "VirtualNetwork",
+              "destinationAddressPrefix": "VirtualNetwork",
               "destinationPortRange": "80"
             }
           },
           {
-            "name": "Allow https",
+            "name": "Allow_https",
             "properties": {
               "priority": 370,
               "protocol": "*",
               "access": "Allow",
               "direction": "Inbound",
-              "sourceApplicationSecurityGroups": [],
-              "destinationApplicationSecurityGroups": [],
               "sourcePortRange": "*",
-              "destinationAddressPrefix": "*",
+              "sourceAddressPrefix": "VirtualNetwork",
+              "destinationAddressPrefix": "VirtualNetwork",
               "destinationPortRange": "443"
             }
           }
@@ -245,7 +246,7 @@
             "name": "ipconfig1",
             "properties": {
               "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "10.4.0.3",
+              "privateIPAddress": "10.4.0.4",
               "publicIPAddress": {
                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-public-IP', parameters('VM_SERVER_name')))]"
               },
@@ -330,7 +331,7 @@
                 "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', format('{0}{1}', parameters('VNET_name'), uniqueString(subscription().subscriptionId, deployment().name))), '2022-07-01').subnets[0].id]"
               },
               "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "10.4.0.4",
+              "privateIPAddress": "10.4.0.6",
               "primary": true,
               "privateIPAddressVersion": "IPv4"
             }
@@ -374,7 +375,7 @@
             "deleteOption": "Delete"
           },
           "imageReference": {
-            "id": "[parameters('ImageID_VM_WINDOWS')]"
+            "id": "[variables('ImageID_VM_WINDOWS')]"
           }
         },
         "networkProfile": {
@@ -409,7 +410,7 @@
       },
       "properties": {
         "hardwareProfile": {
-          "vmSize": "Standard_B2s"
+          "vmSize": "Standard_B1ms"
         },
         "storageProfile": {
           "osDisk": {
@@ -421,7 +422,7 @@
             "deleteOption": "Delete"
           },
           "imageReference": {
-            "id": "[parameters('ImageID_VM_LINUX')]"
+            "id": "[variables('ImageID_VM_LINUX')]"
           }
         },
         "networkProfile": {
@@ -468,7 +469,7 @@
             "deleteOption": "Delete"
           },
           "imageReference": {
-            "id": "[parameters('ImageID_VM_SERVER')]"
+            "id": "[variables('ImageID_VM_SERVER')]"
           }
         },
         "networkProfile": {

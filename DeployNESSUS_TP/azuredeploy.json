@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.15.31.15270",
-      "templateHash": "3170194043342137530"
+      "version": "0.25.53.49325",
+      "templateHash": "16622054331672158579"
     }
   },
   "parameters": {
@@ -36,7 +36,7 @@
         "count": "[length(range(0, parameters('count')))]"
       },
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "[format('{0}tpNESSUS', range(0, parameters('count'))[copyIndex()])]",
       "properties": {
         "expressionEvaluationOptions": {
@@ -78,8 +78,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.15.31.15270",
-              "templateHash": "5808389834951095713"
+              "version": "0.25.53.49325",
+              "templateHash": "15240153344511668468"
             }
           },
           "parameters": {
@@ -116,7 +116,7 @@
             }
           },
           "variables": {
-            "ImageID_VM_SERVER": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_SERVER_VM/versions/1.0.2",
+            "ImageID_VM_SERVER": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_SERVER_VM/versions/1.0.4",
             "ImageID_VM_WINDOWS": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_WINDOWS_VM/versions/1.0.0",
             "ImageID_VM_LINUX": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_LINUX_VM/versions/1.0.0"
           },
@@ -484,7 +484,7 @@
               },
               "properties": {
                 "hardwareProfile": {
-                  "vmSize": "Standard_B2s"
+                  "vmSize": "Standard_B1ms"
                 },
                 "storageProfile": {
                   "osDisk": {
