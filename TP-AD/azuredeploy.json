@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.8.9.13224",
-      "templateHash": "778252330464446572"
+      "version": "0.22.6.54827",
+      "templateHash": "9009813169178722304"
     }
   },
   "parameters": {
@@ -35,7 +35,7 @@
       }
     },
     "vm_password": {
-      "type": "secureString"
+      "type": "securestring"
     }
   },
   "resources": [
@@ -45,7 +45,7 @@
         "count": "[length(range(0, parameters('count')))]"
       },
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "[format('{0}tpAD', range(0, parameters('count'))[copyIndex()])]",
       "properties": {
         "expressionEvaluationOptions": {
@@ -108,8 +108,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.8.9.13224",
-              "templateHash": "13498058647160980168"
+              "version": "0.22.6.54827",
+              "templateHash": "4248729574530580418"
             }
           },
           "parameters": {
@@ -133,7 +133,7 @@
               }
             },
             "vm_password": {
-              "type": "secureString"
+              "type": "securestring"
             },
             "vnet_tp_name": {
               "type": "string"
@@ -312,7 +312,7 @@
                   "imageReference": {
                     "publisher": "MicrosoftWindowsDesktop",
                     "offer": "Windows-10",
-                    "sku": "21h1-ent",
+                    "sku": "21h2-ent",
                     "version": "latest"
                   }
                 },
@@ -430,7 +430,7 @@
                   ]
                 },
                 "osProfile": {
-                  "computerName": "[parameters('win01')]",
+                  "computerName": "[parameters('dc01')]",
                   "adminUsername": "[parameters('vm_username')]",
                   "adminPassword": "[parameters('vm_password')]",
                   "windowsConfiguration": {
