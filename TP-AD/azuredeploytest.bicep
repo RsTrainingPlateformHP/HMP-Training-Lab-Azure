@@ -164,7 +164,7 @@ resource virtualMachineWIN_resource 'Microsoft.Compute/virtualMachines@2021-07-0
       imageReference: {
         publisher: 'MicrosoftWindowsDesktop'
         offer: 'Windows-10'
-        sku: '21h1-ent'
+        sku: '21h2-ent'
         version: 'latest'
       }
     }
