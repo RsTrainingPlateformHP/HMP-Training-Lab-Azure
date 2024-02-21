@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.22.6.54827",
-      "templateHash": "8905893207827606499"
+      "templateHash": "14947066829257833183"
     }
   },
   "parameters": {
@@ -109,7 +109,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.22.6.54827",
-              "templateHash": "4644245767964842817"
+              "templateHash": "531359508617291797"
             }
           },
           "parameters": {
@@ -312,7 +312,7 @@
                   "imageReference": {
                     "publisher": "MicrosoftWindowsDesktop",
                     "offer": "Windows-10",
-                    "sku": "10-pro",
+                    "sku": "20h2-ent",
                     "version": "latest"
                   }
                 },
