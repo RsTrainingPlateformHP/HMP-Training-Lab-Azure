@@ -20,7 +20,7 @@ param nsg_Win01 string
 param dc01 string
 param dcInterface string
 param dcPublicIP string
-param natgatewayname string
+
 
 //On définit les network security group pour avoir accès au RDP
 
@@ -79,17 +79,7 @@ resource nsg_win01 'Microsoft.Network/networkSecurityGroups@2021-08-01' = {
 }
 
 //Pour ce TP, il nous faut un réseau virtuel avec deux sous réseau (un pour chaque machine)
-resource natgateway 'Microsoft.Network/natGateways@2021-05-01' = {
-  name: natgatewayname
-  location: location
-  sku: {
-    name: 'Standard'
-  }
-  properties: {
-    idleTimeoutInMinutes: 4
-    
-  }
-}
+
 resource vnet_tp_ad 'Microsoft.Network/virtualNetworks@2021-08-01' = {
   name: vnet_tp_name
   location: location
@@ -110,9 +100,7 @@ resource vnet_tp_ad 'Microsoft.Network/virtualNetworks@2021-08-01' = {
         properties: {
           addressPrefix: '10.5.0.0/24'
           delegations: []
-          natGateway: {
-            id: natgateway.id
-          }
+          
           privateEndpointNetworkPolicies: 'Enabled'
           privateLinkServiceNetworkPolicies: 'Enabled'
         }
@@ -122,9 +110,7 @@ resource vnet_tp_ad 'Microsoft.Network/virtualNetworks@2021-08-01' = {
         properties: {
           addressPrefix: '10.5.1.0/24'
           delegations: []
-          natGateway: {
-            id: natgateway.id
-          }
+          
           privateEndpointNetworkPolicies: 'Enabled'
           privateLinkServiceNetworkPolicies: 'Enabled'
         }
