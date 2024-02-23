@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.22.6.54827",
-      "templateHash": "14947066829257833183"
+      "version": "0.25.53.49325",
+      "templateHash": "15741670788795028956"
     }
   },
   "parameters": {
@@ -108,8 +108,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.22.6.54827",
-              "templateHash": "531359508617291797"
+              "version": "0.25.53.49325",
+              "templateHash": "18086040471670443147"
             }
           },
           "parameters": {
@@ -182,7 +182,7 @@
                   {
                     "name": "default-allow-rdp",
                     "properties": {
-                      "priority": 1000,
+                      "priority": 360,
                       "protocol": "TCP",
                       "access": "Allow",
                       "direction": "Inbound",
@@ -192,6 +192,32 @@
                       "sourcePortRange": "*",
                       "destinationAddressPrefix": "*",
                       "destinationPortRange": "3389"
+                    }
+                  },
+                  {
+                    "name": "Allow_http",
+                    "properties": {
+                      "priority": 350,
+                      "protocol": "*",
+                      "access": "Allow",
+                      "direction": "Inbound",
+                      "sourcePortRange": "*",
+                      "sourceAddressPrefix": "VirtualNetwork",
+                      "destinationAddressPrefix": "VirtualNetwork",
+                      "destinationPortRange": "80"
+                    }
+                  },
+                  {
+                    "name": "Allow_https",
+                    "properties": {
+                      "priority": 370,
+                      "protocol": "*",
+                      "access": "Allow",
+                      "direction": "Inbound",
+                      "sourcePortRange": "*",
+                      "sourceAddressPrefix": "VirtualNetwork",
+                      "destinationAddressPrefix": "VirtualNetwork",
+                      "destinationPortRange": "443"
                     }
                   }
                 ]

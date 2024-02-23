@@ -35,7 +35,7 @@ resource nsg_win01 'Microsoft.Network/networkSecurityGroups@2021-08-01' = {
     securityRules: [ {
       name: 'default-allow-rdp'
       properties: {
-          priority: 1000
+          priority: 360
           protocol: 'TCP'
           access: 'Allow'
           direction: 'Inbound'
@@ -46,6 +46,32 @@ resource nsg_win01 'Microsoft.Network/networkSecurityGroups@2021-08-01' = {
           destinationAddressPrefix: '*'
           destinationPortRange: '3389'
       } 
+    }
+    {
+      name: 'Allow_http' 
+      properties: {
+        priority: 350
+        protocol: '*'
+        access: 'Allow'
+        direction: 'Inbound'
+        sourcePortRange: '*'
+        sourceAddressPrefix: 'VirtualNetwork'
+        destinationAddressPrefix: 'VirtualNetwork'
+        destinationPortRange: '80' //port de destination autorisé (http)
+      }
+    }
+    {
+      name: 'Allow_https' 
+      properties: {
+        priority: 370
+        protocol: '*'
+        access: 'Allow'
+        direction: 'Inbound'
+        sourcePortRange: '*'
+        sourceAddressPrefix: 'VirtualNetwork'
+        destinationAddressPrefix: 'VirtualNetwork'
+        destinationPortRange: '443' //port de destination autorisé (https)
+      }
     }
   ]
   }
