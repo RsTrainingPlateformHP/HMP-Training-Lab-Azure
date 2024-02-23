@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.25.53.49325",
-      "templateHash": "15741670788795028956"
+      "templateHash": "10132539463995648889"
     }
   },
   "parameters": {
@@ -100,6 +100,9 @@
           },
           "dcPublicIP": {
             "value": "[format('IP_Public_DC_{0}', range(0, parameters('count'))[copyIndex()])]"
+          },
+          "natgatewayname": {
+            "value": "[format('BEIJA_NAT_{0}', range(0, parameters('count'))[copyIndex()])]"
           }
         },
         "template": {
@@ -109,7 +112,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.25.53.49325",
-              "templateHash": "18086040471670443147"
+              "templateHash": "17517671258790108745"
             }
           },
           "parameters": {
@@ -163,6 +166,9 @@
               "type": "string"
             },
             "dcPublicIP": {
+              "type": "string"
+            },
+            "natgatewayname": {
               "type": "string"
             }
           },
@@ -224,6 +230,18 @@
               }
             },
             {
+              "type": "Microsoft.Network/natGateways",
+              "apiVersion": "2021-05-01",
+              "name": "[parameters('natgatewayname')]",
+              "location": "[parameters('location')]",
+              "sku": {
+                "name": "Standard"
+              },
+              "properties": {
+                "idleTimeoutInMinutes": 4
+              }
+            },
+            {
               "type": "Microsoft.Network/virtualNetworks",
               "apiVersion": "2021-08-01",
               "name": "[parameters('vnet_tp_name')]",
@@ -245,6 +263,9 @@
                     "properties": {
                       "addressPrefix": "10.5.0.0/24",
                       "delegations": [],
+                      "natGateway": {
+                        "id": "[resourceId('Microsoft.Network/natGateways', parameters('natgatewayname'))]"
+                      },
                       "privateEndpointNetworkPolicies": "Enabled",
                       "privateLinkServiceNetworkPolicies": "Enabled"
                     }
@@ -254,6 +275,9 @@
                     "properties": {
                       "addressPrefix": "10.5.1.0/24",
                       "delegations": [],
+                      "natGateway": {
+                        "id": "[resourceId('Microsoft.Network/natGateways', parameters('natgatewayname'))]"
+                      },
                       "privateEndpointNetworkPolicies": "Enabled",
                       "privateLinkServiceNetworkPolicies": "Enabled"
                     }
@@ -266,7 +290,10 @@
                     "10.5.1.4"
                   ]
                 }
-              }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/natGateways', parameters('natgatewayname'))]"
+              ]
             },
             {
               "type": "Microsoft.Network/networkInterfaces",

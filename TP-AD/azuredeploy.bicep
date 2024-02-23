@@ -28,5 +28,6 @@ module deploy_tp_ad 'azuredeploytest.bicep' = [for i in range(0, count): {
     dc01:'beijaDC${i}'
     dcInterface:'DC_interface${i}'
     dcPublicIP:'IP_Public_DC_${i}'
+    natgatewayname:'BEIJA_NAT_${i}'
   }
 }]
