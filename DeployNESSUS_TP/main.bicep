@@ -10,8 +10,8 @@ param VM_SERVER_name string
 param VNET_name string
 param NSG_Name string
 
-var ImageID_VM_SERVER = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_SERVER_VM/versions/1.0.4'
-var ImageID_VM_WINDOWS = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_WINDOWS_VM/versions/1.0.0'
+var ImageID_VM_SERVER = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_SERVER_VM/versions/1.0.5'
+var ImageID_VM_WINDOWS = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_WINDOWS_VM/versions/1.0.1'
 var ImageID_VM_LINUX = '/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_LINUX_VM/versions/1.0.0'
 
 //////////////////////////////////////////////////////////////////////////////////SERVER PUBLIC IP/////////////////////////////////////////////////////////////////////////////////////
@@ -194,6 +194,45 @@ resource NSG_TP_NESSUS 'Microsoft.Network/networkSecurityGroups@2022-07-01' = {
           sourceAddressPrefix: 'VirtualNetwork'
           destinationAddressPrefix: 'VirtualNetwork'
           destinationPortRange: '443' //port de destination autorisé (https)
+        }
+      }
+      {
+        name: 'Allow_SMBv1' //nom de la règle
+        properties: {
+          priority: 370
+          protocol: '*'
+          access: 'Allow'
+          direction: 'Inbound'
+          sourcePortRange: '*'
+          sourceAddressPrefix: 'VirtualNetwork'
+          destinationAddressPrefix: 'VirtualNetwork'
+          destinationPortRange: '445' //port de destination autorisé (smb)
+        }
+      }
+      {
+        name: 'Allow_rdp' //nom de la règle
+        properties: {
+          priority: 370
+          protocol: '*'
+          access: 'Allow'
+          direction: 'Inbound'
+          sourcePortRange: '*'
+          sourceAddressPrefix: 'VirtualNetwork'
+          destinationAddressPrefix: 'VirtualNetwork'
+          destinationPortRange: '3389' //port de destination autorisé (rdp)
+        }
+      }
+      {
+        name: 'Allow_disclo' //nom de la règle
+        properties: {
+          priority: 370
+          protocol: '*'
+          access: 'Allow'
+          direction: 'Inbound'
+          sourcePortRange: '*'
+          sourceAddressPrefix: 'VirtualNetwork'
+          destinationAddressPrefix: 'VirtualNetwork'
+          destinationPortRange: '137' //port de destination autorisé (https)
         }
       }
     ]

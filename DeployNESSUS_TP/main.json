@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.25.53.49325",
-      "templateHash": "15240153344511668468"
+      "version": "0.35.1.17967",
+      "templateHash": "11335254232957769353"
     }
   },
   "parameters": {
@@ -42,8 +42,8 @@
     }
   },
   "variables": {
-    "ImageID_VM_SERVER": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_SERVER_VM/versions/1.0.4",
-    "ImageID_VM_WINDOWS": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_WINDOWS_VM/versions/1.0.0",
+    "ImageID_VM_SERVER": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_SERVER_VM/versions/1.0.5",
+    "ImageID_VM_WINDOWS": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_WINDOWS_VM/versions/1.0.1",
     "ImageID_VM_LINUX": "/subscriptions/a4038696-ce0f-492d-9049-38720738d4fe/resourceGroups/RG_Compute_Gallery/providers/Microsoft.Compute/galleries/Compute_gallery_TP/images/TP_NESSUS_LINUX_VM/versions/1.0.0"
   },
   "resources": [
@@ -225,6 +225,45 @@
               "sourceAddressPrefix": "VirtualNetwork",
               "destinationAddressPrefix": "VirtualNetwork",
               "destinationPortRange": "443"
+            }
+          },
+          {
+            "name": "Allow_SMBv1",
+            "properties": {
+              "priority": 370,
+              "protocol": "*",
+              "access": "Allow",
+              "direction": "Inbound",
+              "sourcePortRange": "*",
+              "sourceAddressPrefix": "VirtualNetwork",
+              "destinationAddressPrefix": "VirtualNetwork",
+              "destinationPortRange": "445"
+            }
+          },
+          {
+            "name": "Allow_rdp",
+            "properties": {
+              "priority": 370,
+              "protocol": "*",
+              "access": "Allow",
+              "direction": "Inbound",
+              "sourcePortRange": "*",
+              "sourceAddressPrefix": "VirtualNetwork",
+              "destinationAddressPrefix": "VirtualNetwork",
+              "destinationPortRange": "3389"
+            }
+          },
+          {
+            "name": "Allow_disclo",
+            "properties": {
+              "priority": 370,
+              "protocol": "*",
+              "access": "Allow",
+              "direction": "Inbound",
+              "sourcePortRange": "*",
+              "sourceAddressPrefix": "VirtualNetwork",
+              "destinationAddressPrefix": "VirtualNetwork",
+              "destinationPortRange": "137"
             }
           }
         ]
