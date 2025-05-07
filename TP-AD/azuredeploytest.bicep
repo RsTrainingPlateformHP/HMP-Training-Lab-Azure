@@ -21,6 +21,7 @@ param dc01 string
 param dcInterface string
 param dcPublicIP string
 
+
 //On définit les network security group pour avoir accès au RDP
 
 resource nsg_win01 'Microsoft.Network/networkSecurityGroups@2021-08-01' = {
@@ -35,7 +36,7 @@ resource nsg_win01 'Microsoft.Network/networkSecurityGroups@2021-08-01' = {
     securityRules: [ {
       name: 'default-allow-rdp'
       properties: {
-          priority: 1000
+          priority: 360
           protocol: 'TCP'
           access: 'Allow'
           direction: 'Inbound'
@@ -46,6 +47,32 @@ resource nsg_win01 'Microsoft.Network/networkSecurityGroups@2021-08-01' = {
           destinationAddressPrefix: '*'
           destinationPortRange: '3389'
       } 
+    }
+    {
+      name: 'Allow_http' 
+      properties: {
+        priority: 350
+        protocol: '*'
+        access: 'Allow'
+        direction: 'Inbound'
+        sourcePortRange: '*'
+        sourceAddressPrefix: 'VirtualNetwork'
+        destinationAddressPrefix: 'VirtualNetwork'
+        destinationPortRange: '80' //port de destination autorisé (http)
+      }
+    }
+    {
+      name: 'Allow_https' 
+      properties: {
+        priority: 370
+        protocol: '*'
+        access: 'Allow'
+        direction: 'Inbound'
+        sourcePortRange: '*'
+        sourceAddressPrefix: 'VirtualNetwork'
+        destinationAddressPrefix: 'VirtualNetwork'
+        destinationPortRange: '443' //port de destination autorisé (https)
+      }
     }
   ]
   }
@@ -73,6 +100,7 @@ resource vnet_tp_ad 'Microsoft.Network/virtualNetworks@2021-08-01' = {
         properties: {
           addressPrefix: '10.5.0.0/24'
           delegations: []
+          
           privateEndpointNetworkPolicies: 'Enabled'
           privateLinkServiceNetworkPolicies: 'Enabled'
         }
@@ -82,6 +110,7 @@ resource vnet_tp_ad 'Microsoft.Network/virtualNetworks@2021-08-01' = {
         properties: {
           addressPrefix: '10.5.1.0/24'
           delegations: []
+          
           privateEndpointNetworkPolicies: 'Enabled'
           privateLinkServiceNetworkPolicies: 'Enabled'
         }
@@ -164,7 +193,7 @@ resource virtualMachineWIN_resource 'Microsoft.Compute/virtualMachines@2021-07-0
       imageReference: {
         publisher: 'MicrosoftWindowsDesktop'
         offer: 'Windows-10'
-        sku: '21h1-ent'
+        sku: '20h2-ent'
         version: 'latest'
       }
     }

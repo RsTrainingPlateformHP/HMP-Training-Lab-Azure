@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.8.9.13224",
-      "templateHash": "778252330464446572"
+      "version": "0.25.53.49325",
+      "templateHash": "15741670788795028956"
     }
   },
   "parameters": {
@@ -35,7 +35,7 @@
       }
     },
     "vm_password": {
-      "type": "secureString"
+      "type": "securestring"
     }
   },
   "resources": [
@@ -45,7 +45,7 @@
         "count": "[length(range(0, parameters('count')))]"
       },
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "[format('{0}tpAD', range(0, parameters('count'))[copyIndex()])]",
       "properties": {
         "expressionEvaluationOptions": {
@@ -108,8 +108,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.8.9.13224",
-              "templateHash": "13498058647160980168"
+              "version": "0.25.53.49325",
+              "templateHash": "18086040471670443147"
             }
           },
           "parameters": {
@@ -133,7 +133,7 @@
               }
             },
             "vm_password": {
-              "type": "secureString"
+              "type": "securestring"
             },
             "vnet_tp_name": {
               "type": "string"
@@ -182,7 +182,7 @@
                   {
                     "name": "default-allow-rdp",
                     "properties": {
-                      "priority": 1000,
+                      "priority": 360,
                       "protocol": "TCP",
                       "access": "Allow",
                       "direction": "Inbound",
@@ -192,6 +192,32 @@
                       "sourcePortRange": "*",
                       "destinationAddressPrefix": "*",
                       "destinationPortRange": "3389"
+                    }
+                  },
+                  {
+                    "name": "Allow_http",
+                    "properties": {
+                      "priority": 350,
+                      "protocol": "*",
+                      "access": "Allow",
+                      "direction": "Inbound",
+                      "sourcePortRange": "*",
+                      "sourceAddressPrefix": "VirtualNetwork",
+                      "destinationAddressPrefix": "VirtualNetwork",
+                      "destinationPortRange": "80"
+                    }
+                  },
+                  {
+                    "name": "Allow_https",
+                    "properties": {
+                      "priority": 370,
+                      "protocol": "*",
+                      "access": "Allow",
+                      "direction": "Inbound",
+                      "sourcePortRange": "*",
+                      "sourceAddressPrefix": "VirtualNetwork",
+                      "destinationAddressPrefix": "VirtualNetwork",
+                      "destinationPortRange": "443"
                     }
                   }
                 ]
@@ -312,7 +338,7 @@
                   "imageReference": {
                     "publisher": "MicrosoftWindowsDesktop",
                     "offer": "Windows-10",
-                    "sku": "21h1-ent",
+                    "sku": "20h2-ent",
                     "version": "latest"
                   }
                 },
@@ -430,7 +456,7 @@
                   ]
                 },
                 "osProfile": {
-                  "computerName": "[parameters('win01')]",
+                  "computerName": "[parameters('dc01')]",
                   "adminUsername": "[parameters('vm_username')]",
                   "adminPassword": "[parameters('vm_password')]",
                   "windowsConfiguration": {
