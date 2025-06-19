@@ -33,7 +33,8 @@ resource nsg_win01 'Microsoft.Network/networkSecurityGroups@2021-08-01' = {
     endDate: endDate
   }
   properties: {
-    securityRules: [ {
+    securityRules: [ 
+      {
       name: 'default-allow-rdp'
       properties: {
           priority: 360
@@ -226,7 +227,18 @@ resource virtualMachineWIN_resource 'Microsoft.Compute/virtualMachines@2021-07-0
 }
 
 
-
+resource vmAutoShutdown 'Microsoft.DevTestLab/labs/virtualmachines/schedules@2018-09-15' = {
+  name: '${win01}/autoShutdown'
+  properties: {
+    status: 'Enabled'
+    taskType: 'ComputeVmShutdownTask'
+    dailyRecurrence: {
+      time: '1900' // 19h00
+    }
+    timeZoneId: 'Romance Standard Time' // Fuseau horaire pour la France
+    targetResourceId: win01
+  }
+}
 
 //définition de l'interface réseau du DC
 
@@ -325,5 +337,18 @@ resource virtualMachineDC 'Microsoft.Compute/virtualMachines@2021-07-01' ={
       }
     }
     licenseType: 'Windows_Server'
+  }
+}
+
+resource DCAutoShutdown 'Microsoft.DevTestLab/labs/virtualmachines/schedules@2018-09-15' = {
+  name: '${dc01}/autoShutdown'
+  properties: {
+    status: 'Enabled'
+    taskType: 'ComputeVmShutdownTask'
+    dailyRecurrence: {
+      time: '1900' // 19h00
+    }
+    timeZoneId: 'Romance Standard Time' // Fuseau horaire pour la France
+    targetResourceId: dc01
   }
 }

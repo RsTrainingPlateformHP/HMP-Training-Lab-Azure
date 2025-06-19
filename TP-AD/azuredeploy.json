@@ -372,6 +372,20 @@
               ]
             },
             {
+              "type": "Microsoft.DevTestLab/labs/virtualmachines/schedules",
+              "apiVersion": "2018-09-15",
+              "name": "[format('{0}/autoShutdown', parameters('win01'))]",
+              "properties": {
+                "status": "Enabled",
+                "taskType": "ComputeVmShutdownTask",
+                "dailyRecurrence": {
+                  "time": "1900"
+                },
+                "timeZoneId": "Romance Standard Time",
+                "targetResourceId": "[parameters('win01')]"
+              }
+            },
+            {
               "type": "Microsoft.Network/networkInterfaces",
               "apiVersion": "2021-08-01",
               "name": "[parameters('dcInterface')]",
@@ -473,6 +487,20 @@
               "dependsOn": [
                 "[resourceId('Microsoft.Network/networkInterfaces', parameters('dcInterface'))]"
               ]
+            },
+            {
+              "type": "Microsoft.DevTestLab/labs/virtualmachines/schedules",
+              "apiVersion": "2018-09-15",
+              "name": "[format('{0}/autoShutdown', parameters('dc01'))]",
+              "properties": {
+                "status": "Enabled",
+                "taskType": "ComputeVmShutdownTask",
+                "dailyRecurrence": {
+                  "time": "1900"
+                },
+                "timeZoneId": "Romance Standard Time",
+                "targetResourceId": "[parameters('dc01')]"
+              }
             }
           ]
         }
